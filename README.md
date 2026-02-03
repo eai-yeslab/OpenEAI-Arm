@@ -52,8 +52,7 @@ We provide the Modified Denavit–Hartenberg (MDH) parameters used to reproduce 
 ---
 
 ## Repository Contents
-- `hardware/`: CAD, STLs, drawings, BOM, assembly and calibration docs  
-- `electronics/`: wiring, firmware (if applicable)  
+- `hardware/`: CAD, STLs, drawings, BOM, assembly and calibration docs 
 - `software/`: drivers, controllers, teleop and dataset tools  
 
 ---
