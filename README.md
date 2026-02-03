@@ -12,19 +12,42 @@ OpenEAI Arm is a low-cost, reproducible 6-DoF desktop robotic arm designed for r
 - **VLA-friendly execution**: action-chunk smoothing + dynamics-aware FF-PID tracking for stable deployment.
 - Designed for **desktop manipulation** and scalable deployment for data collection.
 
----
-
-## Specifications (draft)
+----
+## Specifications
 | Item | Value |
 |------|------|
 | DOF | 6 + gripper |
-| Reach | TBD mm |
-| Payload | TBD kg |
-| Weight | TBD kg |
-| Interface | CAN / Ethernet / USB (TBD) |
+| Reach | 637.3 mm |
+| Payload | 2 kg |
+| Weight | 3.3 kg |
+| Interface | CAN |
 | Power | 24V DC (TBD) |
-
 > Note: final specs will be validated and reported with measurement protocols.
+## MDH Parameters
+
+We provide the Modified Denavit–Hartenberg (MDH) parameters used to reproduce the arm kinematics reported in the paper. Angles are in degrees and lengths are in millimeters.
+
+**Notation**
+- \(\theta_i\): joint angle offset (deg). The runtime joint variable \(q_i\) is added on top of this offset.
+- \(a_i\): link length (mm)
+- \(d_i\): link offset (mm)
+- \(\alpha_i\): link twist (deg)
+
+### MDH Table (6-DoF)
+
+| Link \(i\) | \(\theta_i\) (deg) | \(a_i\) (mm) | \(d_i\) (mm) | \(\alpha_i\) (deg) |
+|---:|---:|---:|---:|---:|
+| 1 | 0 | 0 | 106.26 | 0 |
+| 2 | 180 | 19 | 0 | -90 |
+| 3 | \(180+\theta\) | 269 | 0 | 180 |
+| 4 | \(-\theta\) | 236.12 | 0 | 0 |
+| 5 | 90 | 80 | 0 | 90 |
+| 6 | 0 | 0 | 29 | 90 |
+
+**Shared parameter:** \(\theta = 13.85^\circ\).
+
+**End-effector (fixed extension):** \(d_{\mathrm{ee}} = 164\,\mathrm{mm}\) (as used in the paper and CAD).
+
 
 ---
 
