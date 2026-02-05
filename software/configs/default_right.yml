@@ -1,0 +1,111 @@
+
+
+can_config: 
+  id: /dev/ttyACM1
+  baud_rate: 921600
+
+urdf:
+  path: assets/openeai_arm_urdf_ros2/urdf/STEP.urdf
+  base_link: base_link
+  ee_link: link6
+
+controller:
+  interpolation: minjerk
+  filter_alpha: 0.9
+  enable_safety_check: false
+
+motors:
+  - name: joint_1
+    type: DM4340
+    slave_id: 0x01
+    master_id: 0x11
+    min_position: -3.14
+    max_position: 3.14
+    reset_pose: -0.17
+    dynamic_coefficients:
+      kp: 300.0
+      ki: 0.0
+      kd: 5.0
+      friction: 1.0
+      friction_alpha: 50.0
+  - name: joint_2
+    type: DM4340
+    slave_id: 0x02
+    master_id: 0x12
+    min_position: -3.14
+    max_position: 3.14
+    reset_pose: -0.23
+    dynamic_coefficients:
+      kp: 300.0
+      ki: 0.0
+      kd: 5.0
+      friction: 1.0
+      friction_alpha: 50.0
+  - name: joint_3
+    type: DM4340
+    slave_id: 0x03
+    master_id: 0x13
+    min_position: -3.14
+    max_position: 3.14
+    reset_pose: -1.058
+    dynamic_coefficients:
+      kp: 300.0
+      ki: 0.0
+      kd: 5.0
+      friction: 1.0
+      friction_alpha: 50.0
+  - name: joint_4
+    type: DM4310
+    slave_id: 0x04
+    master_id: 0x14
+    min_position: -3.14
+    max_position: 3.14
+    reset_pose: 0.222
+    dynamic_coefficients:
+      kp: 50.0
+      ki: 0.0
+      kd: 0.1
+      friction: 0.5
+      friction_alpha: 5.0
+  - name: joint_5
+    type: DM4310
+    slave_id: 0x05
+    master_id: 0x15
+    min_position: -3.14
+    max_position: 3.14
+    reset_pose: -1.804
+    dynamic_coefficients:
+      kp: 20.0
+      ki: 0.0
+      kd: 0.1
+      friction: 0.5
+      friction_alpha: 5.0
+  - name: joint_6
+    type: DM4310
+    slave_id: 0x06
+    master_id: 0x16
+    min_position: -3.14
+    max_position: 3.14
+    reset_pose: 3.067
+    dynamic_coefficients:
+      kp: 20.0
+      ki: 0.0
+      kd: 0.1
+      friction: 0.5
+      friction_alpha: 5.0
+  - name: joint_7
+    type: DM4310
+    slave_id: 0x07
+    master_id: 0x17
+    min_position: 0.0
+    max_position: 1.35
+    reset_pose: -0.632
+    dynamic_coefficients:
+      kp: 0.0
+      ki: 0.0
+      kd: 0.1
+      friction: 1.0
+      friction_alpha: 5.0
+      
+      
+

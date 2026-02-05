@@ -1,0 +1,22 @@
+frame_rate: 50
+use_depth_image: true
+use_robot_base: false
+arm_steps_length: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+cameras:
+  hand:
+    rgb_topic: "/camera/leftview/color/image_raw"
+    depth_topic: "/camera/leftview/aligned_depth_to_color/image_raw"
+  agent:
+    rgb_topic: "/camera/agentview/color/image_raw"
+    depth_topic: "/camera/agentview/aligned_depth_to_color/image_raw"
+arms:
+  puppet:
+    recv_joint_state_topic: "/left/joint_states"
+    recv_eef_pose_topic: "/left/eef_pose"
+    send_joint_cmd_topic: "/left/joint_targets"
+  master:
+    recv_joint_state_topic: "/joint_targets"
+# robot_base:
+#   recv_topic: "/base/odom"
+#   send_topic: "/base/cmd_vel"
+# ctrl_topic: "/robot_ctrl"
