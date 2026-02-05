@@ -1,0 +1,58 @@
+# Ignore everything
+*
+
+!src/
+!src/openeai_arm/
+!src/openeai_arm/**/
+
+!src/openeai_arm/CMakeLists.txt
+!src/openeai_arm/package.xml
+!src/openeai_arm/src/**.cpp
+
+!src/openeai_arm/include/
+!src/openeai_arm/include/**
+
+!src/openeai_arm/rviz/
+!src/openeai_arm/rviz/**
+
+!src/openeai_arm/examples/*.py
+!src/openeai_arm/examples/*.yml
+
+# Un-ignore any .gitignore files (so per-dir .gitignore can work)
+!*/.gitignore
+
+# Ignore build artifacts
+/build/
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.exe
+*.bin
+*.out
+*.STL
+*.stl
+
+# Ignore editor files etc.
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+.DS_Store
+*.egg-info
+*.egg
+build/
+install/
+log/
+dist/
+__pycache__/
+
+# Ignore any hidden files in root except .gitignore
+/.* 
+!.gitignore
+
+# Ignore .DS_Store and Thumbs.db everywhere
+**/.DS_Store
+**/Thumbs.db
