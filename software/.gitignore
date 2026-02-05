@@ -1,0 +1,89 @@
+# Ignore everything
+/*
+
+# Allow these directories and their contents
+!/assets/
+!/configs/
+!/include/
+!/src/
+!/apps/
+!/tests/
+!/python/
+!/scripts/
+!/third_party/
+!/ros2/
+
+# But inside them, ignore all then allow specific files
+/include/*
+!/include/**
+!/include/**/*.h
+!/include/**/*.hpp
+
+/src/*
+!/src/**
+!/src/**/*.cpp
+!/src/**/*.h
+!/src/**/*.hpp
+
+/apps/*
+!/apps/**
+!/apps/**/*.cpp
+!/apps/**/*.h
+!/apps/**/*.hpp
+!/apps/**/*.py
+
+/configs/*
+!/configs/*.yml
+
+/tests/*
+!/tests/**/*.cpp
+!/tests/**/*.h
+!/tests/**/*.hpp
+
+/python/*
+!/python/**
+!/python/**/*.py
+
+# Allow top-level CMakeLists.txt (project config)
+!/CMakeLists.txt
+
+# Allow top-level README and LICENSE
+!/README*
+!/LICENSE*
+
+# Un-ignore any .gitignore files (so per-dir .gitignore can work)
+!*/.gitignore
+
+# Ignore build artifacts
+/build/
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.exe
+*.bin
+*.out
+*.STL
+*.stl
+
+# Ignore editor files etc.
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+.DS_Store
+*.egg-info
+*.egg
+build/
+dist/
+__pycache__/
+
+# Ignore any hidden files in root except .gitignore
+/.* 
+!.gitignore
+
+# Ignore .DS_Store and Thumbs.db everywhere
+**/.DS_Store
+**/Thumbs.db
