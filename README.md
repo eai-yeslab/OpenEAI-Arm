@@ -294,3 +294,24 @@ We provide a unified script to record synchronized data (Images + Joint States +
 *   **"Permission denied: /dev/ttyUSB0"**: Add user to `dialout` group.
 *   **Arm moves in reverse**: Invert the motor direction sign in `configs/default.yml`.
 *   **Jittery motion**: Increase the `frequency` or check if `Kd` (Derivative gain) is too high.
+
+  
+## Citation
+
+If you use this project in your research, please cite our paper:
+
+```bibtex
+@inproceedings{openeai_platform,
+  title   = {OpenEAI-Platform: Open-source Embodied Artificial Intelligence Hardware-Software Unified Platform},
+  author  = {TODO},
+  year    = {2026}
+}
+```
+
+## Contact / Issues
+
+If you have questions, suggestions, or would like to contribute:
+
+- Please open an issue or submit a pull request.
+- TODO: Add contact email / project page.
+
