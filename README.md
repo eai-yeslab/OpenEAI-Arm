@@ -6,6 +6,7 @@ OpenEAI Arm is a low-cost, reproducible 6-DoF desktop robotic arm designed for r
 
 ---
 <img src="https://raw.githubusercontent.com/eai-yeslab/OpenEAI-Arm/main/assets/images/openEAI-platform.png" width="800" alt="OpenEAI Arm">
+
 ## 1. Introduction
 The OpenEAI Arm is designed to lower the barrier to entry for real-world robotic manipulation research. Unlike expensive industrial arms or fragile hobbyist kits, this design balances **payload capacity (2kg)**, **precision**, and **reproducibility** with a low BOM cost.
 
