@@ -51,7 +51,7 @@ The controller uses **Modified Denavit–Hartenberg (MDH)** parameters matching 
 | **5** | 90 | 80 | 0 | 90 |
 | **6** | 0 | 0 | 29 | 90 |
 
-> **Note:** `β = 13.85°` (Fixed mechanical angle). End-effector offset `d_ee = 164 mm`.
+> **Note:** `β = 13.85°` (Fixed mechanical angle). End-effector offset `d_ee = 176 mm`.
 
 ### 3.3 Manufacturing
 *   **BOM**: See `hardware/bom/`.
