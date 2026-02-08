@@ -285,9 +285,9 @@ We provide a unified script to record synchronized data (Images + Joint States +
 ## 9. Safety & Troubleshooting
 
 ### Safety Checklist
-*   [ ] **Zeroing**: Physically verify joint zero marks match `q=0` in software before powering high-level control.
-*   [ ] **Voltage**: Ensure PSU provides stable 24V. Voltage drops cause CAN errors.
-*   [ ] **Limits**: Keep `torque_limit` conservative (<1.0 Nm) in `configs/default.yml` for initial tests.
+*   **Zeroing**: Physically verify joint zero marks match `q=0` in software before powering high-level control.
+*   **Voltage**: Ensure PSU provides stable 24V. Voltage drops cause CAN errors.
+*   **Limits**: Keep `torque_limit` conservative (<1.0 Nm) in `configs/default.yml` for initial tests.
 
 ### Troubleshooting
 *   **"Pinocchio not found"**: Check `CMAKE_PREFIX_PATH`. Did you source `.bashrc`?
