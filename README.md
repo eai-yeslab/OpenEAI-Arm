@@ -179,7 +179,7 @@ ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=2 -p frequency:=50
 ```
 
 ### 6.2 Real Hardware Control
-**⚠️ SAFETY WARNING:** Ensure E-Stop is ready and workspace is clear.
+**SAFETY WARNING:** Ensure E-Stop is ready and workspace is clear.
 
 1.  **Hardware Config**:
     *   Edit `configs/default.yml`.
