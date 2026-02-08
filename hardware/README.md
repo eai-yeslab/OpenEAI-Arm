@@ -1,3 +1,12 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:c2c7c67c4831080d84e48cd3b02dd413cf752e0f2ef3390fd4311dadf1342272
-size 382
+# Hardware
+
+This directory contains all hardware-related files for the OpenEAI Arm.
+
+## Directory Structure
+
+- **STEP/** -  files in STEP format
+- **stl/** - 3D printable STL files
+- **drawings/** - Technical drawings in PDF format
+- **bom/** - Bill of Materials (CSV/XLSX format)
+- **assembly/** - Assembly instructions in PDF format
+- **calibration/** - Calibration instructions, fixture designs, and tool lists
