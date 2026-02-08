@@ -16,7 +16,7 @@ It is specifically tailored for **VLA (Vision-Language-Action)** data collection
 ## 2. Highlights
 
 ### Hardware
-- **Low-cost 6-DoF arm** with reproducible manufacturing files (CAD/STEP/STL + drawings).
+- **Low-cost 6-DoF arm** with reproducible manufacturing files (STEP/STL + drawings).
 - **Desktop Form Factor**: Compact 6-DoF design + Gripper, suitable for table-top manipulation tasks.
 - **Cost-Effective**: Significantly cheaper than Franka/UR while maintaining sufficient capability for learning tasks.
 
