@@ -1,3 +1,5 @@
+// Referenced from: https://gitee.com/kit-miao/motor-control-routine/tree/master/C++%E4%BE%8B%E7%A8%8B/u2can/damiao.h
+
 #include "dm.hpp"
 
 #include "serial_port.hpp"

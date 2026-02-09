@@ -6,7 +6,7 @@ namespace py = pybind11;
 
 PYBIND11_MODULE(OpenEAIArm_py, m) {
     py::class_<OpenEAIArm>(m, "OpenEAIArm")
-        .def(py::init<const std::string &>()) // 构造函数，假设接收串口字符串
+        .def(py::init<const std::string &>())
         .def("joint_step", &OpenEAIArm::joint_step)
         .def("go_home", &OpenEAIArm::go_home,
             py::arg("move_time") = 2.0f)
