@@ -6,7 +6,7 @@
 !/configs/
 !/include/
 !/src/
-!/apps/
+!/tests/
 !/tests/
 !/python/
 !/scripts/
@@ -25,12 +25,12 @@
 !/src/**/*.h
 !/src/**/*.hpp
 
-/apps/*
-!/apps/**
-!/apps/**/*.cpp
-!/apps/**/*.h
-!/apps/**/*.hpp
-!/apps/**/*.py
+/tests/*
+!/tests/**
+!/tests/**/*.cpp
+!/tests/**/*.h
+!/tests/**/*.hpp
+!/tests/**/*.py
 
 /configs/*
 !/configs/*.yml
