@@ -2,6 +2,8 @@
 *
 
 !src/
+!src/openeai_arm_urdf_ros2/
+!src/openeai_arm_urdf_ros2/**/*
 !src/openeai_arm/
 !src/openeai_arm/**/
 
