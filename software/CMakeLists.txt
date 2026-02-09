@@ -52,29 +52,26 @@ target_link_libraries(OpenEAIArm_core PUBLIC dm_core Eigen3::Eigen orocos-kdl ti
 # endif()
 
 # 4. Build your test/app executables
-add_executable(test_OpenEAIArm apps/test_openeai_arm.cpp)
+add_executable(test_OpenEAIArm tests/test_openeai_arm.cpp)
 target_link_libraries(test_OpenEAIArm PRIVATE OpenEAIArm_core) # Links to OpenEAIArm (which links to dm_core)
 
-add_executable(test_OpenEAIArm_drag apps/test_openeai_arm_drag.cpp)
+add_executable(test_OpenEAIArm_drag tests/test_openeai_arm_drag.cpp)
 target_link_libraries(test_OpenEAIArm_drag PRIVATE OpenEAIArm_core)
 
-add_executable(test_OpenEAIArm_ik apps/test_openeai_arm_ik.cpp)
+add_executable(test_OpenEAIArm_ik tests/test_openeai_arm_ik.cpp)
 target_link_libraries(test_OpenEAIArm_ik PRIVATE OpenEAIArm_core)
 
-add_executable(test_OpenEAIArm_locate apps/test_openeai_arm_locate.cpp)
+add_executable(test_OpenEAIArm_locate tests/test_openeai_arm_locate.cpp)
 target_link_libraries(test_OpenEAIArm_locate PRIVATE OpenEAIArm_core)
 
-add_executable(demo apps/demo.cpp)
+add_executable(demo tests/demo.cpp)
 target_link_libraries(demo PRIVATE OpenEAIArm_core)
 
-add_executable(read_motors apps/read_motors.cpp)
+add_executable(read_motors tests/read_motors.cpp)
 target_link_libraries(read_motors PRIVATE dm_core)
 
-add_executable(test_gravity_compensation apps/test_gravity_compensation.cpp)
+add_executable(test_gravity_compensation tests/test_gravity_compensation.cpp)
 target_link_libraries(test_gravity_compensation PRIVATE OpenEAIArm_core)
-
-# add_executable(test_sim_mm apps/test_sim_mm.cpp)
-# target_link_libraries(test_sim_mm PRIVATE sim_motor)
 
 # Add debug options
 set(CMAKE_CXX_FLAGS -g)
