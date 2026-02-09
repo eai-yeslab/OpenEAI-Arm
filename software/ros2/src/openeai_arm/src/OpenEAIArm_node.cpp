@@ -13,7 +13,7 @@ public:
         this->declare_parameter<std::string>("config", "configs/default.yml");
         this->declare_parameter<int>("ctrl_mode", 0);           // 0: Program control, 1: Drag, 2: Simulation
         this->declare_parameter<int>("frequency", 50);          // Hz
-        this->declare_parameter<int>("ee_pose",   0);          // Hz
+        this->declare_parameter<int>("ee_pose",   0);           // 0: Joint Position, 1: relative ee pose, 2: absolute ee pose
         this->declare_parameter<std::string>("arm_name", "openeai_arm");
 
         // Get initial parameter values
