@@ -2,8 +2,6 @@
 *
 
 !src/
-!src/openeai_arm_urdf_ros2/
-!src/openeai_arm_urdf_ros2/**/*
 !src/openeai_arm/
 !src/openeai_arm/**/
 
@@ -20,6 +18,9 @@
 !src/openeai_arm/examples/*.py
 !src/openeai_arm/examples/*.yml
 
+!src/openeai_arm_urdf_ros2/
+!src/openeai_arm_urdf_ros2/**/*
+
 # Un-ignore any .gitignore files (so per-dir .gitignore can work)
 !*/.gitignore
 
@@ -33,8 +34,6 @@
 *.exe
 *.bin
 *.out
-*.STL
-*.stl
 
 # Ignore editor files etc.
 *.swp
