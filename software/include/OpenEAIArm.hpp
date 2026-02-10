@@ -22,7 +22,6 @@
 class OpenEAIArm {
 public:
     enum class ControlMode {
-        MIT_POS,
         MIT_MIX,
         MIT_DRAG,
         SIM
@@ -45,7 +44,6 @@ public:
     using JointArray = std::array<float, NUM_JOINTS>;
     using MotorPtrArray = std::array<DM_Motor::Motor*, NUM_JOINTS>;
 
-    OpenEAIArm(ControlMode control_mode, const std::string& serial_dev, speed_t baud = B921600);
     OpenEAIArm(const std::string& config_path, ControlMode control_mode = ControlMode::MIT_MIX);
     ~OpenEAIArm();
 
@@ -79,12 +77,18 @@ public:
                            bool interpolate = false);
 
 
+    /*
+    * @brief Switch control mode at runtime. Currently, switching to/from SIM mode is not fully tested and may cause unexpected behavior, so it is disabled.
+    */
+    void set_control_mode(ControlMode mode);
+
+
     float gripper_width_to_joint(const float gripper_width) const;
     float joint_to_gripper_width(const float joint) const;
     JointArray q_control_to_phys(const JointArray& q) const;
     JointArray q_phys_to_control(const JointArray& q_phys) const;
-    JointArray compute_static_tau(JointArray q, JointArray target_q = {}, bool output=false);
     JointArray compute_drag_dynamics(JointArray q, JointArray target_q = {}, bool output=false);
+    void send_drag_command();
 
     // Joint limits
     JointArray lower_limits() const { return joint_limits_low_; }
@@ -107,17 +111,21 @@ private:
     std::unique_ptr<BaseMotorManager> manager_;
 
     JointArray kp_, kd_;
+    JointArray ki_, friction_, friction_alpha_;
     JointArray joint_limits_low_;
     JointArray joint_limits_high_;
     JointArray reset_pose_;
     std::array<std::string, NUM_JOINTS> joint_names;
     
     ControlMode mode_ = ControlMode::MIT_MIX;
+    ArmConfig config;
     std::shared_ptr<KDSolver> kd_solver;
     std::unique_ptr<AdvancedPIDController> pid_controller;
     std::array<float, NUM_JOINTS> motor_mass={0.362, 0.362, 0.362, 0.3, 0.3, 0.3, 0.3};
     std::array<float, NUM_JOINTS> link_mass={0.089464, 0.8789, 0.71598, 0.23515, 0.16797, 0.02, 0.3 };
     std::array<float, NUM_JOINTS+1> motor_cg_z={-0.0267-0.046, 0, 0, 0, -0.023-0.048, 0, 0, -0.055};
+
+    void initialize_arm(bool reinitialize_manager = true);
 
 };
 

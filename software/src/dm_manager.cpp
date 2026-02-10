@@ -94,6 +94,11 @@ void MotorManager::move(
     last_cmd_time_ = std::chrono::steady_clock::now();
 }
 
+void MotorManager::setPosition(const JointArray& q) {
+    interpolator_->fill(q);
+    move_mit(q, uniform(0.0f), uniform(0.0f), kp_, kd_);
+}
+
 void MotorManager::move_mit(const JointArray& q, const JointArray& dq, const JointArray& tau, JointArray kp, JointArray kd) {
     CmdArray cmd;
     for (size_t j=0; j<NUM_JOINTS; ++j)
@@ -150,7 +155,7 @@ void MotorManager::start() {
         state_log_ << ",q_cmd_" << j << ",dq_cmd_" << j << ",tau_cmd_" << j;
     for (size_t j = 0; j < NUM_JOINTS; ++j)
         state_log_ << ",q_" << j << ",dq_" << j << ",tau_" << j;
-    state_log_ << ",ok" << std::endl;
+    state_log_ << ",ok,kp,kd" << std::endl;
     running_ = true;
     thread_ = std::thread(&MotorManager::controlLoop, this);
 }
@@ -286,7 +291,14 @@ void MotorManager::controlLoop() {
         for (size_t j = 0; j < NUM_JOINTS; ++j)
             state_log_ << "," << q[j] << "," << dq[j] << "," << tau[j];
 
-        state_log_ << "," << ok << std::endl;
+        state_log_ << "," << ok;
+
+        for (size_t j = 0; j < NUM_JOINTS; ++j) {
+            const auto& c = cmd_group[j];
+            state_log_ << "," << c.kp << "," << c.kd;
+        }
+
+        state_log_ << std::endl;
         
         auto t1 = std::chrono::steady_clock::now();
         auto used = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();

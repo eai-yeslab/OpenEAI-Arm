@@ -10,59 +10,6 @@ std::ostream& operator<<(std::ostream& os, const OpenEAIArm::JointArray& arr) {
     return os;
 }
 
-OpenEAIArm::OpenEAIArm(ControlMode control_mode, const std::string& serial_dev, speed_t baud):  // Deprecated
-    mode_(control_mode)
-{
-    serial_ = std::make_shared<SerialPort>(serial_dev, baud);
-    motor_ctl_ = std::make_unique<DM_Motor::Motor_Control>(serial_);
-
-    std::array<DM_Motor::DM_Motor_Type, NUM_JOINTS> types = {DM_Motor::DM4340, DM_Motor::DM4340, DM_Motor::DM4340, DM_Motor::DM4310, DM_Motor::DM4310, DM_Motor::DM4310, DM_Motor::DM4310};
-    std::array<uint8_t, NUM_JOINTS>  slave_ids = {0x02, 0x01, 0x03, 0x04, 0x05, 0x06, 0x07};
-    std::array<uint8_t, NUM_JOINTS>  master_ids = {0x12, 0x11, 0x13, 0x14, 0x15, 0x16, 0x17};
-
-    for (size_t i = 0; i < NUM_JOINTS; ++i) {
-        DM_Motor::Motor* m = new DM_Motor::Motor(types[i], slave_ids[i], master_ids[i]);
-        motors_[i] = m;
-        motor_ctl_->addMotor(m);
-    }
-    joint_limits_low_  = {-3.14f, -3.14f, -3.14f, -3.14f, -3.14f, -3.14f, 0.0f};
-    joint_limits_high_ = { 3.14f,  3.14f,  3.14f,  3.14f,  3.14f,  3.14f, 1.37f};
-    reset_pose_        = {M_PI * 0.5f, -1.5, 0.25f, 0.01f, 0.6f, 2.6f, -1.25f};
-    kp_ = {30.0f, 30.0f, 30.0f, 30.0f, 30.0f, 30.0f, 30.0f};
-    kd_ = {0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f, 0.1f};
-    joint_names = {
-            "joint_1","joint_2","joint_3","joint_4","joint_5","joint_6","joint_7"
-        };
-
-    if (mode_ != ControlMode::SIM)
-        enable_all();
-
-
-    // Control main thread management
-    switch (mode_) {
-        case ControlMode::MIT_POS:
-        case ControlMode::MIT_MIX:
-        case ControlMode::MIT_DRAG:
-            manager_ = std::make_unique<MotorManager>(motors_, motor_ctl_.get());
-            break;
-        case ControlMode::SIM:
-            manager_ = std::make_unique<SimMotorManager>("ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf");
-            break;
-    }
-
-    kd_solver = std::make_shared<KDSolver>("ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf", "base_link", "link6");
-    float dt = manager_->getControlCycle();
-    pid_controller = std::make_unique<AdvancedPIDController>(dt);
-    pid_controller->setResetPose(reset_pose_);
-
-    if (mode_ == ControlMode::MIT_MIX)
-        manager_->compute_dynamic_torque = [this](const JointArray& q, const JointArray& target_q){ return this->pid_controller->computeControlTorque(q, target_q); };
-    else if (mode_ == ControlMode::MIT_DRAG)
-        manager_->compute_dynamic_torque = [this](const JointArray& q, const JointArray& target_q){ return this->compute_drag_dynamics(q, target_q); };
-
-    std::cout << "OpenEAIArm initialized and ready." << std::endl;
-}
-
 /*
     * @description: Constructor that loads configuration from a file
     * @param config_path: Path to the configuration file
@@ -72,12 +19,11 @@ OpenEAIArm::OpenEAIArm(const std::string& config_path, ControlMode control_mode)
     mode_(control_mode)
 {
     std::cout << "Loading config file from " << config_path << std::endl;
-    ArmConfig config = load_arm_config(config_path);
+    config = load_arm_config(config_path);
 
     serial_ = std::make_shared<SerialPort>(config.can.id, config.can.baud_rate);
     motor_ctl_ = std::make_unique<DM_Motor::Motor_Control>(serial_);
 
-    JointArray ki, friction, friction_alpha;
 
     for (size_t i = 0; i < NUM_JOINTS; ++i) {
         auto motor = config.motors[i];
@@ -94,20 +40,28 @@ OpenEAIArm::OpenEAIArm(const std::string& config_path, ControlMode control_mode)
         reset_pose_[i] = motor.reset_pose;
         kp_[i] = motor.dynamic_coeff.kp;
         kd_[i] = motor.dynamic_coeff.kd;
-        if (mode_ != ControlMode::MIT_DRAG) {
-            ki[i] = motor.dynamic_coeff.ki;
-            friction[i] = motor.dynamic_coeff.friction;
-            friction_alpha[i] = motor.dynamic_coeff.friction_alpha;
-        }
-        else {
-            ki[i] = 0;
-            friction[i] = 0;
-            friction_alpha[i] = 0;
-        }
     }
 
-    if (mode_ != ControlMode::SIM)
-        enable_all();
+
+    initialize_arm(true);
+
+    std::cout << "OpenEAIArm initialized and ready." << std::endl;
+}
+
+
+void OpenEAIArm::initialize_arm(bool reinitialize_manager) {
+    for (size_t i = 0; i < NUM_JOINTS; ++i) {
+        if (mode_ != ControlMode::MIT_DRAG) {
+            ki_[i] = config.motors[i].dynamic_coeff.ki;
+            friction_[i] = config.motors[i].dynamic_coeff.friction;
+            friction_alpha_[i] = config.motors[i].dynamic_coeff.friction_alpha;
+        }
+        else {
+            ki_[i] = 0;
+            friction_[i] = 0;
+            friction_alpha_[i] = 0;
+        }
+    }
 
     std::string interpolation_method = config.controller.interpolation;
     MotorManager::InterpolationMethod mmim;
@@ -116,24 +70,29 @@ OpenEAIArm::OpenEAIArm(const std::string& config_path, ControlMode control_mode)
     else mmim = MotorManager::InterpolationMethod::MinJerk;
     float mm_alpha = config.controller.filter_alpha;
 
-    switch (mode_) {
-        case ControlMode::MIT_POS:
-        case ControlMode::MIT_MIX:
-        case ControlMode::MIT_DRAG:
-            manager_ = std::make_unique<MotorManager>(motors_, motor_ctl_.get(), mmim, mm_alpha);
-            break;
-        case ControlMode::SIM:
-            manager_ = std::make_unique<SimMotorManager>(config.urdf.path, reset_pose_);
-            break;
+    if (reinitialize_manager)  {
+        if (mode_ != ControlMode::SIM)
+            enable_all();
+
+        if (manager_) manager_->stop();
+        switch (mode_) {
+            case ControlMode::MIT_MIX:
+            case ControlMode::MIT_DRAG:
+                manager_ = std::make_unique<MotorManager>(motors_, motor_ctl_.get(), mmim, mm_alpha);
+                break;
+            case ControlMode::SIM:
+                manager_ = std::make_unique<SimMotorManager>(config.urdf.path, reset_pose_);
+                break;
+        }
+        
+        kd_solver = std::make_shared<KDSolver>(config.urdf.path, config.urdf.base_link, config.urdf.ee_link);
+        
+        float dt = manager_->getControlCycle();
+        pid_controller = std::make_unique<AdvancedPIDController>(dt, kd_solver);
+        pid_controller->setResetPose(reset_pose_);
     }
-
-    kd_solver = std::make_shared<KDSolver>(config.urdf.path, config.urdf.base_link, config.urdf.ee_link);
-
-    float dt = manager_->getControlCycle();
-    pid_controller = std::make_unique<AdvancedPIDController>(dt, kd_solver);
-    pid_controller->setResetPose(reset_pose_);
-    pid_controller->setKpKiParams(friction, ki);
-    pid_controller->setNonlinearParams(friction_alpha, 0.001f);
+    pid_controller->setKpKiParams(friction_, ki_);
+    pid_controller->setNonlinearParams(friction_alpha_, 0.001f);
 
     if (mode_ == ControlMode::MIT_MIX) {
         manager_->compute_dynamic_torque = [this](const JointArray& q, const JointArray& target_q){ return this->pid_controller->computeControlTorque(q, target_q); };
@@ -142,8 +101,6 @@ OpenEAIArm::OpenEAIArm(const std::string& config_path, ControlMode control_mode)
         manager_->compute_dynamic_torque = [this](const JointArray& q, const JointArray& target_q){ return this->compute_drag_dynamics(q, target_q); };
     }
     manager_->setEnableSafetyCheck(config.controller.enable_safety_check);
-
-    std::cout << "OpenEAIArm initialized and ready." << std::endl;
 }
 
 OpenEAIArm::~OpenEAIArm() {
@@ -305,6 +262,28 @@ OpenEAIArm::JointArray OpenEAIArm::inverse_kinetics(JointArray ee_pose, bool& su
     return ik_result;
 }
 
+void OpenEAIArm::set_control_mode(ControlMode mode) {
+    if (mode_ == mode) return;
+    if (mode == ControlMode::SIM || mode_ == ControlMode::SIM) {
+        std::cerr << "Warning: Switching to/from SIM mode may cause unexpected behavior, and is not supported yet." << std::endl;
+        std::cerr << "The robot is stopped. Please restart the program." << std::endl;
+        if (manager_) manager_->stop();
+    }
+    bool reinitialize_manager = false;
+    if ((mode_ == ControlMode::SIM && mode != ControlMode::SIM) ||
+        (mode_ != ControlMode::SIM && mode == ControlMode::SIM)) {
+        reinitialize_manager = true;
+    }
+    mode_ = mode;
+    initialize_arm(reinitialize_manager);
+    if (mode_ != ControlMode::MIT_DRAG) {
+        manager_->setPosition(manager_->getPosition());
+    }
+    else {
+        set_joint_targets(get_joint_positions(), 0.0f, manager_->uniform(0.0f), {}, false);
+    }
+}
+
 float OpenEAIArm::gripper_width_to_joint(const float gripper_width) const {
     constexpr float theta = 1.702582745f;
     float single_width = gripper_width * 500.0f + 23.0f; // Convert from m to mm
@@ -364,140 +343,32 @@ void OpenEAIArm::set_joint_targets(const JointArray& target, float move_time,
     if (!interpolate)
         move_time = 0.0f;
     switch(mode_) {
-        case ControlMode::MIT_POS:
-            manager_->move(physical_target, manager_->uniform(1.0f), std::nullopt, kp_, kd_, move_time);
-            break;
         case ControlMode::MIT_MIX:
         case ControlMode::SIM:
             manager_->move(physical_target, manager_->uniform(0.0f), std::nullopt, kp_, kd_, move_time);
             break;
         case ControlMode::MIT_DRAG:
-            auto current_vel = get_joint_velocities();
-            const float velocity_threshold = 0.25f;
-            bool is_stationary = true;
-            for (const auto& v : current_vel) {
-                if (std::fabs(v) > velocity_threshold) {
-                    is_stationary = false;
-                    break;
-                }
-            }
-            const JointArray stationary_kp = {20.0f, 20.0f, 20.0f, 5.0f, 5.0f, 5.0f, 0.0f};
-            const JointArray stationary_kd = {1.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 0.0f};
-            if (is_stationary)
-                manager_->move(manager_->getPosition(), manager_->uniform(0.0f), std::nullopt, stationary_kp, stationary_kd, move_time);
-            else
-                manager_->move(physical_target, manager_->uniform(0.0f), std::nullopt, manager_->uniform(0.0f), manager_->uniform(0.0f), move_time);
+            send_drag_command();
             break;
     }
 }
 
-OpenEAIArm::JointArray OpenEAIArm::compute_static_tau(OpenEAIArm::JointArray q, OpenEAIArm::JointArray target_q, bool output) // Deprecated
-{
-    if (output) std::cout << "============== Tau args ==============" << std::endl;
-    q = q_phys_to_control(q);
-    // 1. Define robot physical parameters
-    constexpr double DEG = M_PI / 180.0;
-    constexpr double MM = 0.001;
-    constexpr double g = 9.80665;
-    // 2. MDH parameters: theta, d, a, alpha
-    double mdh[NUM_JOINTS][4] = {
-        {0*DEG,           (71.3+45.96)*MM,  0*MM,       0*DEG},
-        {180*DEG,         0*MM,  19*MM,       -90*DEG},
-        {(180+14.927)*DEG,0*MM, 264*MM,      180*DEG},
-        {-14.927*DEG,     0*MM, 233.89*MM,   0*DEG},
-        {90*DEG,          (46.5-48.06)*MM, 75*MM, 90*DEG},
-        {0*DEG,           35.95*MM, 0*MM,   90*DEG},
-        {0*DEG,           65*MM, 0*MM,  0*DEG},
-    };
-    // You need to set motor_mass, link_mass, motor_cg_z
-    JointArray tau{};
-    
-    // ----- 3. Calculate the rotation centers and centers of gravity for each joint -----
-    struct Body {
-        Eigen::Vector3d joint_pos;   // 旋转中心
-        Eigen::Vector3d motor_cg;    // 电机重心
-        Eigen::Vector3d link_cg;     // 连杆重心
-    };
-    std::array<Body, NUM_JOINTS> bodies;
-    Eigen::Matrix4d T = Eigen::Matrix4d::Identity();
-    std::array<Eigen::Matrix4d, NUM_JOINTS+1> Tj; 
-    Tj[0] = T;
-
-    // Joint transformations
-    for (size_t i=0; i<NUM_JOINTS; ++i) {
-        double th = q[i] + mdh[i][0];
-        double d = mdh[i][1];
-        double a = mdh[i][2];
-        double alpha = mdh[i][3];
-        Eigen::Matrix4d Ai;
-
-        Ai << 
-            cos(th),            -sin(th),             0,           a,
-            sin(th)*cos(alpha),  cos(th)*cos(alpha), -sin(alpha), -d*sin(alpha),
-            sin(th)*sin(alpha),  cos(th)*sin(alpha),  cos(alpha),  d*cos(alpha),
-            0,        0,                   0,                  1;
-
-        T = T * Ai;
-        Tj[i+1] = T;
-
-        bodies[i].joint_pos = T.block<3,1>(0,3);
-        Eigen::Vector4d cg_local(0,0,motor_cg_z[i],1);
-        Eigen::Vector4d cg_world = T * cg_local;
-        bodies[i].motor_cg = cg_world.head<3>();
-    }
-    for (size_t i=0; i+1<NUM_JOINTS; ++i) {
-        bodies[i].link_cg = 0.5*(bodies[i].motor_cg + bodies[i+1].motor_cg);
-    }
-    bodies[NUM_JOINTS-1].link_cg = (T * Eigen::Vector4d(0,0,motor_cg_z[NUM_JOINTS],1)).head<3>();
-
-    // ----- 4. Torque sum up -----
-    Eigen::Vector3d gravity(0,0,-g);
-    double delta_tau;
-    for (size_t i=0; i<NUM_JOINTS; ++i) {
-        double tau_i = 0.0;
-        auto origin = bodies[i].joint_pos;
-        // Torques contributed by all subsequent motors and links to joint i
-        for (size_t j=i; j<NUM_JOINTS; ++j) {
-            // Motor center of gravity
-            Eigen::Vector3d r = bodies[j].motor_cg - origin;
-            Eigen::Vector3d Fg = motor_mass[j] * gravity;
-            Eigen::Vector3d tau_g = r.cross(Fg);
-            // Project onto the joint axis
-            Eigen::Vector3d z_axis = (Tj[i+1].block<3,1>(0,2)).normalized(); // Joint i's z-axis direction
-            delta_tau = tau_g.dot(z_axis);
-            tau_i += delta_tau;
-            if (output) std::cout << "Tau " << j << " @ " << i << " = " << delta_tau << std::endl;
-            // Link
-            Eigen::Vector3d r_link = bodies[j].link_cg - origin;
-            Eigen::Vector3d Fg_link = link_mass[j] * gravity;
-            Eigen::Vector3d tau_g_link = r_link.cross(Fg_link);
-            delta_tau = tau_g_link.dot(z_axis);
-            if (output) std::cout << "Tau " << j << "-" << j+1 << " @ " << i << " = " << delta_tau << std::endl;
-            tau_i += delta_tau;
+void OpenEAIArm::send_drag_command() {
+    auto current_vel = get_joint_velocities();
+    const float velocity_threshold = 0.25f;
+    bool is_stationary = true;
+    for (const auto& v : current_vel) {
+        if (std::fabs(v) > velocity_threshold) {
+            is_stationary = false;
+            break;
         }
-        tau[i] = -float(tau_i);
-        if (output) std::cout << "Total tau " << i << " = " << tau[i] << std::endl;
-        if (output) std::cout << "----------------" << std::endl;
     }
-    if (output) {
-        std::cout << "---Joint rotation centers---\n";
-        for (size_t i=0; i<NUM_JOINTS; ++i)
-            std::cout << "Joint " << i << ": (" << bodies[i].joint_pos.transpose() << ")\n";
-        std::cout << "---Motor centers of gravity---\n";
-        for (size_t i=0; i<NUM_JOINTS; ++i)
-            std::cout << "Motor " << i << ": (" << bodies[i].motor_cg.transpose() << ")\n";
-        std::cout << "---Link centers of gravity---\n";
-        for (size_t i=0; i < NUM_JOINTS; ++i)
-            std::cout << "Link " << i << ": (" << bodies[i].link_cg.transpose() << ")\n";
-
-        std::cout << "Angles (q): ";
-        for (float v : q) std::cout << std::fixed << std::setprecision(4) << v << ", ";
-        std::cout << "\nStatic torques (tau): ";
-        for (float v : tau) std::cout << std::fixed << std::setprecision(4) << v << ", ";
-        std::cout << std::endl;
-    }
-
-    return tau;
+    const JointArray stationary_kp = {20.0f, 20.0f, 20.0f, 5.0f, 5.0f, 5.0f, 0.0f};
+    const JointArray stationary_kd = {1.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 0.0f};
+    if (is_stationary)
+        manager_->move(manager_->getPosition(), manager_->uniform(0.0f), std::nullopt, stationary_kp, stationary_kd, 0.0f);
+    else
+        manager_->move(manager_->getPosition(), manager_->uniform(0.0f), std::nullopt, manager_->uniform(0.0f), manager_->uniform(0.0f), 0.0f);
 }
 
 OpenEAIArm::JointArray OpenEAIArm::compute_drag_dynamics(OpenEAIArm::JointArray q, OpenEAIArm::JointArray target_q, bool output) {
@@ -535,5 +406,8 @@ OpenEAIArm::JointArray OpenEAIArm::compute_drag_dynamics(OpenEAIArm::JointArray 
     else {
         std::cout << "Something wrong!" << std::endl;
     }
+
+    send_drag_command();
+
     return tau;
 }

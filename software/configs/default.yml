@@ -99,7 +99,7 @@ motors:
     master_id: 0x17
     min_position: 0.0
     max_position: 1.35
-    reset_pose: -2.28
+    reset_pose: 1.32
     dynamic_coefficients:
       kp: 0.0
       ki: 0.0

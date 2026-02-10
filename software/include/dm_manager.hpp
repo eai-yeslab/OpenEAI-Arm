@@ -69,6 +69,7 @@ public:
     virtual void start() = 0;
     virtual void stop() = 0;
     virtual void refresh() = 0;
+    virtual void setPosition(const JointArray& q) = 0;
 
     // Reset: move all joints to zero and hold for move_time (default: 1.0s)
     virtual void reset(float move_time = 1.0f) = 0;
@@ -116,6 +117,7 @@ public:
     void start();
     void stop();
     void refresh();
+    void setPosition(const JointArray& q) override;
 
     void reset(float move_time = 1.0f) override;
 

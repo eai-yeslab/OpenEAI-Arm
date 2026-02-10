@@ -49,6 +49,7 @@ public:
     void start();
     void stop();
     void refresh();
+    void setPosition(const JointArray& q) override { move(q); };
 
     // Reset: move all joints to zero and hold for move_time (default: 1.0s)
     void reset(float move_time = 1.0f);

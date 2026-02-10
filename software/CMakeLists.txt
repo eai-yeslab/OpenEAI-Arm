@@ -55,6 +55,9 @@ target_link_libraries(OpenEAIArm_core PUBLIC dm_core Eigen3::Eigen orocos-kdl ti
 add_executable(test_OpenEAIArm tests/test_openeai_arm.cpp)
 target_link_libraries(test_OpenEAIArm PRIVATE OpenEAIArm_core) # Links to OpenEAIArm (which links to dm_core)
 
+add_executable(test_OpenEAIArm_set_mode tests/test_openeai_arm_set_mode.cpp)
+target_link_libraries(test_OpenEAIArm_set_mode PRIVATE OpenEAIArm_core)
+
 add_executable(test_OpenEAIArm_drag tests/test_openeai_arm_drag.cpp)
 target_link_libraries(test_OpenEAIArm_drag PRIVATE OpenEAIArm_core)
 
@@ -69,9 +72,6 @@ target_link_libraries(demo PRIVATE OpenEAIArm_core)
 
 add_executable(read_motors tests/read_motors.cpp)
 target_link_libraries(read_motors PRIVATE dm_core)
-
-add_executable(test_gravity_compensation tests/test_gravity_compensation.cpp)
-target_link_libraries(test_gravity_compensation PRIVATE OpenEAIArm_core)
 
 # Add debug options
 set(CMAKE_CXX_FLAGS -g)

@@ -1,19 +1,19 @@
 #include <rclcpp/rclcpp.hpp>
 #include "sensor_msgs/msg/joint_state.hpp"
 #include "rcl_interfaces/msg/set_parameters_result.hpp"
-#include <std_msgs/msg/int32.hpp> 
+#include <std_msgs/msg/int32.hpp>
 #include "OpenEAIArm.hpp"
 
 class OpenEAIArmNode : public rclcpp::Node {
 public:
     OpenEAIArmNode()
-    : Node("OpenEAIArm_node")
+        : Node("OpenEAIArm_node")
     {
         // Declare parameters, with defaults
         this->declare_parameter<std::string>("config", "configs/default.yml");
         this->declare_parameter<int>("ctrl_mode", 0);           // 0: Program control, 1: Drag, 2: Simulation
         this->declare_parameter<int>("frequency", 50);          // Hz
-        this->declare_parameter<int>("ee_pose",   0);           // 0: Joint Position, 1: relative ee pose, 2: absolute ee pose
+        this->declare_parameter<int>("ee_pose",   0);          // 0: joint, 1: delta ee, 2: absolute ee
         this->declare_parameter<std::string>("arm_name", "openeai_arm");
 
         // Get initial parameter values
@@ -42,31 +42,23 @@ public:
             }
         );
 
-        if (ctrl_mode_ == 0) {
-            arm_ = std::make_unique<OpenEAIArm>(config_, OpenEAIArm::ControlMode::MIT_MIX);
-            RCLCPP_INFO(this->get_logger(), "Starting SII Arm with control mode");
-            arm_->reset();
-        }
-        else if (ctrl_mode_ == 1) {
-            arm_ = std::make_unique<OpenEAIArm>(config_, OpenEAIArm::ControlMode::MIT_DRAG);
-            RCLCPP_INFO(this->get_logger(), "Starting SII Arm with drag mode");
-        }
-        else {
-            arm_ = std::make_unique<OpenEAIArm>(config_, OpenEAIArm::ControlMode::SIM);
-            RCLCPP_INFO(this->get_logger(), "Starting SII Arm with sim mode");
-            arm_->go_home();
-        }
+        // Initialize arm with current control mode
+        initialize_arm();
 
+        // Publishers
         pub_joint_ = this->create_publisher<sensor_msgs::msg::JointState>(arm_name_ + "/joint_states", 10);
         pub_joint_6d_ = this->create_publisher<sensor_msgs::msg::JointState>(arm_name_ + "/joint_states_6d", 10);
         pub_eef_pose_ = this->create_publisher<sensor_msgs::msg::JointState>(arm_name_ + "/eef_pose", 10);
         if (ctrl_mode_ == 1) pub_joint_fake_target_ = this->create_publisher<sensor_msgs::msg::JointState>("/joint_targets", 10);
 
-        // (if controlling by JointState message)
+        // Subscribers
         sub_cmd_ = this->create_subscription<sensor_msgs::msg::JointState>(
-            "joint_targets", 10, // target subscription topic here
+            "joint_targets", 10,
             [this](sensor_msgs::msg::JointState::UniquePtr msg){
-                if(msg->position.size() != 7) { /* error handling */ return; }
+                if(msg->position.size() != 7) { 
+                    RCLCPP_WARN(this->get_logger(), "Joint target message must have 7 positions");
+                    return; 
+                }
                 for(size_t i=0;i<7;++i) target_[i] = msg->position[i];
             });
 
@@ -82,6 +74,7 @@ public:
                     in_reset_mode_ = false;
                 }
             });
+
         prepare_sub_ = this->create_subscription<std_msgs::msg::Int32>(
             "robot_prepare", 10,
             [this](std_msgs::msg::Int32::UniquePtr msg) {
@@ -95,10 +88,33 @@ public:
                 }
             });
 
+        // New subscription for setting control mode
+        set_mode_sub_ = this->create_subscription<sensor_msgs::msg::JointState>(
+            "set_control_mode", 10,
+            [this](sensor_msgs::msg::JointState::UniquePtr msg) {
+                if (msg->position.size() >= 2) {
+                    int new_ctrl_mode = static_cast<int>(msg->position[0]);
+                    int new_ee_pose = static_cast<int>(msg->position[1]);
+                    
+                    RCLCPP_INFO(this->get_logger(), "Setting control mode: ctrl_mode=%d, ee_pose=%d", 
+                               new_ctrl_mode, new_ee_pose);
+                    
+                    // Change control mode if different
+                    if (new_ctrl_mode != ctrl_mode_) {
+                        set_control_mode(new_ctrl_mode);
+                    }
+                    
+                    // Change ee_pose mode if different
+                    if (new_ee_pose != ee_pose_) {
+                        set_ee_pose_mode(new_ee_pose);
+                    }
+                } else {
+                    RCLCPP_WARN(this->get_logger(), "Control mode message must have at least 2 values");
+                }
+            });
+
         timer_ = this->create_wall_timer(control_period_, [this]() { send_and_publish(); });
-
         update_init_ee_pose();
-
     }
 
     ~OpenEAIArmNode() override {
@@ -109,9 +125,119 @@ public:
     }
 
 private:
+    void initialize_arm() {
+        if (arm_) {
+            RCLCPP_INFO(this->get_logger(), "Disabling current arm before reinitialization.");
+            arm_->disable_all();
+            arm_.reset();
+        }
+
+        if (ctrl_mode_ == 0) {
+            arm_ = std::make_unique<OpenEAIArm>(config_, OpenEAIArm::ControlMode::MIT_MIX);
+            RCLCPP_INFO(this->get_logger(), "Starting SII Arm with program control mode");
+            arm_->reset();
+        }
+        else if (ctrl_mode_ == 1) {
+            arm_ = std::make_unique<OpenEAIArm>(config_, OpenEAIArm::ControlMode::MIT_DRAG);
+            RCLCPP_INFO(this->get_logger(), "Starting SII Arm with drag mode");
+            // Create publisher for drag mode if needed
+            if (!pub_joint_fake_target_) {
+                pub_joint_fake_target_ = this->create_publisher<sensor_msgs::msg::JointState>("/joint_targets", 10);
+            }
+        }
+        else {
+            arm_ = std::make_unique<OpenEAIArm>(config_, OpenEAIArm::ControlMode::SIM);
+            RCLCPP_INFO(this->get_logger(), "Starting SII Arm with sim mode");
+            arm_->go_home();
+        }
+
+        // Update target positions to current arm position
+        target_ = arm_->get_joint_positions();
+        target_ee_pose_ = arm_->get_ee_pose();
+        init_ee_pose_ = arm_->get_ee_pose();
+        
+        RCLCPP_INFO(this->get_logger(), "Arm initialized with control mode %d", ctrl_mode_);
+    }
+
+    void set_control_mode(int new_mode) {
+        if (new_mode < 0 || new_mode > 2) {
+            RCLCPP_ERROR(this->get_logger(), "Invalid control mode: %d. Must be 0, 1, or 2", new_mode);
+            return;
+        }
+
+        if (new_mode == ctrl_mode_) {
+            return; // No change needed
+        }
+
+        RCLCPP_INFO(this->get_logger(), "Changing control mode from %d to %d", ctrl_mode_, new_mode);
+        
+        // Handle mode-specific cleanup before switching
+        if (new_mode == 2) {
+            RCLCPP_ERROR(this->get_logger(), "Switching to SIM mode is not fully supported and may cause unexpected behavior, so it is disabled.");
+            return;
+        }
+        
+        ctrl_mode_ = new_mode;
+        
+        if (ctrl_mode_ == 0) {
+            arm_->set_control_mode(OpenEAIArm::ControlMode::MIT_MIX);
+        }
+        else if (ctrl_mode_ == 1) {
+            arm_->set_control_mode(OpenEAIArm::ControlMode::MIT_DRAG);
+        }
+        
+        // Update mode-dependent publishers
+        if (ctrl_mode_ == 1 && !pub_joint_fake_target_) {
+            pub_joint_fake_target_ = this->create_publisher<sensor_msgs::msg::JointState>("/joint_targets", 10);
+        } else if (ctrl_mode_ != 1 && pub_joint_fake_target_) {
+            pub_joint_fake_target_.reset(); // Remove publisher if not in drag mode
+        }
+    }
+
+    void set_ee_pose_mode(int new_ee_pose) {
+        if (new_ee_pose < 0 || new_ee_pose > 2) {
+            RCLCPP_ERROR(this->get_logger(), "Invalid ee_pose mode: %d. Must be 0, 1, or 2", new_ee_pose);
+            return;
+        }
+
+        if (new_ee_pose == ee_pose_) {
+            return; // No change needed
+        }
+
+        RCLCPP_INFO(this->get_logger(), "Changing ee_pose mode from %d to %d", ee_pose_, new_ee_pose);
+        
+        ee_pose_ = new_ee_pose;
+        
+        // Update targets based on new mode
+        if (ee_pose_ == 2) {
+            // Absolute ee mode: use current ee pose as reference
+            init_ee_pose_ = arm_->get_ee_pose();
+            for (size_t i = 0; i < 3; ++i) {
+                target_[i] = 0.0f;
+            }
+            for (size_t i = 3; i < arm_->NUM_JOINTS - 1; ++i) {
+                target_[i] = init_ee_pose_[i];
+            }
+            RCLCPP_INFO(this->get_logger(), "Switched to absolute ee control mode");
+        } else if (ee_pose_ == 0) {
+            // Joint control mode: use current joint positions
+            target_ = arm_->get_joint_positions();
+            RCLCPP_INFO(this->get_logger(), "Switched to joint control mode");
+        } else if (ee_pose_ == 1) {
+            // Delta ee mode: use current ee pose as baseline
+            target_ee_pose_ = arm_->get_ee_pose();
+            // Reset delta targets to zero
+            for (size_t i = 0; i < arm_->NUM_JOINTS; ++i) {
+                target_[i] = 0.0f;
+            }
+            RCLCPP_INFO(this->get_logger(), "Switched to delta ee control mode");
+        }
+    }
+
     void update_init_ee_pose() {
         target_ee_pose_ = arm_->get_ee_pose();
         init_ee_pose_ = arm_->get_ee_pose();
+        
         if (ee_pose_ == 2) {
             for (size_t i = 0; i < 3; ++i) {
                 target_[i] = 0.0f;
@@ -123,13 +249,14 @@ private:
         else if (ee_pose_ == 0) {
             target_ = arm_->get_joint_positions();
         }
-        std::cout << arm_->get_joint_positions() << std::endl;
-        std::cout << target_ee_pose_ << std::endl;
+        
+        std::cout << "Current joint positions: " << arm_->get_joint_positions() << std::endl;
+        std::cout << "Current ee pose: " << target_ee_pose_ << std::endl;
     }
 
     void send_and_publish()
     {
-        // Send
+        // Send commands based on current mode
         if (in_reset_mode_) {
             auto q_cur = arm_->get_joint_positions();
             OpenEAIArm::JointArray q_next;
@@ -197,7 +324,7 @@ private:
         auto vel = arm_->get_joint_velocities();
         auto tau = arm_->get_joint_torques();
         auto eef_pose = arm_->get_ee_pose();
-
+        
         auto msg = sensor_msgs::msg::JointState();
         msg.header.stamp = this->now();
         msg.header.frame_id = "";
@@ -206,33 +333,30 @@ private:
         msg.position.insert(msg.position.end(), pos.begin(), pos.end());
         msg.velocity.insert(msg.velocity.end(), vel.begin(), vel.end());
         msg.effort.insert(msg.effort.end(), tau.begin(), tau.end());
-
         pub_joint_->publish(msg);
-
-
+        
         auto msg_6d = sensor_msgs::msg::JointState();
         msg_6d.header.stamp = this->now();
         msg_6d.header.frame_id = "";
         static const std::vector<std::string> joint_names_6d = {
-                "1", "2", "3", "4", "5", "6"
-            };
+            "1", "2", "3", "4", "5", "6"
+        };
         msg_6d.name = joint_names_6d;
         msg_6d.position.insert(msg_6d.position.end(), pos.begin(), pos.end()-1);
         msg_6d.velocity.insert(msg_6d.velocity.end(), vel.begin(), vel.end()-1);
         msg_6d.effort.insert(msg_6d.effort.end(), tau.begin(), tau.end()-1);
-
         pub_joint_6d_->publish(msg_6d);
-
-        if (ctrl_mode_ == 1) {
+        
+        if (ctrl_mode_ == 1 && pub_joint_fake_target_) {
             pub_joint_fake_target_->publish(msg);
         }
-
+        
         auto eef_msg = sensor_msgs::msg::JointState();
         eef_msg.header.stamp = this->now();
         eef_msg.header.frame_id = "eef_pose";
         static const std::vector<std::string> eef_names = {
-                "x", "y", "z", "rx", "ry", "rz", "gripper_width"
-            };
+            "x", "y", "z", "rx", "ry", "rz", "gripper_width"
+        };
         eef_msg.name = eef_names;
         eef_msg.position.insert(eef_msg.position.end(), eef_pose.begin(), eef_pose.end());
         pub_eef_pose_->publish(eef_msg);
@@ -244,19 +368,21 @@ private:
     rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr pub_joint_fake_target_;
     rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr pub_eef_pose_;
     rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr sub_cmd_;
+    rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr set_mode_sub_;
+    
     bool in_reset_mode_ = false, in_prepare_mode_ = false;
     rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr reset_sub_;
     rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr prepare_sub_;
-
-
+    
     OpenEAIArm::JointArray target_ = {0.0,0.0,0.0,0.0,0.0,0.0,0.0};
     OpenEAIArm::JointArray target_ee_pose_ = {0.0,0.0,0.0,0.0,0.0,0.0,0.0};
     OpenEAIArm::JointArray init_ee_pose_ = {0.0,0.0,0.0,0.0,0.0,0.0,0.0};
     OpenEAIArm::JointArray restore_target_{0.0,0.0,0.0,0.0,0.0,0.0,0.0};
     OpenEAIArm::JointArray prepare_target_{0.0,1.0,1.5,-1.0,0.0,0.0,0.0};
+    
     rclcpp::TimerBase::SharedPtr timer_;
     rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr param_cb_handle_;
-
+    
     std::string config_;
     int ctrl_mode_;
     int frequency_;

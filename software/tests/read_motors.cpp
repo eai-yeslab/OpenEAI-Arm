@@ -26,7 +26,7 @@ std::array<DM_Motor::Motor*, NUM_JOINTS> initMotors() {
 int main() {
     auto motors = initMotors();
 
-    std::shared_ptr<SerialPort> serial = std::make_shared<SerialPort>("/dev/ttyACM1", B921600);
+    std::shared_ptr<SerialPort> serial = std::make_shared<SerialPort>("/dev/ttyACM0", B921600);
     DM_Motor::Motor_Control motor_ctl(serial);
     for (auto m : motors){
         motor_ctl.addMotor(m);
