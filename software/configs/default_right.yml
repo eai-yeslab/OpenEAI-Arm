@@ -5,7 +5,7 @@ can_config:
   baud_rate: 921600
 
 urdf:
-  path: assets/openeai_arm_urdf_ros2/urdf/STEP.urdf
+  path: ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf
   base_link: base_link
   ee_link: link6
 

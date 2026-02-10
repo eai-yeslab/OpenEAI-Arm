@@ -46,11 +46,11 @@ OpenEAIArm::OpenEAIArm(ControlMode control_mode, const std::string& serial_dev, 
             manager_ = std::make_unique<MotorManager>(motors_, motor_ctl_.get());
             break;
         case ControlMode::SIM:
-            manager_ = std::make_unique<SimMotorManager>("assets/openeai_arm_urdf_ros2/urdf/STEP.urdf");
+            manager_ = std::make_unique<SimMotorManager>("ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf");
             break;
     }
 
-    kd_solver = std::make_shared<KDSolver>("assets/openeai_arm_urdf_ros2/urdf/STEP.urdf", "base_link", "link6");
+    kd_solver = std::make_shared<KDSolver>("ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf", "base_link", "link6");
     float dt = manager_->getControlCycle();
     pid_controller = std::make_unique<AdvancedPIDController>(dt);
     pid_controller->setResetPose(reset_pose_);

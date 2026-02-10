@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import time
 
-urdf = "assets/openeai_arm_urdf_ros2/urdf/STEP.urdf"
+urdf = "ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf"
 csv = "sim_motor_state_log.csv"
 reset_pose = np.array([-1.46, -1.49, -0.18, 0.226, 2.76, 2.03, -2.22])
 # 启动可视化
