@@ -30,7 +30,7 @@ AdvancedPIDController::AdvancedPIDController(float Ts): Ts_(Ts) {
     prev_measurement_.fill(0.0f);
 
 
-    kd_solver = std::make_shared<KDSolver>("assets/openeai_arm_urdf_ros2/urdf/STEP.urdf", "base_link", "link6");
+    kd_solver = std::make_shared<KDSolver>("ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf", "base_link", "link6");
 }
 
 AdvancedPIDController::AdvancedPIDController(float Ts, std::shared_ptr<KDSolver>kd_solver): Ts_(Ts), kd_solver(kd_solver) {
