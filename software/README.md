@@ -144,6 +144,22 @@ where [configs/default_right.yml](configs/default_right.yml) is the config file 
 
 An example of python ROS2 controller can be found at [ros2/src/openeai_arm/examples/OpenEAIArmROS2Operator.py](ros2/src/openeai_arm/examples/OpenEAIArmROS2Operator.py), which provides `get_frame()` function to collect the latest data from robotic arm, cameras, etc. with synchronized timestamps.
 
+To switch the control mode when the node is running, you can publish to the topic `/set_control_mode` with message type `sensor_msgs/msg/JointState`, where the first data is the control mode you want to switch to, 0 for program control mode and 1 for drag mode, where the sim mode does not support switching to and from; and the second data is the ee pose mode, 0 for joint control, 1 for delta ee pose control, and 2 for absolute ee pose control. For example, to switch to drag mode under joint control, you can run:
+
+```bash
+ros2 topic pub /set_control_mode sensor_msgs/msg/JointState "header:
+  stamp:
+    sec: 0
+    nanosec: 0
+  frame_id: ''
+name: []
+position: [1.0, 0.0]
+velocity: []
+effort: []" -1
+```
+
+or you can write your own script to publish the message.
+
 ## Control
 
 ### Basic Settings
