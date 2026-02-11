@@ -13,6 +13,7 @@ controller:
   interpolation: minjerk
   filter_alpha: 0.9
   enable_safety_check: false
+  drag_stationary_vel_threshold: 0.2
 
 motors:
   - name: joint_1
@@ -28,6 +29,12 @@ motors:
       kd: 5.0
       friction: 1.0
       friction_alpha: 50.0
+      drag:
+        stationary_kp: 10.0
+        stationary_kd: 0.0
+        moving_kd: -0.5
+        moving_tanh: 0.5
+        moving_tanh_alpha: 2.0
   - name: joint_2
     type: DM4340
     slave_id: 0x01
@@ -41,6 +48,12 @@ motors:
       kd: 5.0
       friction: 1.0
       friction_alpha: 50.0
+      drag:
+        stationary_kp: 25.0
+        stationary_kd: 2.5
+        moving_kd: -0.5
+        moving_tanh: 0.5
+        moving_tanh_alpha: 2.0
   - name: joint_3
     type: DM4340
     slave_id: 0x03
@@ -54,6 +67,12 @@ motors:
       kd: 5.0
       friction: 1.0
       friction_alpha: 50.0
+      drag:
+        stationary_kp: 15.0
+        stationary_kd: 0.5
+        moving_kd: -0.5
+        moving_tanh: 0.5
+        moving_tanh_alpha: 2.0
   - name: joint_4
     type: DM4310
     slave_id: 0x04
@@ -67,6 +86,12 @@ motors:
       kd: 0.5
       friction: 0.5
       friction_alpha: 5.0
+      drag:
+        stationary_kp: 2.5
+        stationary_kd: 0.5
+        moving_kd: 0.0
+        moving_tanh: 0.0
+        moving_tanh_alpha: 0.0
   - name: joint_5
     type: DM4310
     slave_id: 0x05
@@ -80,6 +105,12 @@ motors:
       kd: 0.1
       friction: 0.5
       friction_alpha: 5.0
+      drag:
+        stationary_kp: 2.5
+        stationary_kd: 0.5
+        moving_kd: 0.0
+        moving_tanh: 0.0
+        moving_tanh_alpha: 0.0
   - name: joint_6
     type: DM4310
     slave_id: 0x06
@@ -93,19 +124,31 @@ motors:
       kd: 0.1
       friction: 0.5
       friction_alpha: 5.0
+      drag:
+        stationary_kp: 2.5
+        stationary_kd: 0.5
+        moving_kd: 0.0
+        moving_tanh: 0.0
+        moving_tanh_alpha: 0.0
   - name: joint_7
     type: DM4310
     slave_id: 0x07
     master_id: 0x17
     min_position: 0.0
     max_position: 1.35
-    reset_pose: 1.32
+    reset_pose: -2.26
     dynamic_coefficients:
       kp: 0.0
       ki: 0.0
       kd: 0.1
       friction: 1.0
       friction_alpha: 5.0
+      drag:
+        stationary_kp: 0.0
+        stationary_kd: 0.0
+        moving_kd: 0.0
+        moving_tanh: 0.0
+        moving_tanh_alpha: 0.0
       
       
 

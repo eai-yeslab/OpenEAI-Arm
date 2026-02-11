@@ -2,8 +2,14 @@
 #include <string>
 #include <vector>
 #include <iostream>
+struct DragDynamicsCoefficients {
+    float stationary_kp, stationary_kd;
+    float moving_kd, moving_tanh, moving_tanh_alpha;
+};
+
 struct DynamicCoefficients {
     float kp, ki, kd, friction, friction_alpha;
+    DragDynamicsCoefficients drag;
 };
 
 struct MotorConfig {
@@ -32,6 +38,7 @@ struct ControllerConfig {
     std::string interpolation;
     float filter_alpha;
     bool enable_safety_check;
+    float drag_stationary_vel_threshold;
 };
 
 struct ArmConfig {

@@ -40,7 +40,14 @@ OpenEAIArm::OpenEAIArm(const std::string& config_path, ControlMode control_mode)
         reset_pose_[i] = motor.reset_pose;
         kp_[i] = motor.dynamic_coeff.kp;
         kd_[i] = motor.dynamic_coeff.kd;
+        drag_stationary_kp_[i] = motor.dynamic_coeff.drag.stationary_kp;
+        drag_stationary_kd_[i] = motor.dynamic_coeff.drag.stationary_kd;
+        drag_moving_kd_[i] = motor.dynamic_coeff.drag.moving_kd;
+        drag_moving_tanh_[i] = motor.dynamic_coeff.drag.moving_tanh;
+        drag_moving_tanh_alpha_[i] = motor.dynamic_coeff.drag.moving_tanh_alpha;
     }
+
+    drag_stationary_vel_threshold_ = config.controller.drag_stationary_vel_threshold;
 
 
     initialize_arm(true);
@@ -355,18 +362,16 @@ void OpenEAIArm::set_joint_targets(const JointArray& target, float move_time,
 
 void OpenEAIArm::send_drag_command() {
     auto current_vel = get_joint_velocities();
-    const float velocity_threshold = 0.25f;
     bool is_stationary = true;
     for (const auto& v : current_vel) {
-        if (std::fabs(v) > velocity_threshold) {
+        if (std::fabs(v) > drag_stationary_vel_threshold_) {
             is_stationary = false;
             break;
         }
     }
-    const JointArray stationary_kp = {20.0f, 20.0f, 20.0f, 5.0f, 5.0f, 5.0f, 0.0f};
-    const JointArray stationary_kd = {1.0f, 1.0f, 1.0f, 0.5f, 0.5f, 0.5f, 0.0f};
+
     if (is_stationary)
-        manager_->move(manager_->getPosition(), manager_->uniform(0.0f), std::nullopt, stationary_kp, stationary_kd, 0.0f);
+        manager_->move(manager_->getPosition(), manager_->uniform(0.0f), std::nullopt, drag_stationary_kp_, drag_stationary_kd_, 0.0f);
     else
         manager_->move(manager_->getPosition(), manager_->uniform(0.0f), std::nullopt, manager_->uniform(0.0f), manager_->uniform(0.0f), 0.0f);
 }
@@ -397,9 +402,9 @@ OpenEAIArm::JointArray OpenEAIArm::compute_drag_dynamics(OpenEAIArm::JointArray 
         else if (mode_ == ControlMode::MIT_DRAG) { // Add drag compensation for more stable and smoother control
             auto current_vel = get_joint_velocities();
             auto current_tau = get_joint_torques();
-            for (int i = 1; i < 3; i++) {
-                tau[i] += 0.5f * tanh(2.0f * current_vel[i]);
-                tau[i] += 0.3f * current_vel[i];
+            for (int i = 1; i < NUM_JOINTS; i++) {
+                tau[i] += drag_moving_tanh_[i] * tanh(drag_moving_tanh_alpha_[i] * current_vel[i]);
+                tau[i] -= drag_moving_kd_[i] * current_vel[i];
             }
         }
     }

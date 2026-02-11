@@ -155,7 +155,10 @@ void MotorManager::start() {
         state_log_ << ",q_cmd_" << j << ",dq_cmd_" << j << ",tau_cmd_" << j;
     for (size_t j = 0; j < NUM_JOINTS; ++j)
         state_log_ << ",q_" << j << ",dq_" << j << ",tau_" << j;
-    state_log_ << ",ok,kp,kd" << std::endl;
+    state_log_ << ",ok";
+    for (size_t j = 0; j < NUM_JOINTS; ++j)
+        state_log_ << ",kp_" << j << ",kd_" << j;
+    state_log_ << "\n";
     running_ = true;
     thread_ = std::thread(&MotorManager::controlLoop, this);
 }

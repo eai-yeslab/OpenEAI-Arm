@@ -112,6 +112,8 @@ private:
 
     JointArray kp_, kd_;
     JointArray ki_, friction_, friction_alpha_;
+    float drag_stationary_vel_threshold_;
+    JointArray drag_stationary_kp_, drag_stationary_kd_, drag_moving_kd_, drag_moving_tanh_, drag_moving_tanh_alpha_;
     JointArray joint_limits_low_;
     JointArray joint_limits_high_;
     JointArray reset_pose_;
