@@ -21,18 +21,27 @@
 
 class OpenEAIArm {
 public:
+    /*
+    * @brief Control mode enumeration class of the Arm.
+    */
     enum class ControlMode {
         MIT_MIX,
         MIT_DRAG,
         SIM
     };
 
+    /*
+    * @brief Policy Enumeration Class for inverse kinetic computation when there is a jump between current joint positions and target joint positions
+    */
     enum class IKJumpPolicy {
         REJECT,      // Fail on jump over threshold
         CLIP,        // Move with fixed_step when jump over threshold
         ACCEPT       // Always accept (equivalent to original logic)
     };
 
+    /*
+    * @brief Option Class for inverse kinetic computation to set jump threshold, jump policy and clipping step length
+    */
     struct IKOptions {
         float angle_jump_threshold = 0.2f; // rad/s
         float fixed_step = 0.2f;           // rad/s, only valid if policy==CLIP
@@ -47,15 +56,27 @@ public:
     OpenEAIArm(const std::string& config_path, ControlMode control_mode = ControlMode::MIT_MIX);
     ~OpenEAIArm();
 
-    // Joint step control (MIT mode), optional velocity and torque
+    /*
+    * @brief Step the arm to the next joint angles. Equivalent to set_joint_targets(joint_angles, 0.0f, joint_velocities, joint_torques, false)
+    * @param joint_angles Target joint positions
+    * @param joint_velocities Target joint velocities (optional)
+    * @param joint_torques Target joint torques (optional)
+    */
     void joint_step(const JointArray& joint_angles, 
                     const JointArray& joint_velocities = JointArray{}, 
                     const JointArray& joint_torques = JointArray{});
 
-    // Return to preset zero position (interpolation mode), parameters are interpolation steps and time
+    /*
+    * @brief Return to preset zero position
+    * @param move_time time to move to the zero position
+    */
     void go_home(float move_time = 2);
 
-    // Reset the robot arm. If there is a large angle jump, it will be rejected.
+    /*
+    * @brief Reset the robot arm. If there is a large angle jump, the user will be prompted to decide if to continue the operation
+    * @param move_time time to move to the zero position
+    * @param angle_jump_threshold threshold for rejecting large angle jumps
+    */
     void reset(float move_time = 2, float angle_jump_threshold = 0.28f);
 
     JointArray get_joint_positions()   const;
@@ -64,13 +85,30 @@ public:
     JointArray get_ee_pose()           const;
     std::array<std::string, NUM_JOINTS> get_joint_names() const;
 
-    // FK, the output is {x, y, z, rx, ry, rz, gripper_width} which rx, ry, rz is the euler angle in ZYX rotation
+    /*
+    * @brief forward kinetics function for the arm
+    * @param joint Joint angles of the arm
+    * @return JointArray representing the end-effector pose in {x, y, z, rx, ry, rz, gripper_width} which rx, ry, rz is the euler angle in ZYX rotation. The gripper width will not be changed.
+    */
     JointArray forward_kinetics(JointArray joint) const;
     // IK, the input should be {x, y, z, rx, ry, rz, gripper_width} which rx, ry, rz is the euler angle in ZYX rotation
+    /*
+    * @brief inverse kinetics function for the arm
+    * @param ee_pose EE Pose of the arm in {x, y, z, rx, ry, rz, gripper_width} which rx, ry, rz is the euler angle in ZYX rotation
+    * @param success reference value to record if the computation is successful
+    * @param options IK Options to set specific behaviors (mainly when the result differs too large from current joint positions)
+    * @return JointArray representing the joint angles of the arm. The gripper width will not be changed.
+    */
     JointArray inverse_kinetics(JointArray ee_pose, bool& success, IKOptions options = IKOptions()) const;
 
-
-    // Directly set joint targets (interpolatable), internally calls MotorManager
+    /*
+    * @brief Set joint targets with various control modes
+    * @param target: Target joint positions
+    * @param move_time: Time to move to the target, default is 0.0s (will be aligned to minimal control cycle time)
+    * @param vel: Target joint velocities (optional)
+    * @param tau: Target joint torques (optional)
+    * @param interpolate: Whether to interpolate the movement, default is false
+    */
     void set_joint_targets(const JointArray& target, float move_time = 0.0,
                            const JointArray& vel = JointArray{},
                            const JointArray& tau = JointArray{},

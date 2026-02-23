@@ -1,7 +1,4 @@
 #include "sim_motor_manager.hpp"
-// Pinocchio helpers
-// #include <pinocchio/algorithm/geometry.hpp>
-// #include <pinocchio/algorithm/visualize.hpp>
 #include <iostream>
 #include <thread>
 #include <iomanip>
@@ -272,7 +269,6 @@ void SimMotorManager::controlLoop() {
                 usleep(inter_joint_delay_us);
             }
         } else {
-            // 自动分模式分发
             if (compute_dynamic_torque) {
                 JointArray target_q = {};
                 for (size_t j=0; j < NUM_JOINTS; ++j) {
@@ -325,14 +321,14 @@ bool SimMotorManager::check_joint_safety(float v_thresh, float tau_thresh_ratio,
     static constexpr float POS_TOL = 0.1f;
     size_t stuck_cnt_lim = static_cast<size_t>(stuck_time / 0.01f);
   
-    // 读取反馈
+    // read feedbacks
     auto pos = getPosition();
     auto vel = getVelocity();
     auto tau = getTau();
   
     for (size_t j = 0; j < NUM_JOINTS; ++j) {
         float max_tau = 9.0f;
-        // 力矩保护
+        // torque protection
         if (std::fabs(tau[j]) > (max_tau * tau_thresh_ratio)) {
             std::cerr << "[Safety] Joint " << j << " torque over threshold: " << tau[j]
             << " (max=" << max_tau << ")" << std::endl;

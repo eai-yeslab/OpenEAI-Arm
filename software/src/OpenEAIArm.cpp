@@ -140,7 +140,7 @@ void OpenEAIArm::joint_step(const JointArray& joint_angles,
     JointArray clipped_q;
     for (size_t i=0; i<NUM_JOINTS; ++i)
         clipped_q[i] = std::min(std::max(q[i], joint_limits_low_[i]), joint_limits_high_[i]);
-    manager_->move(clipped_q);
+    manager_->move(clipped_q, dq, tau);
 }
 
 void OpenEAIArm::go_home(float move_time)
@@ -335,9 +335,9 @@ OpenEAIArm::JointArray OpenEAIArm::q_phys_to_control(const JointArray& q_phys) c
 }
 
 /*
-    * @description: Set joint targets with various control modes
+    * @brief Set joint targets with various control modes
     * @param target: Target joint positions
-    * @param move_time: Time to move to the target, default is 0.0s
+    * @param move_time: Time to move to the target, default is 0.0s (align to control frequency)
     * @param vel: Target joint velocities (optional)
     * @param tau: Target joint torques (optional)
     * @param interpolate: Whether to interpolate the movement, default is false
