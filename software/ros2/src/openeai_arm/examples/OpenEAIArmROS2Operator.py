@@ -154,20 +154,23 @@ class OpenEAIArmROS2Operator:
         stamp = msg.header.stamp
         return stamp.sec + stamp.nanosec * 1e-9
 
-    def get_frame(self):
+    def get_frame(self, required = ['imgs', 'arms', 'robot_base']):
         frame_time_candidates = []
-        for cam_name, types in self.img_deques.items():
-            for typ, dq in types.items():
+        if 'imgs' in required:
+            for cam_name, types in self.img_deques.items():
+                for typ, dq in types.items():
+                    if len(dq) == 0:
+                        self.node.get_logger().info(f"{cam_name} {typ} image info is missing...")
+                        return False
+                    frame_time_candidates.append(self._to_sec(dq[-1]))
+                    
+        if 'arms' in required:
+            for arm_name, dq in self.arm_deques.items():
                 if len(dq) == 0:
-                    self.node.get_logger().info(f"{cam_name} {typ} image info is missing...")
+                    self.node.get_logger().info(f"{arm_name} arm pose info missing...")
                     return False
                 frame_time_candidates.append(self._to_sec(dq[-1]))
-        for arm_name, dq in self.arm_deques.items():
-            if len(dq) == 0:
-                self.node.get_logger().info(f"{arm_name} arm pose info missing...")
-                return False
-            frame_time_candidates.append(self._to_sec(dq[-1]))
-        if self.config.get('use_robot_base', False) and len(self.base_deque) == 0:
+        if 'robot_base' in required and self.config.get('use_robot_base', False) and len(self.base_deque) == 0:
             return False
         if frame_time_candidates:
             frame_time = min(frame_time_candidates)
@@ -180,36 +183,47 @@ class OpenEAIArmROS2Operator:
             return dq.popleft() if len(dq) > 0 else None
 
         imgs = {}
-        for cam_name, types in self.img_deques.items():
-            imgs[cam_name] = {}
-            for typ, dq in types.items():
-                msg = pop_until(dq)
-                if msg is None:
-                    self.node.get_logger().info(f"Waiting for {cam_name} {typ} image...")
-                    return False
-                img = self.bridge.imgmsg_to_cv2(msg, 'passthrough')
-                if img.shape[-1] == 2:
-                    img = cv2.cvtColor(img, cv2.COLOR_YUV2RGB_YUY2)
-                imgs[cam_name][typ] = img
+        if 'imgs' in required:
+            for cam_name, types in self.img_deques.items():
+                imgs[cam_name] = {}
+                for typ, dq in types.items():
+                    msg = pop_until(dq)
+                    if msg is None:
+                        self.node.get_logger().info(f"Waiting for {cam_name} {typ} image...")
+                        return False
+                    img = self.bridge.imgmsg_to_cv2(msg, 'passthrough')
+                    if img.shape[-1] == 2:
+                        img = cv2.cvtColor(img, cv2.COLOR_YUV2RGB_YUY2)
+                    imgs[cam_name][typ] = img
 
         arms = {}
-        for arm_name, dq in self.arm_deques.items():
-            arms[arm_name] = pop_until(dq)
-            if arms[arm_name] is None:
-                self.node.get_logger().info(f"Waiting for {arm_name} arm pose...")
-                return False
-
+        if 'arms' in required:
+            for arm_name, dq in self.arm_deques.items():
+                arms[arm_name] = pop_until(dq)
+                if arms[arm_name] is None:
+                    self.node.get_logger().info(f"Waiting for {arm_name} arm pose...")
+                    return False
         robot_base_msg = None
-        if self.config.get('use_robot_base', False):
+        if 'robot_base' in required and self.config.get('use_robot_base', False):
             robot_base_msg = pop_until(self.base_deque)
 
-        return {
-            'imgs': imgs,         # {'hand': {'rgb':..., 'depth': ...}, ...}
-            'arm_keys': self.arm_keys,  # ['puppet', ...]
-            'arms': arms,         # {'puppet': jointstate_msg, ...}
-            'robot_base': robot_base_msg,
-            'timestamp': frame_time,
-        }
+        # return {
+        #     'imgs': imgs,         # {'hand': {'rgb':..., 'depth': ...}, ...}
+        #     'arm_keys': self.arm_keys,  # ['puppet', ...]
+        #     'arms': arms,         # {'puppet': jointstate_msg, ...}
+        #     'robot_base': robot_base_msg,
+        #     'timestamp': frame_time,
+        # }
+        result = {}
+        if 'imgs' in required:
+            result['imgs'] = imgs
+        if 'arms' in required:
+            result['arm_keys'] = self.arm_keys
+            result['arms'] = arms
+        if 'robot_base' in required and self.config.get('use_robot_base', False):
+            result['robot_base'] = robot_base_msg
+        result['timestamp'] = frame_time
+        return result
 
     # ------- ROS2 callback bindings --------
     def _make_image_callback(self, cam_name, typ):
