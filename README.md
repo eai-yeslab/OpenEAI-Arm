@@ -47,12 +47,12 @@ The controller uses **Modified Denavit–Hartenberg (MDH)** parameters matching 
 | :---: | :---: | :---: | :---: | :---: |
 | **1** | 0 | 0 | 106.26 | 0 |
 | **2** | 180 | 19 | 0 | -90 |
-| **3** | 180 + β | 269 | 0 | 180 |
-| **4** | -β | 236.12 | 0 | 0 |
+| **3** | 180 + $\beta$ | 269 | 0 | 180 |
+| **4** | -$\beta$ | 236.12 | 0 | 0 |
 | **5** | 90 | 80 | 0 | 90 |
 | **6** | 0 | 0 | 29 | 90 |
 
-> **Note:** `β = 13.85°` (Fixed mechanical angle). End-effector offset `d_ee = 176 mm`.
+> **Note:** $\beta$ = 13.85° (Fixed mechanical angle). End-effector offset $d_{ee} = 176$ mm.
 
 ### 3.3 Manufacturing
 *   **BOM**: See `hardware/bom/`.
@@ -62,33 +62,61 @@ The controller uses **Modified Denavit–Hartenberg (MDH)** parameters matching 
 ---
 
 ## 4. Software Prerequisites
+
 We recommend **Ubuntu 22.04** with **ROS2 Humble**.
+
+### 4.0 Basic building softwares
+
+First, make sure you have some basic building tools on your machine. You can install them by:
+
+```bash
+sudo apt install git build-essential cmake
+```
+
+Then, clone the repository:
+
+```bash
+git clone https://github.com/eai-yeslab/OpenEAI-Arm.git
+```
+
+Since some of the third-party dependencies will use python bindings, we also recommend setting up a python virtual environment to avoid conflicts with your system python packages. You can set up a virtual environment with the following commands:
+
+```bash
+conda create -n openeai python=3.10
+conda activate openeai
+```
+
+## 4.1 Third-Party Dependencies
 
 This project relys on the following third-party packages:
 - yaml-cpp for reading config files
 - Eigen3 library for matrix calculations
+- URDF library for urdf reading
 - [pinocchio](https://gepettoweb.laas.fr/doc/stack-of-tasks/pinocchio/master/doxygen-html/md_doc_b_examples_a_model.html) for inverse kinetics
 - [KDL](https://www.orocos.org/wiki/orocos/kdl-wiki.html)
 - [kdl_parser](https://github.com/ros/kdl_parser?tab=readme-ov-file) and [urdf](https://github.com/ros/urdf) packages, whose source codes are already included so that they can be used without installing ros
 - [Dynamixel SDK](https://github.com/ROBOTIS-GIT/DynamixelSDK/tree/main) for controlling [GELLO](https://wuphilipp.github.io/gello_site/)
 
-### 4.1 yaml-cpp Installation
-Run `sudo apt install libyaml-cpp-dev`
-### 4.2 Dynamixel SDK Installation
+### 4.1.1 yaml-cpp, Eigen3, URDF Installation
+
+Run `sudo apt install libyaml-cpp-dev libeigen3-dev liburdf-dev` to install yaml-cpp, Eigen3, and URDF library.
+
+### 4.1.2 Dynamixel SDK Installation
+
 Simply `cd` to its python directory and install:
 ```bash
 cd third_party/DynamixelSDK/python
 pip install -e .
 ```
-### 4.3 Pinocchio Installation
+
+### 4.1.3 Pinocchio Installation
+
 In this project we use pinocchio to calculate inverse kinetics. To install this library run the following commands as described in the [official installation website](https://stack-of-tasks.github.io/pinocchio/download.html#Install_3):
 ```bash
 sudo apt install -qqy lsb-release curl
 sudo mkdir -p /etc/apt/keyrings
-curl http://robotpkg.openrobots.org/packages/debian/robotpkg.asc \    
-| sudo tee /etc/apt/keyrings/robotpkg.asc
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" \
-| sudo tee /etc/apt/sources.list.d/robotpkg.list
+curl http://robotpkg.openrobots.org/packages/debian/robotpkg.asc | sudo tee /etc/apt/keyrings/robotpkg.asc
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" | sudo tee /etc/apt/sources.list.d/robotpkg.list
 sudo apt update
 sudo apt install -qqy robotpkg-py3*-pinocchio
 ```
@@ -100,7 +128,9 @@ export LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH
 export PYTHONPATH=/opt/openrobots/lib/python3.10/site-packages:$PYTHONPATH # Adapt your desired python version here
 export CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
 ```
-### 4.4 KDL Installation
+
+### 4.1.4 KDL Installation
+
 [KDL](https://github.com/orocos/orocos_kinematics_dynamics/tree/master) (Kinetics and Dynamics Library) requires Eigen3 library to install. To install, run the following commands:
 ```bash
 git clone https://github.com/orocos/orocos_kinematics_dynamics.git
@@ -114,28 +144,36 @@ sudo make install
 ---
 
 ## 5. Build and Installation
+
 In this project, we use cmake to build the control program.
+
 ### All
+
 We provide an option to build everything, including basic C++ library, ROS2 pacakge, and python package installation via pip. This can be completed via:
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=RELEASE
 cmake --build build --target extra
 ```
 If you don't want to build all of them, you can build them one by one following the instructions below.
+
 ### C++
+
 C++ libraries are core libraries to control OpenEAI-Arm. The commands are:
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=RELEASE
 cmake --build build -j 8
 ```
-An example of the usage can be found at [apps/test_openeai_arm.cpp](apps/test_openeai_arm.cpp), whose brinary is located at [build/test_openeai_arm](build/test_openeai_arm). If you want to run it, make sure your robotic arm is well-assembled, as the program will move the robotic arm.
+An example of the usage can be found at [tests/test_openeai_arm.cpp](tests/test_openeai_arm.cpp), whose brinary is located at [build/test_openeai_arm](build/test_openeai_arm). If you want to run it, make sure your robotic arm is well-assembled, as the program will move the robotic arm.
+
 ### Python
+
 To build python packages and install via pip, run:
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=RELEASE -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")
 cmake --build build --target pip_install -j 8 
 ```
 ### ROS2
+
 ROS2 packages can be built with cmake:
 ```bash
 cmake --build build --target ros2 
@@ -155,7 +193,9 @@ And start the arm node:
 cd ../..
 ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0 -p frequency:=50 # 0 for program control mode, 1 for drag mode, 2 for sim mode
 ```
-Or set `-p ee_pose:=1` to use delta ee pose control (mainly for spacemouse controlling)
+
+You can also set `-p ee_pose:=1` for delta ee pose control, and `-p ee_pose:=2` for absolute ee pose control.
+
 If you want to run two arms at the same time, you can use:
 ```bash
 ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0 -p frequency:=50 -p arm_name:=left -r /joint_targets:=/left/joint_targets
@@ -163,7 +203,10 @@ ros2 run openeai_arm OpenEAIArm_node --ros-args -p config:=configs/default_right
 ```
 ## 6. Quick Start
 
+This is a quick start guide to get the arm up and running in both simulation and real hardware modes. For detailed instructions, we highly recommand you to read [software/README.md](software/README.md) for detailed information.
+
 ### 6.1 Simulation Mode (No Hardware)
+
 Visualize the arm in RViz and test motion planning.
 
 **Terminal 1: Launch RViz**
@@ -180,11 +223,12 @@ ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=2 -p frequency:=50
 ```
 
 ### 6.2 Real Hardware Control
+
 **SAFETY WARNING:** Ensure E-Stop is ready and workspace is clear.
 
 1.  **Hardware Config**:
     *   Edit `configs/default.yml`.
-    *   **Check Motor IDs**: By default, Motor 1 (Base) is often ID `0x02` or `0x01` depending on firmware. **Verify before powering on.**
+    *   **Check Motor IDs**: In default file, Motor 1 (Base) is often ID `0x02` instead of `0x01` while Motor 2 is `0x01` instead of `0x02`. **Verify before powering on.**
     *   Set `urdf.path` if you moved files.
 2.  **Permissions**: `sudo usermod -aG dialout $USER` (Re-login required).
 3.  **Run Node**:

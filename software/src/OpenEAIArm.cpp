@@ -21,8 +21,10 @@ OpenEAIArm::OpenEAIArm(const std::string& config_path, ControlMode control_mode)
     std::cout << "Loading config file from " << config_path << std::endl;
     config = load_arm_config(config_path);
 
-    serial_ = std::make_shared<SerialPort>(config.can.id, config.can.baud_rate);
-    motor_ctl_ = std::make_unique<DM_Motor::Motor_Control>(serial_);
+    if (mode_ != ControlMode::SIM) {
+        serial_ = std::make_shared<SerialPort>(config.can.id, config.can.baud_rate);
+        motor_ctl_ = std::make_unique<DM_Motor::Motor_Control>(serial_);
+    }
 
 
     for (size_t i = 0; i < NUM_JOINTS; ++i) {
@@ -32,7 +34,9 @@ OpenEAIArm::OpenEAIArm(const std::string& config_path, ControlMode control_mode)
         else if (motor.type == "DM4310") type = DM_Motor::DM4310;
         DM_Motor::Motor* m = new DM_Motor::Motor(type, motor.slave_id, motor.master_id);
         motors_[i] = m;
-        motor_ctl_->addMotor(m);
+        if (mode_ != ControlMode::SIM) {
+            motor_ctl_->addMotor(m);
+        }
 
         joint_names[i] = motor.name;
         joint_limits_low_[i] = motor.min_position;

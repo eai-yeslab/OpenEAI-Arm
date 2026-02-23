@@ -4,17 +4,39 @@ This is the open-source control software for the OpenEAI-ARM robot.
 
 ## Prerequisites
 
+First, make sure you have some basic building tools on your machine. You can install them by:
+
+```bash
+sudo apt install git build-essential cmake
+```
+
+Then, clone the repository:
+
+```bash
+git clone https://github.com/eai-yeslab/OpenEAI-Arm.git
+```
+
+Since some of the third-party dependencies will use python bindings, we also recommend setting up a python virtual environment to avoid conflicts with your system python packages. You can set up a virtual environment with the following commands:
+
+```bash
+conda create -n openeai python=3.10
+conda activate openeai
+```
+
+## Third-party Dependencies
+
 This project relys on the following third-party packages:
 - yaml-cpp for reading config files
 - Eigen3 library for matrix calculations
+- URDF library for urdf reading
 - [pinocchio](https://gepettoweb.laas.fr/doc/stack-of-tasks/pinocchio/master/doxygen-html/md_doc_b_examples_a_model.html) for inverse kinetics
 - [KDL](https://www.orocos.org/wiki/orocos/kdl-wiki.html)
 - [kdl_parser](https://github.com/ros/kdl_parser?tab=readme-ov-file) and [urdf](https://github.com/ros/urdf) packages, whose source codes are already included so that they can be used without installing ros
 - [Dynamixel SDK](https://github.com/ROBOTIS-GIT/DynamixelSDK/tree/main) for controlling [GELLO](https://wuphilipp.github.io/gello_site/)
 
-### yaml-cpp Installation
+### yaml-cpp, Eigen3, URDF Installation
 
-Run `sudo apt install libyaml-cpp-dev`
+Run `sudo apt install libyaml-cpp-dev libeigen3-dev liburdf-dev` to install yaml-cpp, Eigen3, and URDF library.
 
 ### Dynamixel SDK Installation
 
@@ -27,7 +49,7 @@ pip install -e .
 
 ### Pinocchio Installation
 
-In this project we use pinocchio to calculate inverse kinetics. To install this library run the following commands as described in the [official installation website](https://stack-of-tasks.github.io/pinocchio/download.html#Install_3):
+In this project we use pinocchio to calculate inverse kinetics. To install this library run the following commands as described in the [official installation website](https://stack-of-tasks.github.io/pinocchio/download.html#Install_3). Note this may take a while:
 
 ```bash
 sudo apt install -qqy lsb-release curl
@@ -92,7 +114,7 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=RELEASE
 cmake --build build -j 8
 ```
 
-An example of the usage can be found at [apps/test_openeai_arm.cpp](apps/test_openeai_arm.cpp), whose brinary is located at [build/test_openeai_arm](build/test_openeai_arm). If you want to run it, make sure your robotic arm is well-assembled, as the program will move the robotic arm.
+An example of the usage can be found at [tests/test_openeai_arm.cpp](tests/test_openeai_arm.cpp), whose brinary is located at [build/test_openeai_arm](build/test_openeai_arm). If you want to run it, make sure your robotic arm is well-assembled, as the program will move the robotic arm.
 
 ### Python
 
@@ -131,7 +153,7 @@ cd ../..
 ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0 -p frequency:=50 # 0 for program control mode, 1 for drag mode, 2 for sim mode
 ```
 
-Or set `-p ee_pose:=1` to use delta ee pose control (mainly for spacemouse controlling)
+You can also set `-p ee_pose:=1` for delta ee pose control, and `-p ee_pose:=2` for absolute ee pose control.
 
 If you want to run two arms at the same time, you can use:
 

@@ -134,12 +134,12 @@ private:
 
         if (ctrl_mode_ == 0) {
             arm_ = std::make_unique<OpenEAIArm>(config_, OpenEAIArm::ControlMode::MIT_MIX);
-            RCLCPP_INFO(this->get_logger(), "Starting SII Arm with program control mode");
+            RCLCPP_INFO(this->get_logger(), "Starting OpenEAI Arm with program control mode");
             arm_->reset();
         }
         else if (ctrl_mode_ == 1) {
             arm_ = std::make_unique<OpenEAIArm>(config_, OpenEAIArm::ControlMode::MIT_DRAG);
-            RCLCPP_INFO(this->get_logger(), "Starting SII Arm with drag mode");
+            RCLCPP_INFO(this->get_logger(), "Starting OpenEAI Arm with drag mode");
             // Create publisher for drag mode if needed
             if (!pub_joint_fake_target_) {
                 pub_joint_fake_target_ = this->create_publisher<sensor_msgs::msg::JointState>("/joint_targets", 10);
@@ -147,7 +147,7 @@ private:
         }
         else {
             arm_ = std::make_unique<OpenEAIArm>(config_, OpenEAIArm::ControlMode::SIM);
-            RCLCPP_INFO(this->get_logger(), "Starting SII Arm with sim mode");
+            RCLCPP_INFO(this->get_logger(), "Starting OpenEAI Arm with sim mode");
             arm_->go_home();
         }
 
@@ -328,7 +328,8 @@ private:
         auto msg = sensor_msgs::msg::JointState();
         msg.header.stamp = this->now();
         msg.header.frame_id = "";
-        static const std::vector<std::string> joint_names(arm_->get_joint_names().begin(), arm_->get_joint_names().end());
+        static auto raw_joint_names = arm_->get_joint_names();
+        static const std::vector<std::string> joint_names(raw_joint_names.begin(), raw_joint_names.end());
         msg.name = joint_names;
         msg.position.insert(msg.position.end(), pos.begin(), pos.end());
         msg.velocity.insert(msg.velocity.end(), vel.begin(), vel.end());

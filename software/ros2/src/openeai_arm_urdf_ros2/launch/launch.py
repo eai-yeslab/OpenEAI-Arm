@@ -15,7 +15,7 @@ def generate_launch_description():
         'rviz',
         'rviz2.rviz'
     )
-    # 声明一个可选 launch 参数
+
     joint_topic_arg = DeclareLaunchArgument(
         'joint_states',
         default_value='/left/joint_states_6d',

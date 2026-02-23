@@ -1,7 +1,6 @@
 // ----- KDSolver.cpp -----
 #include "kd_solver.hpp"
 
-// 构造函数
 KDSolver::KDSolver(const std::string& urdf_file, const std::string& base_link, const std::string& tip_link)
 {
     // 1. Read and parse URDF file

@@ -1,5 +1,5 @@
-#ifndef SII_ARM_HPP
-#define SII_ARM_HPP
+#ifndef OPENEAIARM_HPP
+#define OPENEAIARM_HPP
 
 #include <Eigen/Dense>
 #include <array>
@@ -133,4 +133,4 @@ private:
 
 std::ostream& operator<<(std::ostream& os, const OpenEAIArm::JointArray& arr);
 
-#endif // SII_ARM_HPP
+#endif // OPENEAIARM_HPP

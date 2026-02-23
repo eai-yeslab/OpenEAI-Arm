@@ -12,9 +12,9 @@ import glob
 import threading
 import zmq
 
-from SIIArmROS2Operator import SIIArmROS2Operator
+from OpenEAIArmROS2Operator import OpenEAIArmROS2Operator
 
-class SIIArmDataCollector:
+class OpenEAIArmDataCollector:
     def __init__(self, args):
         with open(args.config_path, 'r') as f:
             self.config = yaml.safe_load(f)
@@ -26,7 +26,7 @@ class SIIArmDataCollector:
         else:
             self.camera_names = []
         self.args.camera_names = self.camera_names
-        self.operator = SIIArmROS2Operator(args.config_path)
+        self.operator = OpenEAIArmROS2Operator(args.config_path)
         self.node = self.operator.node
 
         self.running = False
@@ -363,7 +363,7 @@ def get_arguments():
     parser.add_argument('--frame_rate', type=int, default=20, help="Frame rate")
     parser.add_argument('--image_shape', type=str, default="640x480", help="Image shape WxH")
     parser.add_argument('--use_depth_image', action='store_true')
-    parser.add_argument('--config_path', type=str, default="config_single.yml", help="SIIArmROS2Operator config path")
+    parser.add_argument('--config_path', type=str, default="config_single.yml", help="OpenEAIArmROS2Operator config path")
     return parser.parse_args()
 
 
@@ -371,5 +371,5 @@ def get_arguments():
 
 if __name__ == '__main__':
     args = get_arguments()
-    collector = SIIArmDataCollector(args)
+    collector = OpenEAIArmDataCollector(args)
     collector.process()
