@@ -3,7 +3,7 @@
 OpenEAI Arm is a low-cost, reproducible 6-DoF desktop robotic arm designed for real-world embodied manipulation and Vision-Language-Action (VLA) research. This repository contains OpenEAI-Arm with the full hardware and software stack needed to build, calibrate, and run the arm. For **OpenEAI-VLA**, please refer to the [OpenEAI-VLA repository](https://github.com/eai-yeslab/OpenEAI_VLA).
 
 
-> Status: **Public release**Includes complete BOM, STEP, STL, mechanical drawings, assembly instructions, and software stack.
+> Status: **Public release** includes complete BOM, STEP, STL, mechanical drawings, assembly instructions, and software stack.
 ---
 <img src="https://github.com/eai-yeslab/OpenEAI-Arm/blob/main/assets/images/openEAI-Arm.jpg" width="1200" alt="OpenEAI Arm">
 
