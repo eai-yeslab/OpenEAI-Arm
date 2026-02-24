@@ -48,7 +48,7 @@ The controller uses **Modified Denavit–Hartenberg (MDH)** parameters matching 
 | **1** | 0 | 0 | 106.26 | 0 |
 | **2** | 180 | 19 | 0 | -90 |
 | **3** | 180 + $\beta$ | 269 | 0 | 180 |
-| **4** | -$\beta$ | 236.12 | 0 | 0 |
+| **4** | - $\beta$ | 236.12 | 0 | 0 |
 | **5** | 90 | 80 | 0 | 90 |
 | **6** | 0 | 0 | 29 | 90 |
 
