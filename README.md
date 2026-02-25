@@ -57,7 +57,7 @@ The controller uses **Modified Denavit–Hartenberg (MDH)** parameters matching 
 ### 3.3 Manufacturing
 *   **BOM**: See `hardware/bom/`.
 *   **CAD/STL**: See `hardware/stl/`.
-*   **Assembly Guide**: See `hardware/assembly/guide.md`.
+
 
 ---
 
