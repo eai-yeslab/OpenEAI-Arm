@@ -3,7 +3,7 @@
 OpenEAI Arm is a low-cost, reproducible 6-DoF desktop robotic arm designed for real-world embodied manipulation and Vision-Language-Action (VLA) research. This repository contains OpenEAI-Arm with the full hardware and software stack needed to build, calibrate, and run the arm. For **OpenEAI-VLA**, please refer to the [OpenEAI-VLA repository](https://github.com/eai-yeslab/OpenEAI_VLA).
 
 
-> Status: **Public release** includes complete BOM, STEP, STL, mechanical drawings, assembly instructions, and software stack.
+> Status: **Public release** includes complete BOM, STEP, STL, mechanical drawings, and software stack.
 ---
 <img src="https://github.com/eai-yeslab/OpenEAI-Arm/blob/main/assets/images/openEAI-Arm.jpg" width="1200" alt="OpenEAI Arm">
 
@@ -48,7 +48,7 @@ The controller uses **Modified Denavit–Hartenberg (MDH)** parameters matching 
 | **1** | 0 | 0 | 106.26 | 0 |
 | **2** | 180 | 19 | 0 | -90 |
 | **3** | 180 + $\beta$ | 269 | 0 | 180 |
-| **4** | -$\beta$ | 236.12 | 0 | 0 |
+| **4** | - $\beta$ | 236.12 | 0 | 0 |
 | **5** | 90 | 80 | 0 | 90 |
 | **6** | 0 | 0 | 29 | 90 |
 
@@ -57,7 +57,7 @@ The controller uses **Modified Denavit–Hartenberg (MDH)** parameters matching 
 ### 3.3 Manufacturing
 *   **BOM**: See `hardware/bom/`.
 *   **CAD/STL**: See `hardware/stl/`.
-*   **Assembly Guide**: See `hardware/assembly/guide.md`.
+
 
 ---
 
