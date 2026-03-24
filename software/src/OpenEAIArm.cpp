@@ -106,7 +106,7 @@ void OpenEAIArm::initialize_arm(bool reinitialize_manager) {
     pid_controller->setNonlinearParams(friction_alpha_, 0.001f);
 
     if (mode_ == ControlMode::MIT_MIX) {
-        manager_->compute_dynamic_torque = [this](const JointArray& q, const JointArray& target_q){ return this->pid_controller->computeControlTorque(q, target_q); };
+        manager_->compute_dynamic_torque = [this](const JointArray& q, const JointArray& target_q){ return this->pid_controller->computeControlTorque(q, target_q, get_joint_velocities()); };
     }
     else if (mode_ == ControlMode::MIT_DRAG) {
         manager_->compute_dynamic_torque = [this](const JointArray& q, const JointArray& target_q){ return this->compute_drag_dynamics(q, target_q); };
@@ -384,10 +384,12 @@ OpenEAIArm::JointArray OpenEAIArm::compute_drag_dynamics(OpenEAIArm::JointArray 
     if (output) std::cout << "============== Tau args ==============" << std::endl;
     q = q_phys_to_control(q);
     target_q = q_phys_to_control(target_q);
+    auto current_vel = get_joint_velocities();
+    auto current_tau = get_joint_torques();
 
-    std::vector<double> q_in(q.begin(), q.end() - 1), t_out;
+    std::vector<double> q_in(q.begin(), q.end() - 1), dq_in(current_vel.begin(), current_vel.end() - 1), t_out;
 
-    bool success = kd_solver->gravityCompensation(q_in, t_out);
+    bool success = kd_solver->gravityCompensation(q_in, dq_in, t_out);
     JointArray tau{};
     if (success) {
         if (output) {
@@ -396,21 +398,12 @@ OpenEAIArm::JointArray OpenEAIArm::compute_drag_dynamics(OpenEAIArm::JointArray 
         }
         std::transform(t_out.begin(), t_out.begin() + (NUM_JOINTS - 1), tau.begin(),
                [](double x) { return static_cast<float>(x); });
-        if (mode_ == ControlMode::MIT_MIX) {
-            int error_tolenrance = 0.01f;
-            for (int i = 0; i < 3; i++) {
-                if (target_q[i] - q[i] > error_tolenrance) tau[i] += 0.5f;
-                else if (target_q[i] - q[i] < -error_tolenrance) tau[i] -= 0.5f;
-            }
+        // Add drag compensation for more stable and smoother control
+        for (int i = 1; i < NUM_JOINTS; i++) {
+            tau[i] += drag_moving_tanh_[i] * tanh(drag_moving_tanh_alpha_[i] * current_vel[i]);
+            tau[i] -= drag_moving_kd_[i] * current_vel[i];
         }
-        else if (mode_ == ControlMode::MIT_DRAG) { // Add drag compensation for more stable and smoother control
-            auto current_vel = get_joint_velocities();
-            auto current_tau = get_joint_torques();
-            for (int i = 1; i < NUM_JOINTS; i++) {
-                tau[i] += drag_moving_tanh_[i] * tanh(drag_moving_tanh_alpha_[i] * current_vel[i]);
-                tau[i] -= drag_moving_kd_[i] * current_vel[i];
-            }
-        }
+        tau[1] *= 0.9;
     }
     else {
         std::cout << "Something wrong!" << std::endl;

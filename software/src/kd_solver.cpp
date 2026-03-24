@@ -78,16 +78,24 @@ bool KDSolver::inverseKinematics(const KDL::Frame& desired_pose, std::vector<dou
     return true;
 }
 
-bool KDSolver::gravityCompensation(const std::vector<double>& joint_positions, std::vector<double>& out_torques)
+bool KDSolver::gravityCompensation(const std::vector<double>& joint_positions, const std::vector<double>& joint_velocities, std::vector<double>& out_torques)
 {
     if (joint_positions.size() != num_joints_) return false;
-    KDL::JntArray q(num_joints_), torques(num_joints_);
-    for (size_t i = 0; i < num_joints_; ++i) q(i) = joint_positions[i];
+    KDL::JntArray q(num_joints_), dq(num_joints_), gravity_torques(num_joints_), coriolis_torques(num_joints_);
+    for (size_t i = 0; i < num_joints_; ++i) {
+        q(i) = joint_positions[i];
+        dq(i) = joint_velocities[i];
+    }
 
-    int ret = dyn_param_solver_->JntToGravity(q, torques);
+    int ret = dyn_param_solver_->JntToGravity(q, gravity_torques);
+    if (ret < 0) return false;
+
+    ret = dyn_param_solver_->JntToCoriolis(q, dq, coriolis_torques);
     if (ret < 0) return false;
 
     out_torques.resize(num_joints_);
-    for (size_t i = 0; i < num_joints_; ++i) out_torques[i] = torques(i);
+    for (size_t i = 0; i < num_joints_; ++i) {
+        out_torques[i] = gravity_torques(i) + coriolis_torques(i);
+    }
     return true;
 }

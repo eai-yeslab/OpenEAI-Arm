@@ -47,12 +47,12 @@ AdvancedPIDController::AdvancedPIDController(float Ts, std::shared_ptr<KDSolver>
 }
 
 
-AdvancedPIDController::JointArray AdvancedPIDController::computeGravityTorque(JointArray q) {
+AdvancedPIDController::JointArray AdvancedPIDController::computeGravityTorque(JointArray q, JointArray dq) {
     q = q_phys_to_control(q);
 
-    std::vector<double> q_in(q.begin(), q.end() - 1), t_out;
+    std::vector<double> q_in(q.begin(), q.end() - 1), dq_in(dq.begin(), dq.end() - 1), t_out;
 
-    bool success = kd_solver->gravityCompensation(q_in, t_out);
+    bool success = kd_solver->gravityCompensation(q_in, dq_in, t_out);
     std::array<float, 7> tau{};
     if (success) {
         std::transform(t_out.begin(), t_out.begin() + (NUM_JOINTS - 1), tau.begin(),
@@ -94,14 +94,14 @@ void AdvancedPIDController::updateIntegralWithAntiWindup(float Ki, float error, 
     // integral = std::clamp(integral, -10.0f, 10.0f);
 }
 
-AdvancedPIDController::JointArray AdvancedPIDController::computeControlTorque(const JointArray& current_q, const JointArray& target_q, bool output) {
+AdvancedPIDController::JointArray AdvancedPIDController::computeControlTorque(const JointArray& current_q, const JointArray& target_q, const JointArray& current_vel, const bool output) {
     if (output) std::cout << "============== Tau args ==============" << std::endl;
 
     JointArray control_torque{};
     JointArray current_error{};
 
     // Calculate gravity compensation
-    JointArray gravity_torque = computeGravityTorque(current_q);
+    JointArray gravity_torque = computeGravityTorque(current_q, current_vel);
 
     for (int i = 0; i < 7; ++i) {
         // 1. Calculate current error

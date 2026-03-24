@@ -27,7 +27,7 @@ public:
     bool inverseKinematics(const KDL::Frame& desired_pose, std::vector<double>& out_joint_positions, std::vector<double>& init_joint_positions);
 
     // Gravity Compensation
-    bool gravityCompensation(const std::vector<double>& joint_positions, std::vector<double>& out_torques);
+    bool gravityCompensation(const std::vector<double>& joint_positions, const std::vector<double>& joint_velocities, std::vector<double>& out_torques);
 
 private:
     KDL::Tree tree_;

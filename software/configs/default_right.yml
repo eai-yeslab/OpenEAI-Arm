@@ -32,7 +32,7 @@ motors:
       drag:
         stationary_kp: 10.0
         stationary_kd: 0.0
-        moving_kd: -0.5
+        moving_kd: -0.2
         moving_tanh: 0.5
         moving_tanh_alpha: 2.0
   - name: joint_2
@@ -49,10 +49,10 @@ motors:
       friction: 1.0
       friction_alpha: 50.0
       drag:
-        stationary_kp: 25.0
+        stationary_kp: 30.0
         stationary_kd: 2.5
-        moving_kd: -0.5
-        moving_tanh: 0.5
+        moving_kd: -0.2
+        moving_tanh: 0.4
         moving_tanh_alpha: 2.0
   - name: joint_3
     type: DM4340
@@ -68,10 +68,10 @@ motors:
       friction: 1.0
       friction_alpha: 50.0
       drag:
-        stationary_kp: 15.0
+        stationary_kp: 10.0
         stationary_kd: 0.5
-        moving_kd: -0.5
-        moving_tanh: 0.5
+        moving_kd: -0.2
+        moving_tanh: 0.4
         moving_tanh_alpha: 2.0
   - name: joint_4
     type: DM4310
@@ -144,11 +144,11 @@ motors:
       friction: 1.0
       friction_alpha: 5.0
       drag:
-        stationary_kp: 0.0
-        stationary_kd: 0.0
-        moving_kd: 0.0
-        moving_tanh: 0.0
-        moving_tanh_alpha: 0.0
+        stationary_kp: 5.0
+        stationary_kd: 0.1
+        moving_kd: 0.1
+        moving_tanh: 0.2
+        moving_tanh_alpha: 25.0
       
       
 

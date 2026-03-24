@@ -11,7 +11,7 @@ public:
     JointArray uniform(float value);
     void setResetPose(JointArray reset_pose) { reset_pose_ = reset_pose; }
 
-    JointArray computeControlTorque(const JointArray& current_q, const JointArray& target_q, bool output = false) {return JointArray{};};
+    JointArray computeControlTorque(const JointArray& current_q, const JointArray& target_q, const JointArray& current_vel, const bool output = false) {return JointArray{};};
 
 
 protected:
@@ -38,7 +38,7 @@ public:
 
 
     // Gravity compensation torque calculation
-    JointArray computeGravityTorque(JointArray q);
+    JointArray computeGravityTorque(JointArray q, JointArray dq);
 
     // Nonlinear proportional term with deadzone
     float nonlinearProportional(float Kp, float alpha, float error) const;
@@ -47,7 +47,7 @@ public:
     void updateIntegralWithAntiWindup(float Ki, float error, float& integral, float p_term, float g_term, int joint_idx);
 
     // Main control function
-    JointArray computeControlTorque(const JointArray& current_q, const JointArray& target_q, bool output = false) ;
+    JointArray computeControlTorque(const JointArray& current_q, const JointArray& target_q, const JointArray& target_vel, const bool output = false) ;
 
 private:
 
