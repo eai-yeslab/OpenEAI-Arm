@@ -2,7 +2,7 @@ import rclpy
 from rclpy.executors import MultiThreadedExecutor
 import threading
 from sensor_msgs.msg import JointState, Image
-from std_msgs.msg import Bool, Int32
+from std_msgs.msg import Bool, Int32, Float32, Float64MultiArray
 from std_msgs.msg import Header
 from geometry_msgs.msg import Twist
 from collections import deque
@@ -49,11 +49,10 @@ class OpenEAIArmROS2Operator:
         for arm_name, arm_conf in self.config.get('arms', {}).items():
             self.arm_deques[arm_name] = deque()
             self.arm_keys.append(arm_name)
-        # Gripper/pose/extra
-        self.extra_deques = {
-            'gripper_joint': deque(),
-            'arm_pose': deque(),
-        }
+        extra_topics = self.config.get('extra', {})
+        self.extra_deques = {}
+        for topic_name, topic in extra_topics.items():
+            self.extra_deques[topic_name] = deque()
 
     def init(self):
         self.puppet_arm_publish_lock.acquire()
@@ -151,27 +150,29 @@ class OpenEAIArmROS2Operator:
         self.executor.spin()
 
     def _to_sec(self, msg):
+        if not hasattr(msg, 'header'):
+            return msg['timestamp'].sec + msg['timestamp'].nanosec * 1e-9
         stamp = msg.header.stamp
         return stamp.sec + stamp.nanosec * 1e-9
 
-    def get_frame(self, required = ['imgs', 'arms', 'robot_base']):
+    def get_frame(self):
         frame_time_candidates = []
-        if 'imgs' in required:
-            for cam_name, types in self.img_deques.items():
-                for typ, dq in types.items():
-                    if len(dq) == 0:
-                        self.node.get_logger().info(f"{cam_name} {typ} image info is missing...")
-                        return False
-                    frame_time_candidates.append(self._to_sec(dq[-1]))
-                    
-        if 'arms' in required:
-            for arm_name, dq in self.arm_deques.items():
+        for cam_name, types in self.img_deques.items():
+            for typ, dq in types.items():
                 if len(dq) == 0:
-                    self.node.get_logger().info(f"{arm_name} arm pose info missing...")
+                    self.node.get_logger().info(f"{cam_name} {typ} image info is missing...")
                     return False
                 frame_time_candidates.append(self._to_sec(dq[-1]))
-        if 'robot_base' in required and self.config.get('use_robot_base', False) and len(self.base_deque) == 0:
-            return False
+        for arm_name, dq in self.arm_deques.items():
+            if len(dq) == 0:
+                self.node.get_logger().info(f"{arm_name} arm pose info missing...")
+                return False
+            frame_time_candidates.append(self._to_sec(dq[-1]))
+        for topic_name, topic in self.extra_deques.items():
+            if len(topic) == 0:
+                self.node.get_logger().info(f"{topic_name} extra topic info missing...")
+                return False
+            frame_time_candidates.append(self._to_sec(topic[-1]))
         if frame_time_candidates:
             frame_time = min(frame_time_candidates)
         else:
@@ -183,47 +184,45 @@ class OpenEAIArmROS2Operator:
             return dq.popleft() if len(dq) > 0 else None
 
         imgs = {}
-        if 'imgs' in required:
-            for cam_name, types in self.img_deques.items():
-                imgs[cam_name] = {}
-                for typ, dq in types.items():
-                    msg = pop_until(dq)
-                    if msg is None:
-                        self.node.get_logger().info(f"Waiting for {cam_name} {typ} image...")
-                        return False
-                    img = self.bridge.imgmsg_to_cv2(msg, 'passthrough')
-                    if img.shape[-1] == 2:
-                        img = cv2.cvtColor(img, cv2.COLOR_YUV2RGB_YUY2)
-                    imgs[cam_name][typ] = img
+        for cam_name, types in self.img_deques.items():
+            imgs[cam_name] = {}
+            for typ, dq in types.items():
+                msg = pop_until(dq)
+                if msg is None:
+                    self.node.get_logger().info(f"Waiting for {cam_name} {typ} image...")
+                    return False
+                img = self.bridge.imgmsg_to_cv2(msg, 'passthrough')
+                if img.shape[-1] == 2:
+                    img = cv2.cvtColor(img, cv2.COLOR_YUV2RGB_YUY2)
+                imgs[cam_name][typ] = img
 
         arms = {}
-        if 'arms' in required:
-            for arm_name, dq in self.arm_deques.items():
-                arms[arm_name] = pop_until(dq)
-                if arms[arm_name] is None:
-                    self.node.get_logger().info(f"Waiting for {arm_name} arm pose...")
-                    return False
-        robot_base_msg = None
-        if 'robot_base' in required and self.config.get('use_robot_base', False):
-            robot_base_msg = pop_until(self.base_deque)
+        for arm_name, dq in self.arm_deques.items():
+            arms[arm_name] = pop_until(dq)
+            if arms[arm_name] is None:
+                self.node.get_logger().info(f"Waiting for {arm_name} arm pose...")
+                return False
 
-        # return {
-        #     'imgs': imgs,         # {'hand': {'rgb':..., 'depth': ...}, ...}
-        #     'arm_keys': self.arm_keys,  # ['puppet', ...]
-        #     'arms': arms,         # {'puppet': jointstate_msg, ...}
-        #     'robot_base': robot_base_msg,
-        #     'timestamp': frame_time,
-        # }
-        result = {}
-        if 'imgs' in required:
-            result['imgs'] = imgs
-        if 'arms' in required:
-            result['arm_keys'] = self.arm_keys
-            result['arms'] = arms
-        if 'robot_base' in required and self.config.get('use_robot_base', False):
-            result['robot_base'] = robot_base_msg
-        result['timestamp'] = frame_time
-        return result
+        extra = {}
+        for topic_name, dq in self.extra_deques.items():
+            msg = pop_until(dq)
+            if isinstance(msg, dict):
+                msg = msg['data']
+            extra[topic_name] = {
+                'msg': msg,
+                'type': self.config['extra'][topic_name]['type'],
+            }
+            if extra[topic_name]['msg'] is None:
+                self.node.get_logger().info(f"Waiting for {topic_name} extra topic...")
+                return False
+
+        return {
+            'imgs': imgs,         # {'hand': {'rgb':..., 'depth': ...}, ...}
+            'arm_keys': self.arm_keys,  # ['puppet', ...]
+            'arms': arms,         # {'puppet': jointstate_msg, ...}
+            'extra': extra,       # {'extra_topic': float32_msg, ...}
+            'timestamp': frame_time,
+        }
 
     # ------- ROS2 callback bindings --------
     def _make_image_callback(self, cam_name, typ):
@@ -240,6 +239,17 @@ class OpenEAIArmROS2Operator:
             if len(dq) >= 2000:
                 dq.popleft()
             dq.append(msg)
+        return cb
+    
+    def _make_extra_callback(self, topic_name):
+        def cb(msg):
+            dq = self.extra_deques[topic_name]
+            if len(dq) >= 2000:
+                dq.popleft()
+            if hasattr(msg, 'header'):
+                dq.append(msg)
+            else:
+                dq.append({'timestamp': self.node.get_clock().now().to_msg(), 'data': msg})
         return cb
 
     def robot_base_callback(self, msg):
@@ -292,22 +302,24 @@ class OpenEAIArmROS2Operator:
                     JointState, arm_conf['recv_eef_pose_topic'],
                     self._make_arm_callback(arm_name + '_pose'), 10
                 )
-        # Robot base
-        if self.config.get('use_robot_base', False):
-            base_conf = self.config.get('robot_base', {})
-            if 'recv_topic' in base_conf:
-                self.node.create_subscription(
-                    Twist, base_conf['recv_topic'],
-                    self.robot_base_callback, 10
-                )
-            if 'send_topic' in base_conf:
-                self.base_publisher = self.node.create_publisher(
-                    Twist, base_conf['send_topic'], 10
-                )
-        # Control
-        if 'ctrl_topic' in self.config:
+        # Extra topics
+        extra_topics = self.config.get('extra', {})
+        for topic_name, topic in extra_topics.items():
+            topic_type = topic.get('type', 'JointState')
+            if topic_type == 'JointState':
+                msg_type = JointState
+            elif topic_type == 'Float32':
+                msg_type = Float32
+            elif topic_type == 'Bool':
+                msg_type = Bool
+            elif topic_type == 'Float64MultiArray':
+                msg_type = Float64MultiArray
+            else:
+                self.node.get_logger().error(f"Unsupported extra topic type: {topic_type}. Supported types are JointState, Float32, Bool, Float64MultiArray.")
+                continue
             self.node.create_subscription(
-                Bool, self.config['ctrl_topic'], self.ctrl_callback, 10
+                msg_type, topic['topic'],
+                self._make_extra_callback(topic_name), 10
             )
         
         self.prepare_publisher = self.node.create_publisher(

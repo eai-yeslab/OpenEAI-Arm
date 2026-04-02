@@ -283,7 +283,7 @@ class DynamixelDriver(DynamixelDriverProtocol):
 
 class DynamixelNode():
     def __init__(self):
-        self.ids = range(1, 9)
+        self.ids = [1,7,3,4,5,6,8]
         self.directions = [1, -1, -1, -1, -1, 1, 1, 1]
         self.degree = False
         self.dof = 6

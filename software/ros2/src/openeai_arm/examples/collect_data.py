@@ -161,7 +161,8 @@ class OpenEAIArmDataCollector:
             self.node.get_logger().warning("Frame construct failed: {}".format(e))
             return False
         timestamp = result['timestamp']
-        return (imgs, master_arm, puppet_arm, puppet_arm_pose, timestamp)
+        extra = result.get('extra', {})
+        return (imgs, master_arm, puppet_arm, puppet_arm_pose, timestamp, extra)
 
     def process(self):
         if self.config.get('use_depth_image', False):
@@ -169,6 +170,7 @@ class OpenEAIArmDataCollector:
         while True:
             timesteps = []
             actions = []
+            extra_topics = []
             # Image data
             image = np.random.randint(0, 255, size=(480, 640, 3), dtype=np.uint8)
             image_dict = dict()
@@ -202,7 +204,8 @@ class OpenEAIArmDataCollector:
                     self.missing_info_frame_count = 0
                 print_flag = True
                 count += 1
-                (imgs, master_arm, puppet_arm, puppet_arm_pose, timestamp) = result
+                (imgs, master_arm, puppet_arm, puppet_arm_pose, timestamp, extra) = result
+                extra_topics = list(extra.keys())
                 delay = time.time() - timestamp
                 obs = collections.OrderedDict() 
                 obs['images'] = imgs
@@ -230,6 +233,24 @@ class OpenEAIArmDataCollector:
                 obs['eef_pose'] = eef_pose                
                 
                 obs['timestamp'] = timestamp
+                
+                for extra_topic in extra:
+                    extra_data = extra[extra_topic]
+                    if extra_data['type'] == 'Float32':
+                        obs[extra_topic] = float(extra_data['msg'].data)
+                    elif extra_data['type'] == 'Bool':
+                        obs[extra_topic] = bool(extra_data['msg'].data)
+                    elif extra_data['type'] == 'Float64MultiArray':
+                        obs[extra_topic] = np.array(extra_data['msg'].data)
+                    elif extra_data['type'] == 'JointState':
+                        jointstate_msg = extra_data['msg']
+                        joint_names = np.array(jointstate_msg.name)
+                        qpos_extra = np.zeros(len(joint_names))
+                        for i, name in enumerate(joint_names):
+                            qpos_extra[i] = jointstate_msg.position[i]
+                        obs[extra_topic + '/qpos'] = qpos_extra
+                    else:
+                        self.node.get_logger().warning(f"Unsupported extra data type: {extra_data['type']} for topic {extra_topic}")
                 
                 if count == 1:
                     ts = dm_env.TimeStep(
@@ -262,11 +283,11 @@ class OpenEAIArmDataCollector:
                 self.node.get_logger().info(f"len(actions)  : {len(actions)}")
                 self.timestamps = timesteps
                 self.actions = actions
-                self.save_data()
+                self.save_data(extra_topics)
                 self.episode_idx += 1
             self.next_episode = None
     
-    def save_data(self):
+    def save_data(self, extra_topics):
         if self.actions is None or self.timestamps is None:
             return
         actions = self.actions
@@ -285,6 +306,8 @@ class OpenEAIArmDataCollector:
             '/action': [],
             '/timestamps': []
         }
+        for extra_topic in extra_topics:
+            data_dict[f'/observations/{extra_topic}'] = []
         for cam_name in self.args.camera_names:
             data_dict[f'/observations/images/cam_{cam_name}'] = []
             if self.config['use_depth_image']:
@@ -302,6 +325,11 @@ class OpenEAIArmDataCollector:
             data_dict['/observations/qvel'].append(ts.observation['qvel'])
             data_dict['/observations/effort'].append(ts.observation['effort'])
             data_dict['/observations/eef_pose'].append(ts.observation['eef_pose'])
+            
+            for extra_topic in extra_topics:
+                extra_data = ts.observation.get(extra_topic, None)
+                if extra_data is not None:
+                    data_dict[f'/observations/{extra_topic}'].append(extra_data)
             
             # Fix data: find frames where qvel or effort length is 0 and replace with the previous frame's value
             if (len(ts.observation['qvel']) == 0 or len(ts.observation['effort']) == 0):
@@ -345,6 +373,12 @@ class OpenEAIArmDataCollector:
             _ = obs.create_dataset('eef_pose', (data_size, eef_dim))
             _ = root.create_dataset('action', (data_size, action_dim))
             _ = root.create_dataset('timestamps', (data_size,), dtype='float64')
+            for extra_topic in extra_topics:
+                extra_topic_length = len(ts.observation.get(extra_topic, []))
+                if extra_topic_length == 1:
+                    _ = obs.create_dataset(extra_topic, (data_size,))
+                else:
+                    _ = obs.create_dataset(extra_topic, (data_size, extra_topic_length))
 
             for name, array in data_dict.items():
                 root[name][...] = array

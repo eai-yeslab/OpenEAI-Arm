@@ -133,7 +133,10 @@ def get_frame(ros_operator):
         ros_operator.node.get_logger().warning("Frame construct failed: {}".format(e))
         return False
     timestamp = result['timestamp']
-    return (imgs, master_arm, puppet_arm, puppet_arm_pose, timestamp)
+    extra = result.get('extra', None)
+    current_time = time.time()
+    print("Get frame latency: {:.3f}s".format(current_time - timestamp))
+    return (imgs, master_arm, puppet_arm, puppet_arm_pose, timestamp, extra)
 
 def inference_process(args, ros_operator, t, pre_action):
     global inference_lock
@@ -154,7 +157,7 @@ def inference_process(args, ros_operator, t, pre_action):
             rate.sleep()
             continue
         print_flag = True
-        (imgs, master_arm, puppet_arm, puppet_arm_pose, timestamp) = result
+        (imgs, master_arm, puppet_arm, puppet_arm_pose, timestamp, extra) = result
 
         images = {}
         img_key_mapping = {
@@ -207,7 +210,7 @@ def inference_process(args, ros_operator, t, pre_action):
                 continue
             else:
                 exit(0)
-        print("model cost time: ", end_time -start_time)
+        print(f"model cost time: {end_time -start_time:.3f}s")
         inference_lock.acquire()
         inference_actions = server_result["actions"]
         if len(inference_actions.shape) > 2:

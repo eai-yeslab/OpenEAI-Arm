@@ -41,7 +41,7 @@ motors:
     master_id: 0x12
     min_position: -3.14
     max_position: 3.14
-    reset_pose: -0.23
+    reset_pose: -0.31
     dynamic_coefficients:
       kp: 300.0
       ki: 0.0
@@ -141,7 +141,7 @@ motors:
       kp: 0.0
       ki: 0.0
       kd: 0.1
-      friction: 1.0
+      friction: 2.0
       friction_alpha: 5.0
       drag:
         stationary_kp: 5.0
