@@ -13,7 +13,7 @@ controller:
   interpolation: minjerk
   filter_alpha: 0.9
   enable_safety_check: false
-  drag_stationary_vel_threshold: 0.2
+  drag_stationary_vel_threshold: 0.25
 
 motors:
   - name: joint_1
@@ -30,10 +30,10 @@ motors:
       friction: 1.0
       friction_alpha: 50.0
       drag:
-        stationary_kp: 10.0
-        stationary_kd: 0.0
-        moving_kd: -0.2
-        moving_tanh: 0.5
+        stationary_kp: 20.0
+        stationary_kd: 1.0
+        moving_kd: 0.0
+        moving_tanh: 0.0
         moving_tanh_alpha: 2.0
   - name: joint_2
     type: DM4340
@@ -49,10 +49,10 @@ motors:
       friction: 1.0
       friction_alpha: 50.0
       drag:
-        stationary_kp: 30.0
-        stationary_kd: 2.5
-        moving_kd: -0.2
-        moving_tanh: 0.4
+        stationary_kp: 15.0
+        stationary_kd: 1.0
+        moving_kd: -0.25
+        moving_tanh: 0.25
         moving_tanh_alpha: 2.0
   - name: joint_3
     type: DM4340
@@ -68,10 +68,10 @@ motors:
       friction: 1.0
       friction_alpha: 50.0
       drag:
-        stationary_kp: 10.0
+        stationary_kp: 12.5
         stationary_kd: 0.5
-        moving_kd: -0.2
-        moving_tanh: 0.4
+        moving_kd: -0.35
+        moving_tanh: 0.35
         moving_tanh_alpha: 2.0
   - name: joint_4
     type: DM4310
@@ -79,7 +79,7 @@ motors:
     master_id: 0x14
     min_position: -3.14
     max_position: 3.14
-    reset_pose: 0.19
+    reset_pose: 0.226
     dynamic_coefficients:
       kp: 50.0
       ki: 0.0
@@ -87,11 +87,11 @@ motors:
       friction: 0.5
       friction_alpha: 5.0
       drag:
-        stationary_kp: 2.5
+        stationary_kp: 5.0
         stationary_kd: 0.5
-        moving_kd: 0.0
-        moving_tanh: 0.0
-        moving_tanh_alpha: 0.0
+        moving_kd: -0.03
+        moving_tanh: 0.03
+        moving_tanh_alpha: 2.0
   - name: joint_5
     type: DM4310
     slave_id: 0x05
@@ -106,11 +106,11 @@ motors:
       friction: 0.5
       friction_alpha: 5.0
       drag:
-        stationary_kp: 2.5
+        stationary_kp: 5.0
         stationary_kd: 0.5
         moving_kd: 0.0
         moving_tanh: 0.0
-        moving_tanh_alpha: 0.0
+        moving_tanh_alpha: 2.0
   - name: joint_6
     type: DM4310
     slave_id: 0x06
@@ -125,30 +125,29 @@ motors:
       friction: 0.5
       friction_alpha: 5.0
       drag:
-        stationary_kp: 2.5
+        stationary_kp: 5.0
         stationary_kd: 0.5
         moving_kd: 0.0
         moving_tanh: 0.0
-        moving_tanh_alpha: 0.0
+        moving_tanh_alpha: 2.0
   - name: joint_7
     type: DM4310
     slave_id: 0x07
     master_id: 0x17
     min_position: 0.0
     max_position: 1.35
-    reset_pose: -2.26
+    reset_pose: -2.28
     dynamic_coefficients:
       kp: 0.0
       ki: 0.0
       kd: 0.1
-      friction: 2.0
+      friction: 1.0
       friction_alpha: 5.0
       drag:
-        stationary_kp: 5.0
-        stationary_kd: 0.1
-        moving_kd: 0.1
-        moving_tanh: 0.2
-        moving_tanh_alpha: 25.0
+        stationary_kp: 0.0
+        stationary_kd: 0.0
+        moving_kd: -0.01
+        moving_tanh: 0.01
+        moving_tanh_alpha: 2.0
       
       
-

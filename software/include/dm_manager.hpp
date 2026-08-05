@@ -12,38 +12,12 @@
 #include <variant>
 #include <functional>
 #include "dm.hpp"
+#include "joint_array.hpp"
 #include "interpolator.hpp"
 
 struct MITCmd {
     float kp, kd, q, dq, tau;
 };
-
-template <size_t N>
-inline std::array<float, N> operator+(const std::array<float, N>& a, const std::array<float, N>& b) {
-    std::array<float, N> out;
-    for (size_t i = 0; i < N; ++i) {
-        out[i] = a[i] + b[i];
-    }
-    return out;
-}
-
-template <size_t N>
-inline std::array<float, N> operator-(const std::array<float, N>& a, const std::array<float, N>& b) {
-    std::array<float, N> out;
-    for (size_t i = 0; i < N; ++i) {
-        out[i] = a[i] - b[i];
-    }
-    return out;
-}
-
-template <size_t N>
-inline std::array<float, N> operator*(const std::array<float, N>& a, float b) {
-    std::array<float, N> out;
-    for (size_t i = 0; i < N; ++i) {
-        out[i] = a[i] * b;
-    }
-    return out;
-}
 
 class BaseMotorManager {
 public:
@@ -139,10 +113,12 @@ private:
     DM_Motor::Motor_Control* mc_;
 
     std::deque<CmdArray> traj_queue_;
+    bool traj_queue_updated_ = false;
     std::mutex traj_mutex_;
 
     CmdArray last_cmd_;
     CmdArray filtered_cmd_; 
+    JointArray external_target_{};
     float filter_alpha;
     MITCmd filter_cmd(const MITCmd& prev, const MITCmd& curr, float alpha);
 

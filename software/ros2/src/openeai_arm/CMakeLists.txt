@@ -10,7 +10,6 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(pinocchio REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR}/../../../include)
 
@@ -21,7 +20,7 @@ add_executable(OpenEAIArm_node src/OpenEAIArm_node.cpp)
 ament_target_dependencies(OpenEAIArm_node rclcpp std_msgs sensor_msgs)
 
 # 主库名为 OpenEAIArm_core
-target_link_libraries(OpenEAIArm_node OpenEAIArm_core pinocchio::pinocchio)
+target_link_libraries(OpenEAIArm_node OpenEAIArm_core)
 install(TARGETS OpenEAIArm_node DESTINATION lib/${PROJECT_NAME})
 
 install(

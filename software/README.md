@@ -29,7 +29,6 @@ This project relys on the following third-party packages:
 - yaml-cpp for reading config files
 - Eigen3 library for matrix calculations
 - URDF library for urdf reading
-- [pinocchio](https://gepettoweb.laas.fr/doc/stack-of-tasks/pinocchio/master/doxygen-html/md_doc_b_examples_a_model.html) for inverse kinetics
 - [KDL](https://www.orocos.org/wiki/orocos/kdl-wiki.html)
 - [kdl_parser](https://github.com/ros/kdl_parser?tab=readme-ov-file) and [urdf](https://github.com/ros/urdf) packages, whose source codes are already included so that they can be used without installing ros
 - [Dynamixel SDK](https://github.com/ROBOTIS-GIT/DynamixelSDK/tree/main) for controlling [GELLO](https://wuphilipp.github.io/gello_site/)
@@ -45,35 +44,6 @@ Simply `cd` to its python directory and install:
 ```bash
 cd third_party/DynamixelSDK/python
 pip install -e .
-```
-
-### Pinocchio Installation
-
-In this project we use pinocchio to calculate inverse kinetics. To install this library run the following commands as described in the [official installation website](https://stack-of-tasks.github.io/pinocchio/download.html#Install_3). Note this may take a while:
-
-```bash
-sudo apt install -qqy lsb-release curl
-
-sudo mkdir -p /etc/apt/keyrings
-curl http://robotpkg.openrobots.org/packages/debian/robotpkg.asc \
-    | sudo tee /etc/apt/keyrings/robotpkg.asc
-
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" \
-| sudo tee /etc/apt/sources.list.d/robotpkg.list
-
-sudo apt update
-
-sudo apt install -qqy robotpkg-py3*-pinocchio
-```
-
-And then modify the following environment variables or add to `$HOME/.bashrc` for persistent configuration:
-
-```bash
-export PATH=/opt/openrobots/bin:$PATH
-export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH
-export LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH
-export PYTHONPATH=/opt/openrobots/lib/python3.10/site-packages:$PYTHONPATH # Adapt your desired python version here
-export CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
 ```
 
 ### KDL Installation
@@ -313,4 +283,3 @@ python inference.py --task_instruction "do something" --contiguous --config_path
 ```
 
 You can modify [OpenEAI-Arm/ros2/src/openeai_arm/examples/config_left_inference.yml](OpenEAI-Arm/ros2/src/openeai_arm/examples/config_left_inference.yml) based on your own settings.
-

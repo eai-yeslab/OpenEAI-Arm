@@ -11,6 +11,7 @@
 #include <variant>
 #include <cstdint>
 #include <cmath>
+#include <stdexcept>
 
 float DM_Motor::Motor::get_param_as_float(int key) const
 {
@@ -412,7 +413,315 @@ void DM_Motor::Motor_Control::write_motor_param(Motor &DM_Motor,uint8_t RID,cons
     serial_->send((uint8_t*)&send_data, sizeof(can_send_frame));
 }
 
+DM_Motor::SimMotorControl::SimMotorControl()
+    : Motor_Control(nullptr, false)
+{
+}
 
+void DM_Motor::SimMotorControl::ensure_state(Motor &motor)
+{
+    auto id = motor.GetSlaveId();
+    if (sim_states.find(id) == sim_states.end()) {
+        SimMotorState state;
+        state.pos = motor.Get_Position();
+        state.last_tau = motor.Get_tau();
+        state.last_update = std::chrono::steady_clock::now();
+        sim_states[id] = state;
+    }
+}
+
+void DM_Motor::SimMotorControl::step_tracker(
+    SimMotorState& state, float dt, const SimMotorParams& params)
+{
+    if (dt <= 0.0f) return;
+    dt = std::min(dt, params.max_dt);
+
+    float error = state.target_pos - state.pos;
+    if (std::abs(error) < params.pos_epsilon &&
+        std::abs(state.vel) < params.vel_epsilon) {
+        state.pos = state.target_pos;
+        state.vel = 0.0f;
+        return;
+    }
+
+    float direction = signf(error);
+    float acceleration = 0.0f;
+    if (direction == 0.0f) {
+        acceleration = state.vel > 0.0f ? -params.amax
+                     : state.vel < 0.0f ? params.amax : 0.0f;
+    } else {
+        float velocity_toward_target = direction * state.vel;
+        float braking_distance = velocity_toward_target > 0.0f
+            ? velocity_toward_target * velocity_toward_target / (2.0f * params.amax)
+            : 0.0f;
+        float margin = std::max(
+            params.pos_epsilon, 0.5f * params.amax * dt * dt);
+
+        if (velocity_toward_target < 0.0f ||
+            std::abs(error) > braking_distance + margin) {
+            acceleration = direction * params.amax;
+        } else {
+            acceleration = -direction * params.amax;
+        }
+    }
+
+    float new_velocity = clampf(
+        state.vel + acceleration * dt, -params.vmax, params.vmax);
+    float new_position = state.pos + 0.5f * (state.vel + new_velocity) * dt;
+
+    if ((state.target_pos - state.pos) *
+        (state.target_pos - new_position) <= 0.0f) {
+        new_position = state.target_pos;
+        new_velocity = 0.0f;
+    }
+
+    state.pos = new_position;
+    state.vel = new_velocity;
+}
+
+void DM_Motor::SimMotorControl::update_feedback(
+    Motor &motor, float new_pos, float tau_feedback)
+{
+    ensure_state(motor);
+    auto &state = sim_states[motor.GetSlaveId()];
+    auto now = std::chrono::steady_clock::now();
+
+    static const SimMotorParams params = [] {
+        SimMotorParams value;
+        value.vmax = 5.0f;
+        value.amax = 20.0f;
+        value.pos_epsilon = 1e-4f;
+        value.vel_epsilon = 1e-3f;
+        value.max_dt = 0.02f;
+        return value;
+    }();
+
+    if (!state.initialized) {
+        state.pos = new_pos;
+        state.vel = 0.0f;
+        state.target_pos = new_pos;
+        state.last_tau = tau_feedback;
+        state.last_update = now;
+        state.initialized = true;
+        motor.receive_data(state.pos, state.vel, tau_feedback);
+        return;
+    }
+
+    float dt = std::chrono::duration<float>(now - state.last_update).count();
+    if (dt < 0.0f) dt = 0.0f;
+
+    state.target_pos = new_pos;
+    state.last_tau = tau_feedback;
+    step_tracker(state, dt, params);
+    state.last_update = now;
+    motor.receive_data(state.pos, state.vel, tau_feedback);
+}
+
+void DM_Motor::SimMotorControl::enable(const Motor& motor)
+{
+    if (motors.find(motor.GetSlaveId()) == motors.end()) return;
+    sim_states[motor.GetSlaveId()].enabled = true;
+}
+
+void DM_Motor::SimMotorControl::enable_old(
+    const Motor& motor, Control_Mode mode)
+{
+    if (motors.find(motor.GetSlaveId()) == motors.end()) return;
+    sim_states[motor.GetSlaveId()].enabled = true;
+    sim_states[motor.GetSlaveId()].mode = mode;
+}
+
+void DM_Motor::SimMotorControl::refresh_motor_status(const Motor& motor)
+{
+    auto it = motors.find(motor.GetSlaveId());
+    if (it == motors.end()) return;
+    auto *registered_motor = it->second;
+    ensure_state(*registered_motor);
+    update_feedback(
+        *registered_motor,
+        registered_motor->Get_Position(),
+        registered_motor->Get_tau());
+}
+
+void DM_Motor::SimMotorControl::disable(const Motor& motor)
+{
+    if (motors.find(motor.GetSlaveId()) == motors.end()) return;
+    sim_states[motor.GetSlaveId()].enabled = false;
+}
+
+void DM_Motor::SimMotorControl::set_zero_position(const Motor& motor)
+{
+    auto it = motors.find(motor.GetSlaveId());
+    if (it == motors.end()) return;
+
+    auto *registered_motor = it->second;
+    ensure_state(*registered_motor);
+    auto &state = sim_states[motor.GetSlaveId()];
+    auto now = std::chrono::steady_clock::now();
+    float dt = std::chrono::duration<float>(now - state.last_update).count();
+    float velocity = dt > 1e-6f ? -state.pos / dt : 0.0f;
+
+    state.pos = 0.0f;
+    state.target_pos = 0.0f;
+    state.vel = velocity;
+    state.last_tau = 0.0f;
+    state.last_update = now;
+    registered_motor->receive_data(0.0f, velocity, 0.0f);
+}
+
+void DM_Motor::SimMotorControl::control_mit(
+    Motor &motor, float kp, float kd, float q, float dq, float tau)
+{
+    (void)kp;
+    (void)kd;
+    (void)dq;
+    if (motors.find(motor.GetSlaveId()) == motors.end()) {
+        throw std::runtime_error("Motor_Control id not found");
+    }
+    ensure_state(motor);
+    sim_states[motor.GetSlaveId()].mode = MIT_MODE;
+    update_feedback(motor, q, tau);
+}
+
+void DM_Motor::SimMotorControl::control_pos_vel(
+    Motor &motor, float pos, float vel)
+{
+    (void)vel;
+    if (motors.find(motor.GetSlaveId()) == motors.end()) {
+        throw std::runtime_error("POS_VEL ERROR : Motor_Control id not found");
+    }
+    ensure_state(motor);
+    sim_states[motor.GetSlaveId()].mode = POS_VEL_MODE;
+    update_feedback(motor, pos, 0.0f);
+}
+
+void DM_Motor::SimMotorControl::control_vel(Motor &motor, float vel)
+{
+    if (motors.find(motor.GetSlaveId()) == motors.end()) {
+        throw std::runtime_error("VEL ERROR : id not found");
+    }
+    ensure_state(motor);
+    auto &state = sim_states[motor.GetSlaveId()];
+    state.mode = VEL_MODE;
+
+    auto now = std::chrono::steady_clock::now();
+    float dt = std::chrono::duration<float>(now - state.last_update).count();
+    if (dt < 1e-6f) dt = 1e-6f;
+    update_feedback(motor, state.pos + vel * dt, 0.0f);
+}
+
+void DM_Motor::SimMotorControl::control_pos_force(
+    Motor &motor, float pos, uint16_t vel, uint16_t i)
+{
+    (void)vel;
+    (void)i;
+    if (motors.find(motor.GetSlaveId()) == motors.end()) {
+        throw std::runtime_error("pos_force ERROR : Motor_Control id not found");
+    }
+    ensure_state(motor);
+    sim_states[motor.GetSlaveId()].mode = POS_FORCE_MODE;
+    update_feedback(motor, pos, 0.0f);
+}
+
+void DM_Motor::SimMotorControl::receive()
+{
+}
+
+void DM_Motor::SimMotorControl::receive_param()
+{
+}
+
+void DM_Motor::SimMotorControl::addMotor(Motor *motor)
+{
+    motors.insert({motor->GetSlaveId(), motor});
+    if (motor->GetMasterId() != 0) {
+        motors.insert({motor->GetMasterId(), motor});
+    }
+
+    SimMotorState state;
+    state.pos = motor->Get_Position();
+    state.last_tau = motor->Get_tau();
+    state.last_update = std::chrono::steady_clock::now();
+    sim_states[motor->GetSlaveId()] = state;
+
+    motor->set_param(CTRL_MODE, static_cast<uint32_t>(MIT_MODE));
+    auto limits = motor->get_limit_param();
+    motor->set_param(PMAX, limits.Q_MAX);
+    motor->set_param(VMAX, limits.DQ_MAX);
+    motor->set_param(TMAX, limits.TAU_MAX);
+    motor->set_param(MST_ID, motor->GetMasterId());
+    motor->set_param(ESC_ID, motor->GetSlaveId());
+}
+
+float DM_Motor::SimMotorControl::read_motor_param(Motor &motor, uint8_t rid)
+{
+    if (motors.find(motor.GetSlaveId()) == motors.end()) return 0.0f;
+
+    if (!motor.is_have_param(rid)) {
+        if (rid == PMAX) {
+            motor.set_param(rid, motor.get_limit_param().Q_MAX);
+        } else if (rid == VMAX) {
+            motor.set_param(rid, motor.get_limit_param().DQ_MAX);
+        } else if (rid == TMAX) {
+            motor.set_param(rid, motor.get_limit_param().TAU_MAX);
+        } else if (rid == CTRL_MODE) {
+            motor.set_param(
+                rid, static_cast<uint32_t>(sim_states[motor.GetSlaveId()].mode));
+        } else if (rid == MST_ID) {
+            motor.set_param(rid, motor.GetMasterId());
+        } else if (rid == ESC_ID) {
+            motor.set_param(rid, motor.GetSlaveId());
+        } else if (is_in_ranges(rid)) {
+            motor.set_param(rid, static_cast<uint32_t>(0));
+        } else {
+            motor.set_param(rid, 0.0f);
+        }
+    }
+
+    return get_param_value_as_float(motor, rid);
+}
+
+bool DM_Motor::SimMotorControl::switchControlMode(
+    Motor &motor, Control_Mode mode)
+{
+    if (motors.find(motor.GetSlaveId()) == motors.end()) return false;
+    ensure_state(motor);
+    sim_states[motor.GetSlaveId()].mode = mode;
+    motor.set_param(CTRL_MODE, static_cast<uint32_t>(mode));
+    return true;
+}
+
+bool DM_Motor::SimMotorControl::change_motor_param(
+    Motor &motor, uint8_t rid, float data)
+{
+    if (motors.find(motor.GetSlaveId()) == motors.end()) return false;
+
+    if (is_in_ranges(rid)) {
+        motor.set_param(rid, float_to_uint32(data));
+    } else {
+        motor.set_param(rid, data);
+    }
+
+    if (rid == CTRL_MODE) {
+        sim_states[motor.GetSlaveId()].mode =
+            static_cast<Control_Mode>(float_to_uint32(data));
+    }
+    return true;
+}
+
+void DM_Motor::SimMotorControl::save_motor_param(Motor &motor)
+{
+    (void)motor;
+}
+
+float DM_Motor::SimMotorControl::get_param_value_as_float(
+    Motor &motor, uint8_t rid)
+{
+    if (is_in_ranges(rid)) {
+        return static_cast<float>(motor.get_param_as_uint32(rid));
+    }
+    return motor.get_param_as_float(rid);
+}
 
 
 

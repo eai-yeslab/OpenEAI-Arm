@@ -46,9 +46,17 @@ PYBIND11_MODULE(OpenEAIArm_py, m) {
         .def("get_ee_pose", &OpenEAIArm::get_ee_pose)
         .def("get_joint_names", &OpenEAIArm::get_joint_names)
         .def("forward_kinetics", &OpenEAIArm::forward_kinetics)
-        .def("inverse_kinetics", 
-             py::overload_cast<OpenEAIArm::JointArray, bool&, OpenEAIArm::IKOptions>(&OpenEAIArm::inverse_kinetics, py::const_),
-             py::arg("ee_pose"), py::arg("success"), py::arg("options") = OpenEAIArm::IKOptions())
+        .def("inverse_kinetics",
+             [](const OpenEAIArm& arm,
+                const OpenEAIArm::JointArray& ee_pose,
+                OpenEAIArm::IKOptions options) {
+                 bool success = false;
+                 auto joints = arm.inverse_kinetics(ee_pose, success, options);
+                 return py::make_tuple(joints, success);
+             },
+             py::arg("ee_pose"),
+             py::arg("options") = OpenEAIArm::IKOptions(),
+             "Return (joint_angles, success) for the requested end-effector pose.")
         .def("set_joint_targets", &OpenEAIArm::set_joint_targets,
              py::arg("target"),
              py::arg("move_time") = 0.0f,

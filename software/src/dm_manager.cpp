@@ -47,6 +47,7 @@ void MotorManager::move(
 {
     JointArray kp = kp_arg ? *kp_arg : kp_;
     JointArray kd = kd_arg ? *kd_arg : kd_;
+    external_target_ = q;
 
     // Current State
     JointArray q_curr = getPosition(), delta_q{};
@@ -62,10 +63,12 @@ void MotorManager::move(
 
     // Velocity and torque parameter preparation
     JointArray dq_res = interpolator_->getVel(), tau_res{};
-    if (dq_arg) dq_res = *dq_arg;
-    else {
+    if (dq_arg) {
         for (size_t j = 0; j < NUM_JOINTS; ++j) {
-            // float d_q = q[j] - last_q_[j];
+            dq_res[j] = (*dq_arg)[j] / dt;
+        }
+    } else {
+        for (size_t j = 0; j < NUM_JOINTS; ++j) {
             dq_res[j] = std::clamp(dq_res[j] / dt, -2.0f, 2.0f);
         }
     }
@@ -78,8 +81,7 @@ void MotorManager::move(
         float planned_vel = std::fabs(delta_q[j] / dt);
         if (planned_vel > max_vel_[j]) {
             need_interpolate = true;
-            float required = std::fabs(delta_q[j]) / max_vel_[j];
-            if (required > min_time) min_time = required;
+            break;
         }
     }
 
@@ -106,6 +108,7 @@ void MotorManager::move_mit(const JointArray& q, const JointArray& dq, const Joi
     std::deque<CmdArray> single{cmd};
     std::lock_guard<std::mutex> lk(traj_mutex_);
     traj_queue_ = std::move(single);
+    traj_queue_updated_ = true;
 }
 
 void MotorManager::move_mit_interpolated(const JointArray& tau, const JointArray& kp, const JointArray& kd, float move_time)
@@ -123,6 +126,7 @@ void MotorManager::move_mit_interpolated(const JointArray& tau, const JointArray
     }
     std::lock_guard<std::mutex> lk(traj_mutex_);
     traj_queue_ = std::move(new_traj_deque);
+    traj_queue_updated_ = true;
 }
 
 MotorManager::JointArray MotorManager::getPosition() {
@@ -152,13 +156,14 @@ void MotorManager::start() {
     state_log_.open("motor_state_log.csv");
     state_log_ << "timestamp_ms";
     for (size_t j = 0; j < NUM_JOINTS; ++j)
+        state_log_ << ",q_ext_" << j;
+    for (size_t j = 0; j < NUM_JOINTS; ++j)
         state_log_ << ",q_cmd_" << j << ",dq_cmd_" << j << ",tau_cmd_" << j;
     for (size_t j = 0; j < NUM_JOINTS; ++j)
-        state_log_ << ",q_" << j << ",dq_" << j << ",tau_" << j;
-    state_log_ << ",ok";
+        state_log_ << ",q_snd_" << j << ",dq_snd_" << j << ",tau_snd_" << j;
     for (size_t j = 0; j < NUM_JOINTS; ++j)
-        state_log_ << ",kp_" << j << ",kd_" << j;
-    state_log_ << "\n";
+        state_log_ << ",q_" << j << ",dq_" << j << ",tau_" << j;
+    state_log_ << ",ok,keyframe\n";
     running_ = true;
     thread_ = std::thread(&MotorManager::controlLoop, this);
 }
@@ -216,8 +221,9 @@ void MotorManager::controlLoop() {
     while (running_) {
         auto t0 = std::chrono::steady_clock::now();
 
-        CmdArray group;
+        CmdArray group{};
         bool ok = false;
+        bool is_keyframe = false;
 
         {
             std::lock_guard<std::mutex> lk(traj_mutex_);
@@ -226,8 +232,13 @@ void MotorManager::controlLoop() {
                 traj_queue_.pop_front();
                 ok = true;
             }
+            if (traj_queue_updated_) {
+                is_keyframe = true;
+                traj_queue_updated_ = false;
+            }
         }
-        CmdArray input_cmd = ok ? group : last_cmd_;
+        CmdArray input_cmd{};
+        input_cmd = ok ? group : last_cmd_;
         CmdArray send_cmd;
 
         for (size_t j = 0; j < NUM_JOINTS; ++j) {
@@ -251,6 +262,10 @@ void MotorManager::controlLoop() {
         for (size_t j=0; j < NUM_JOINTS; ++j) {
             try {
                 const auto& c = send_cmd[j];
+                send_cmd[j].dq = (c.q - filtered_cmd_[j].q) / control_cycle;
+                if (std::fabs(send_cmd[j].dq) > max_vel_[j]) {
+                    send_cmd[j].dq = std::clamp(send_cmd[j].dq, -max_vel_[j], max_vel_[j]);
+                }
                 if (compute_dynamic_torque) {
                     mc_->control_mit(*motors_[j], c.kp, c.kd, c.q, c.dq, tau_computed[j]);
                     target_t[j] = tau_computed[j];
@@ -286,22 +301,23 @@ void MotorManager::controlLoop() {
 
         state_log_ << ts;
 
+        for (size_t j = 0; j < NUM_JOINTS; ++j)
+            state_log_ << "," << external_target_[j];
+
         for (size_t j = 0; j < NUM_JOINTS; ++j) {
             const auto& c = cmd_group[j];
+            state_log_ << "," << c.q << "," << c.dq << "," << (compute_dynamic_torque ? tau_computed[j] : c.tau) ;
+        }
+
+        for (size_t j = 0; j < NUM_JOINTS; ++j) {
+            const auto& c = send_cmd[j];
             state_log_ << "," << c.q << "," << c.dq << "," << (compute_dynamic_torque ? tau_computed[j] : c.tau) ;
         }
 
         for (size_t j = 0; j < NUM_JOINTS; ++j)
             state_log_ << "," << q[j] << "," << dq[j] << "," << tau[j];
 
-        state_log_ << "," << ok;
-
-        for (size_t j = 0; j < NUM_JOINTS; ++j) {
-            const auto& c = cmd_group[j];
-            state_log_ << "," << c.kp << "," << c.kd;
-        }
-
-        state_log_ << std::endl;
+        state_log_ << "," << ok << "," << is_keyframe << std::endl;
         
         auto t1 = std::chrono::steady_clock::now();
         auto used = std::chrono::duration_cast<std::chrono::microseconds>(t1-t0).count();

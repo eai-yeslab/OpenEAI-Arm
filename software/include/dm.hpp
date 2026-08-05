@@ -11,7 +11,10 @@
 #include <array>
 #include <variant>
 #include <cstdint>
-#include <cmath>
+#include <chrono>
+#include <cstring>
+#include <memory>
+#include <algorithm>
 
 #define POS_MODE 0x100
 #define SPEED_MODE 0x200
@@ -298,45 +301,45 @@ namespace DM_Motor
         * @param serial 串口对象
         * 默认串口为/dev/ttyACM0
         */
-        Motor_Control(SerialPort::SharedPtr serial = nullptr): serial_(std::move(serial))
+        Motor_Control(SerialPort::SharedPtr serial = nullptr, bool open_default_serial = true): serial_(std::move(serial))
         {
-            if (serial_ == nullptr) {
+            if (serial_ == nullptr && open_default_serial) {
                 //default serial port
                 serial_ = std::make_shared<SerialPort>("/dev/ttyACM0", B921600);
             }
         }
 
-        ~Motor_Control()
+        virtual ~Motor_Control()
         = default;
 
         /*
         * @brief enable the motor 使能电机
         * @param motor 电机对象
         */
-        void enable(const Motor& motor);
+        virtual void enable(const Motor& motor);
         /*
          * @brief enable motor which is old version 使能达妙旧款电机固件 使用旧版本固件建议尽快升级成新版本
          * @param motor object 电机对象
          * @param mode 控制模式  DM_MOTOR::MIT_MODE, DM_MOTOR::POS_VEL_MODE, DM_MOTOR::VEL_MODE, DM_MOTOR::POS_FORCE_MODE
          */
-        void enable_old(const Motor& motor, Control_Mode mode);
+        virtual void enable_old(const Motor& motor, Control_Mode mode);
 
         /*
          * @brief refresh motor status 刷新电机状态
          * @param motor object 电机对象
          */
-        void refresh_motor_status(const Motor& motor);
+        virtual void refresh_motor_status(const Motor& motor);
         /*
         * @brief  disable the motor 失能电机
         * @param  motor object 电机对象
         */
-        void disable(const Motor& motor);
+        virtual void disable(const Motor& motor);
 
         /*
         * @brief set the now position as zero point 保存当前位置为电机零点
         * @param motor object 电机对象
         */
-        void set_zero_position(const Motor& motor);
+        virtual void set_zero_position(const Motor& motor);
 
         /* @description: MIT Control Mode MIT控制模式 具体描述请参考达妙手册
          *@param kp: 比例系数
@@ -345,7 +348,7 @@ namespace DM_Motor
          *@param dq: velocity 速度
          *@param tau: torque 扭矩
         */
-        void control_mit(Motor &DM_Motor, float kp, float kd, float q, float dq, float tau);
+        virtual void control_mit(Motor &DM_Motor, float kp, float kd, float q, float dq, float tau);
 
         /*
          * @description: Position Control Mode with velocity  位置速度控制模式
@@ -353,14 +356,14 @@ namespace DM_Motor
          * @param vel: velocity 速度
          * @param DM_Motor: Motor object 电机对象
          */
-        void control_pos_vel(Motor &DM_Motor,float pos,float vel);
+        virtual void control_pos_vel(Motor &DM_Motor,float pos,float vel);
 
         /*
         * @description: velocity control mode 速度控制模式
         * @param DM_Motor: motor object 电机对象
         * @param vel: velocity 速度
         */
-        void control_vel(Motor &DM_Motor,float vel);
+        virtual void control_vel(Motor &DM_Motor,float vel);
 
         /*
          * @description: Position control mode with torque  力位混合控制模式
@@ -369,20 +372,20 @@ namespace DM_Motor
          * @param vel: velocity 速度 范围0-10000 具体参考达妙手册
          * @param i: current 电流 范围0-10000具体参考达妙手册
          */
-        void control_pos_force(Motor &DM_Motor,float pos, uint16_t vel, uint16_t i);
+        virtual void control_pos_force(Motor &DM_Motor,float pos, uint16_t vel, uint16_t i);
 
         /*
          * @description 函数库内部调用,用于解算电机can线返回的电机参数
          */
-        void receive();
+        virtual void receive();
 
-        void receive_param();
+        virtual void receive_param();
 
         /**
          * @brief add motor to class 添加电机
          * @param DM_Motor : motor object 电机对象
          */
-        void addMotor(Motor *DM_Motor);
+        virtual void addMotor(Motor *DM_Motor);
 
         /*
          * @description: read motor register param 读取电机内部寄存器参数，具体寄存器列表请参考达妙的手册
@@ -390,7 +393,7 @@ namespace DM_Motor
          * @param RID: register id 寄存器ID  example: DM_MOTOR::UV_Value
          * @return: motor param 电机参数 如果没查询到返回的参数为0
          */
-        float read_motor_param(Motor &DM_Motor,uint8_t RID);
+        virtual float read_motor_param(Motor &DM_Motor,uint8_t RID);
 
 
         /*
@@ -398,7 +401,7 @@ namespace DM_Motor
          * @param DM_Motor: motor object 电机对象
          * @param mode: control mode 控制模式 like:DM_MOTOR::MIT_MODE, DM_MOTOR::POS_VEL_MODE, DM_MOTOR::VEL_MODE, DM_MOTOR::POS_FORCE_MODE
          */
-        bool switchControlMode(Motor &DM_Motor,Control_Mode mode);
+        virtual bool switchControlMode(Motor &DM_Motor,Control_Mode mode);
 
         /*
          * @description: change motor param 修改电机内部寄存器参数 具体寄存器列表请参考达妙手册
@@ -407,7 +410,7 @@ namespace DM_Motor
          * @param data: param data 参数数据,大部分数据是float类型，其中如果是uint32类型的数据也可以直接输入整型的就行，函数内部有处理
          * @return: bool true or false  是否修改成功
          */
-        bool change_motor_param(Motor &DM_Motor,uint8_t RID,float data);
+        virtual bool change_motor_param(Motor &DM_Motor,uint8_t RID,float data);
 
 
         /*
@@ -415,7 +418,7 @@ namespace DM_Motor
          * @param DM_Motor: motor object 电机对象
          * 电机默认参数不会写到flash里面，需要进行写操作
          */
-        void save_motor_param(Motor &DM_Motor);
+        virtual void save_motor_param(Motor &DM_Motor);
 
         /*
          * @description: change motor limit param 修改电机限制参数，这个修改的不是电机内部的寄存器参数，而是电机的限制参数
@@ -439,7 +442,7 @@ namespace DM_Motor
             limit_param[DM_Motor.GetMotorType()].Q_MAX=P_MAX;
         }
 
-    private:
+    protected:
         void control_cmd(Motor_id id , uint8_t cmd);
 
         void write_motor_param(Motor &DM_Motor,uint8_t RID,const uint8_t data[4]);
@@ -472,6 +475,72 @@ namespace DM_Motor
         SerialPort::SharedPtr serial_;  //serial port
         can_send_frame send_data; //send data frame
         CAN_Receive_Frame receive_data{};//receive data frame
+    };
+
+    class SimMotorControl : public Motor_Control
+    {
+    public:
+        SimMotorControl();
+        ~SimMotorControl() override = default;
+
+        void enable(const Motor& motor) override;
+        void enable_old(const Motor& motor, Control_Mode mode) override;
+        void refresh_motor_status(const Motor& motor) override;
+        void disable(const Motor& motor) override;
+        void set_zero_position(const Motor& motor) override;
+        void control_mit(Motor &motor, float kp, float kd, float q, float dq, float tau) override;
+        void control_pos_vel(Motor &motor, float pos, float vel) override;
+        void control_vel(Motor &motor, float vel) override;
+        void control_pos_force(Motor &motor, float pos, uint16_t vel, uint16_t i) override;
+        void receive() override;
+        void receive_param() override;
+        void addMotor(Motor *motor) override;
+        float read_motor_param(Motor &motor, uint8_t rid) override;
+        bool switchControlMode(Motor &motor, Control_Mode mode) override;
+        bool change_motor_param(Motor &motor, uint8_t rid, float data) override;
+        void save_motor_param(Motor &motor) override;
+
+    private:
+        struct SimMotorState
+        {
+            bool enabled = false;
+            bool initialized = false;
+            bool param_pending = false;
+            uint8_t pending_rid = 0;
+            Control_Mode mode = MIT_MODE;
+            float last_vel_cmd = 0.0f;
+            float last_tau = 0.0f;
+            float target_pos = 0.0f;
+            float vel = 0.0f;
+            float pos = 0.0f;
+            std::chrono::steady_clock::time_point last_update = std::chrono::steady_clock::now();
+        };
+
+        struct SimMotorParams
+        {
+            float vmax = 5.0f;
+            float amax = 20.0f;
+            float pos_epsilon = 1e-4f;
+            float vel_epsilon = 1e-3f;
+            float max_dt = 0.1f;
+        };
+
+        static float clampf(float x, float lo, float hi) {
+            return std::max(lo, std::min(hi, x));
+        }
+
+        static float signf(float x) {
+            if (x > 0.0f) return 1.0f;
+            if (x < 0.0f) return -1.0f;
+            return 0.0f;
+        }
+
+        std::unordered_map<Motor_id, SimMotorState> sim_states;
+
+        void ensure_state(Motor &motor);
+        void update_feedback(Motor &motor, float new_pos, float tau_feedback);
+        void step_tracker(SimMotorState& state, float dt, const SimMotorParams& params);
+        float get_param_value_as_float(Motor &motor, uint8_t rid);
     };
 
 };

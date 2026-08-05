@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-find_package(pinocchio REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(orocos_kdl REQUIRED)
 find_package(urdf REQUIRED)
@@ -22,14 +21,6 @@ add_library(dm_core SHARED
 
 target_include_directories(dm_core PUBLIC include)
 
-# add_library(sim_motor SHARED
-#     src/sim_motor_manager.cpp
-# )
-# target_include_directories(sim_motor PUBLIC include)
-# target_link_libraries(sim_motor
-#     PUBLIC pinocchio::pinocchio Eigen3::Eigen yaml-cpp
-# )
-
 # 3. Build OpenEAIArm SHARED library
 add_library(OpenEAIArm_core SHARED
     src/OpenEAIArm.cpp
@@ -38,18 +29,12 @@ add_library(OpenEAIArm_core SHARED
     src/kdl_parser/kdl_parser.cpp
     src/urdf/model.cpp
     src/config_loader.cpp
-    src/sim_motor_manager.cpp
 )
 
 target_include_directories(OpenEAIArm_core PUBLIC include)
 # OpenEAIArm库依赖dm_core库
 target_link_libraries(OpenEAIArm_core PUBLIC dm_core Eigen3::Eigen orocos-kdl tinyxml2 tinyxml 
-    urdfdom_model yaml-cpp pinocchio::pinocchio)
-
-# option(SIM "Enable simulation" ON)
-# if(SIM)
-# target_link_libraries(OpenEAIArm_core PUBLIC sim_motor)
-# endif()
+    urdfdom_model yaml-cpp)
 
 # 4. Build your test/app executables
 add_executable(test_OpenEAIArm tests/test_openeai_arm.cpp)

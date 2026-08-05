@@ -24,6 +24,8 @@ OpenEAIArm::OpenEAIArm(const std::string& config_path, ControlMode control_mode)
     if (mode_ != ControlMode::SIM) {
         serial_ = std::make_shared<SerialPort>(config.can.id, config.can.baud_rate);
         motor_ctl_ = std::make_unique<DM_Motor::Motor_Control>(serial_);
+    } else {
+        motor_ctl_ = std::make_unique<DM_Motor::SimMotorControl>();
     }
 
 
@@ -34,9 +36,7 @@ OpenEAIArm::OpenEAIArm(const std::string& config_path, ControlMode control_mode)
         else if (motor.type == "DM4310") type = DM_Motor::DM4310;
         DM_Motor::Motor* m = new DM_Motor::Motor(type, motor.slave_id, motor.master_id);
         motors_[i] = m;
-        if (mode_ != ControlMode::SIM) {
-            motor_ctl_->addMotor(m);
-        }
+        motor_ctl_->addMotor(m);
 
         joint_names[i] = motor.name;
         joint_limits_low_[i] = motor.min_position;
@@ -82,17 +82,14 @@ void OpenEAIArm::initialize_arm(bool reinitialize_manager) {
     float mm_alpha = config.controller.filter_alpha;
 
     if (reinitialize_manager)  {
-        if (mode_ != ControlMode::SIM)
-            enable_all();
+        enable_all();
 
         if (manager_) manager_->stop();
         switch (mode_) {
             case ControlMode::MIT_MIX:
             case ControlMode::MIT_DRAG:
-                manager_ = std::make_unique<MotorManager>(motors_, motor_ctl_.get(), mmim, mm_alpha);
-                break;
             case ControlMode::SIM:
-                manager_ = std::make_unique<SimMotorManager>(config.urdf.path, reset_pose_);
+                manager_ = std::make_unique<MotorManager>(motors_, motor_ctl_.get(), mmim, mm_alpha);
                 break;
         }
         
@@ -403,7 +400,6 @@ OpenEAIArm::JointArray OpenEAIArm::compute_drag_dynamics(OpenEAIArm::JointArray 
             tau[i] += drag_moving_tanh_[i] * tanh(drag_moving_tanh_alpha_[i] * current_vel[i]);
             tau[i] -= drag_moving_kd_[i] * current_vel[i];
         }
-        tau[1] *= 0.9;
     }
     else {
         std::cout << "Something wrong!" << std::endl;

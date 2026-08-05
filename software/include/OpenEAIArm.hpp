@@ -17,7 +17,6 @@
 #include "dm_manager.hpp"
 #include "motor_controller.hpp"
 #include "kd_solver.hpp"
-#include "sim_motor_manager.hpp"
 
 class OpenEAIArm {
 public:
