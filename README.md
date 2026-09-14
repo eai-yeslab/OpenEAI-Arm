@@ -1,365 +1,387 @@
-# OpenEAI Arm
+# OpenEAI-Arm
 
-OpenEAI Arm is a low-cost, reproducible 6-DoF desktop robotic arm designed for real-world embodied manipulation and Vision-Language-Action (VLA) research. This repository contains OpenEAI-Arm with the full hardware and software stack needed to build, calibrate, and run the arm. For **OpenEAI-VLA**, please refer to the [OpenEAI-VLA repository](https://github.com/eai-yeslab/OpenEAI_VLA).
+Open-source, low-cost, reproducible desktop robot hardware for embodied AI and real-world manipulation.
 
+![OpenEAI-Arm overview](assets/images/openeai-arm-overview.png)
 
-> Status: **Public release** includes complete BOM, STEP, STL, mechanical drawings, and software stack.
----
-<img src="https://github.com/eai-yeslab/OpenEAI-Arm/blob/main/assets/images/openEAI-Arm.jpg" width="1200" alt="OpenEAI Arm">
+OpenEAI-Arm is a 6-DoF serial robot arm with an independently controlled end-effector channel. It is designed for embodied-AI research, robot-control development, real-world policy evaluation, teleoperation, and Vision-Language-Action (VLA) data collection. The repository provides the mechanical design, manufacturing files, robot model, low-level control stack, ROS 2 integration, teleoperation examples, and data-collection tools needed to reproduce and extend the platform.
 
-## 1. Introduction
-The OpenEAI Arm is designed to lower the barrier to entry for real-world robotic manipulation research. Unlike expensive industrial arms or fragile hobbyist kits, this design balances **payload capacity (2kg)**, **precision**, and **reproducibility** with a low BOM cost.
+The design prioritizes a practical balance among workspace, payload, mass, manufacturability, control access, and cost. It can be used as a complete experimental platform or as an open hardware foundation for replacing actuators, modifying links, integrating new end effectors, and building synchronized dual-arm systems.
 
-It is specifically tailored for **VLA (Vision-Language-Action)** data collection, supporting multiple teleoperation modalities (VR, SpaceMouse, Master-Slave) and featuring a software stack that bridges the gap between simulation and reality with dynamics-aware control.
+> [!WARNING]
+> A robot arm can move unexpectedly and generate hazardous forces. Rigidly secure the base, keep the workspace clear, verify the emergency stop, and begin with simulation followed by unloaded, low-speed, small-angle tests. Never hot-plug the 24 V power or CAN wiring.
 
----
+## OpenEAI Ecosystem
 
-## 2. Highlights
+OpenEAI-Arm is the robot-hardware and control foundation of the OpenEAI platform:
 
-### Hardware
-- **Low-cost 6-DoF arm** with reproducible manufacturing files (STEP/STL + drawings).
-- **Desktop Form Factor**: Compact 6-DoF design + Gripper, suitable for table-top manipulation tasks.
-- **Cost-Effective**: Significantly cheaper than Franka/UR while maintaining sufficient capability for learning tasks.
+- [OpenEAI-VLA](https://github.com/eai-yeslab/OpenEAI-VLA) provides the Vision-Language-Action research and deployment stack.
+- [OpenEAI-FOC](https://github.com/ZJYSII/OpenEAI-FOC) develops open joint hardware, drive electronics, sensing, and field-oriented motor control.
+- OpenEAI-Arm connects policies to a reproducible physical system through kinematics, dynamics-aware control, CAN communication, ROS 2, teleoperation, and safety limits.
 
-### Software & Control
-- **Open Low-Level Stack**: Full access to C++ drivers, safety limits, and execution layers.
-- **Dynamics-Aware**: Integrated Gravity Compensation and Feed-Forward PID tracking for smooth trajectory execution.
-- **Multi-Modal Teleop**: Native support for **GELLO** (Puppet), **SpaceMouse** (Delta Pose), and **VR** (Absolute Pose).
-- **Sim2Real**: Unified URDF and control interface allows seamless switching between Physics Simulation (Isaac Gym/PyBullet) and Real Hardware.
-
-
-## 3. Hardware Specifications
-
-### 3.1 Specs
-| Parameter | Value | Description |
-| :--- | :--- | :--- |
-| **DoF** | 6 + Gripper | 6 Rotary joints |
-| **Reach** | 637.3 mm | Base to Flange |
-| **Payload** | ~2.0 kg | Nominal payload |
-| **Weight** | 3.3 kg | Total assembled weight |
-| **Interface** | CAN Bus | High-frequency feedback (up to 1kHz) |
-| **Power** | 24V DC | External PSU required |
-
-### 3.2 Kinematics (MDH Parameters)
-The controller uses **Modified Denavit–Hartenberg (MDH)** parameters matching the CAD/URDF.
-
-| Joint ID | θ (deg) | a (mm) | d (mm) | α (deg) |
-| :---: | :---: | :---: | :---: | :---: |
-| **1** | 0 | 0 | 106.26 | 0 |
-| **2** | 180 | 19 | 0 | -90 |
-| **3** | 180 + $\beta$ | 269 | 0 | 180 |
-| **4** | - $\beta$ | 236.12 | 0 | 0 |
-| **5** | 90 | 80 | 0 | 90 |
-| **6** | 0 | 0 | 29 | 90 |
-
-> **Note:** $\beta$ = 13.85° (Fixed mechanical angle). End-effector offset $d_{ee} = 176$ mm.
-
-### 3.3 Manufacturing
-*   **BOM**: See `hardware/bom/`.
-*   **CAD/STL**: See `hardware/stl/`.
-
-
----
-
-## 4. Software Prerequisites
-
-We recommend **Ubuntu 22.04** with **ROS2 Humble**.
-
-### 4.0 Basic building softwares
-
-First, make sure you have some basic building tools on your machine. You can install them by:
-
-```bash
-sudo apt install git build-essential cmake
+```text
+OpenEAI-VLA policy and data pipeline
+                  │ actions
+                  ▼
+OpenEAI-Arm coordination, kinematics, teleoperation, and safety
+                  │ joint targets
+                  ▼
+OpenEAI-FOC / compatible joint actuators and end effector
+                  │
+                  └──────── joint state and sensor feedback ────────┘
 ```
 
-Then, clone the repository:
+## Highlights
+
+### Open hardware
+
+- Six rotary joints plus one independently controlled end-effector channel
+- Modular actuators, links, base, cable routing, and end-effector interface
+- BOM, STEP, STL, mechanical drawings, URDF/SDF, and assembly documentation
+- Replaceable gripper, dexterous-hand, or sensor interface
+- Suitable for single-arm, dual-arm, and task-adapted embodiments
+
+### Open control stack
+
+- C++ core library, Python bindings, and ROS 2 nodes
+- CAN-based joint and end-effector communication
+- Joint-space, end-effector incremental, and end-effector absolute-pose control
+- Gravity, inertia, Coriolis, and friction compensation in the low-level stack
+- Jerk-limited S-curve interpolation for smoother target execution
+- Simulation and visualization through the shared robot model
+
+### Teleoperation and embodied-AI workflows
+
+- GELLO master-slave joint control
+- SpaceMouse incremental Cartesian control
+- VR absolute-pose teleoperation over UDP
+- Single-arm and dual-arm operation with isolated configurations and topics
+- Synchronized image, joint-state, and action collection for VLA datasets
+- Policy rollout examples for real-world manipulation
+
+## System Specifications
+
+The following values describe the documented OpenEAI-Arm V0.9 prototype. Payload, speed, accuracy, and thermal performance depend on assembly quality, calibration, controller settings, end-effector mass, and operating conditions.
+
+| Parameter | Specification |
+| --- | --- |
+| Active degrees of freedom | 6 |
+| End-effector control channels | 1 |
+| Maximum reach | 636.7 mm |
+| Arm mass | 3.3 kg, excluding gripper |
+| Nominal end payload | 2 kg, excluding gripper |
+| Nominal power | 420 W |
+| Peak current | 17.5 A |
+| Theoretical maximum end-effector speed | 1.6 m/s |
+| Rated joint torque | J1-J3: 9 N·m; J4-J7: 3 N·m |
+| Maximum static joint torque | J1-J3: 27 N·m; J4-J7: 7 N·m |
+| Prototype repeatability | ±0.03 mm |
+| Gripper force range | 0.5-5 N |
+| Joint and end-effector bus | CAN |
+| Power input | 24 V DC, XT30 2+2 |
+| Documented manufacturing cost | Approximately CNY 5,500 |
+| Recommended environment | 0-40 °C; non-waterproof |
+
+The comparison charts in the overview image are project evaluation results. When reproducing them, report the hardware revision, payload, trajectory, warm-up state, measurement equipment, sample count, and calculation method.
+
+## Kinematics
+
+The controller uses Modified Denavit-Hartenberg parameters matching the CAD and URDF. The fixed mechanical angle is `β = 13.85°`.
+
+| Joint | θ (deg) | a (mm) | d (mm) | α (deg) |
+| --- | ---: | ---: | ---: | ---: |
+| J1, base rotation | 0 | 0 | 106.26 | 0 |
+| J2, shoulder pitch | 180 | 19 | 0 | -90 |
+| J3, elbow flexion | 180 + β | 269 | 0 | 180 |
+| J4, wrist deviation | -β | 236.12 | 0 | 0 |
+| J5, wrist pitch | 90 | 80 | 0 | 90 |
+| J6, tool rotation | 0 | 0 | 29 | 90 |
+
+The end-effector mounting envelope is approximately 57 mm × 35 mm and uses four M3 fasteners. Communication and power can be routed through the final joint using the CAN and XT30 2+2 harness.
+
+## Repository Layout
+
+```text
+OpenEAI-Arm/
+├─ hardware/
+│  ├─ bom/                    # Bill of materials
+│  ├─ STEP/                   # Assemblies and manufacturable CAD
+│  ├─ stl/                    # Printable and visualization meshes
+│  ├─ drawings/               # DWG/PDF manufacturing drawings
+│  └─ assembly/               # Assembly documentation
+├─ software/
+│  ├─ configs/                # Arm, CAN, motor, zero, and limit settings
+│  ├─ include/ and src/       # C++ control library
+│  ├─ python/                 # Python bindings
+│  ├─ ros2/                   # ROS 2 nodes, robot model, and examples
+│  ├─ scripts/                # Visualization and utility scripts
+│  └─ tests/                  # Hardware and software test programs
+├─ assets/                    # README images and videos
+├─ LICENSE
+└─ THIRD_PARTY_NOTICES
+```
+
+- Hardware index: [`hardware/README.md`](hardware/README.md)
+- Software, control, and teleoperation guide: [`software/README.md`](software/README.md)
+- Default real-arm configuration: [`software/configs/default.yml`](software/configs/default.yml)
+- ROS 2 node: [`software/ros2/src/openeai_arm/src/OpenEAIArm_node.cpp`](software/ros2/src/openeai_arm/src/OpenEAIArm_node.cpp)
+- Control and data-collection examples: [`software/ros2/src/openeai_arm/examples/`](software/ros2/src/openeai_arm/examples/)
+
+## Quick Start
+
+### 1. Prepare the system
+
+Ubuntu 22.04 and ROS 2 Humble are recommended.
 
 ```bash
+sudo apt update
+sudo apt install git build-essential cmake libyaml-cpp-dev libeigen3-dev liburdf-dev
+
 git clone https://github.com/eai-yeslab/OpenEAI-Arm.git
+cd OpenEAI-Arm/software
 ```
 
-Since some of the third-party dependencies will use python bindings, we also recommend setting up a python virtual environment to avoid conflicts with your system python packages. You can set up a virtual environment with the following commands:
+A Python 3.10 environment is recommended for keeping robot dependencies isolated:
 
 ```bash
 conda create -n openeai python=3.10
 conda activate openeai
 ```
 
-## 4.1 Third-Party Dependencies
+Pinocchio, KDL, the Dynamixel SDK, and optional teleoperation dependencies require additional setup. Follow [`software/README.md`](software/README.md) before building the complete stack.
 
-This project relys on the following third-party packages:
-- yaml-cpp for reading config files
-- Eigen3 library for matrix calculations
-- URDF library for urdf reading
-- [pinocchio](https://gepettoweb.laas.fr/doc/stack-of-tasks/pinocchio/master/doxygen-html/md_doc_b_examples_a_model.html) for inverse kinetics
-- [KDL](https://www.orocos.org/wiki/orocos/kdl-wiki.html)
-- [kdl_parser](https://github.com/ros/kdl_parser?tab=readme-ov-file) and [urdf](https://github.com/ros/urdf) packages, whose source codes are already included so that they can be used without installing ros
-- [Dynamixel SDK](https://github.com/ROBOTIS-GIT/DynamixelSDK/tree/main) for controlling [GELLO](https://wuphilipp.github.io/gello_site/)
+### 2. Build
 
-### 4.1.1 yaml-cpp, Eigen3, URDF Installation
+Build the C++ library, ROS 2 packages, and Python bindings from the `software/` directory:
 
-Run `sudo apt install libyaml-cpp-dev libeigen3-dev liburdf-dev` to install yaml-cpp, Eigen3, and URDF library.
-
-### 4.1.2 Dynamixel SDK Installation
-
-Simply `cd` to its python directory and install:
 ```bash
-cd third_party/DynamixelSDK/python
-pip install -e .
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target extra -j 8
 ```
 
-### 4.1.3 Pinocchio Installation
+To build the components separately:
 
-In this project we use pinocchio to calculate inverse kinetics. To install this library run the following commands as described in the [official installation website](https://stack-of-tasks.github.io/pinocchio/download.html#Install_3):
 ```bash
-sudo apt install -qqy lsb-release curl
-sudo mkdir -p /etc/apt/keyrings
-curl http://robotpkg.openrobots.org/packages/debian/robotpkg.asc | sudo tee /etc/apt/keyrings/robotpkg.asc
-echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" | sudo tee /etc/apt/sources.list.d/robotpkg.list
-sudo apt update
-sudo apt install -qqy robotpkg-py3*-pinocchio
-```
-And then modify the following environment variables or add to `$HOME/.bashrc` for persistent configuration:
-```bash
-export PATH=/opt/openrobots/bin:$PATH
-export PKG_CONFIG_PATH=/opt/openrobots/lib/pkgconfig:$PKG_CONFIG_PATH
-export LD_LIBRARY_PATH=/opt/openrobots/lib:$LD_LIBRARY_PATH
-export PYTHONPATH=/opt/openrobots/lib/python3.10/site-packages:$PYTHONPATH # Adapt your desired python version here
-export CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH
-```
-
-### 4.1.4 KDL Installation
-
-[KDL](https://github.com/orocos/orocos_kinematics_dynamics/tree/master) (Kinetics and Dynamics Library) requires Eigen3 library to install. To install, run the following commands:
-```bash
-git clone https://github.com/orocos/orocos_kinematics_dynamics.git
-cd orocos_kinematics_dynamics/orocos_kdl
-mkdir build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make
-sudo make install
-```
----
-
-## 5. Build and Installation
-
-In this project, we use cmake to build the control program.
-
-### All
-
-We provide an option to build everything, including basic C++ library, ROS2 pacakge, and python package installation via pip. This can be completed via:
-```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=RELEASE
-cmake --build build --target extra
-```
-If you don't want to build all of them, you can build them one by one following the instructions below.
-
-### C++
-
-C++ libraries are core libraries to control OpenEAI-Arm. The commands are:
-```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=RELEASE
+# C++ core and tests
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j 8
-```
-An example of the usage can be found at [tests/test_openeai_arm.cpp](tests/test_openeai_arm.cpp), whose brinary is located at [build/test_openeai_arm](build/test_openeai_arm). If you want to run it, make sure your robotic arm is well-assembled, as the program will move the robotic arm.
 
-### Python
+# Python package
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")
+cmake --build build --target pip_install -j 8
 
-To build python packages and install via pip, run:
-```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=RELEASE -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")
-cmake --build build --target pip_install -j 8 
-```
-### ROS2
-
-ROS2 packages can be built with cmake:
-```bash
-cmake --build build --target ros2 
-```
-Or, after run the commands for building C++ libraries, run:
-```bash
-cd ros2
-colcon build --symlink-install
-```
-After building the package, add it to the environment:
-```bash
-cd ros2/install # or cd install
-source setup.bash
-```
-And start the arm node:
-```bash
-cd ../..
-ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0 -p frequency:=50 # 0 for program control mode, 1 for drag mode, 2 for sim mode
+# ROS 2 workspace
+cmake --build build --target ros2
+source ros2/install/setup.bash
 ```
 
-You can also set `-p ee_pose:=1` for delta ee pose control, and `-p ee_pose:=2` for absolute ee pose control.
+### 3. Verify in simulation first
 
-If you want to run two arms at the same time, you can use:
+Terminal 1:
+
 ```bash
-ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0 -p frequency:=50 -p arm_name:=left -r /joint_targets:=/left/joint_targets
-ros2 run openeai_arm OpenEAIArm_node --ros-args -p config:=configs/default_right.yml -p ctrl_mode:=0 -p frequency:=50 -p arm_name:=right -r /joint_targets:=/right/joint_targets
-```
-## 6. Quick Start
-
-This is a quick start guide to get the arm up and running in both simulation and real hardware modes. For detailed instructions, we highly recommand you to read [software/README.md](software/README.md) for detailed information.
-
-### 6.1 Simulation Mode (No Hardware)
-
-Visualize the arm in RViz and test motion planning.
-
-**Terminal 1: Launch RViz**
-```bash
+cd OpenEAI-Arm/software
 source ros2/install/setup.bash
 ros2 launch openeai_arm_urdf_ros2 launch.py
 ```
 
-**Terminal 2: Start Arm Node (Sim)**
+Terminal 2:
+
 ```bash
+cd OpenEAI-Arm/software
 source ros2/install/setup.bash
-# ctrl_mode:=2 enables Simulation Mode
-ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=2 -p frequency:=50
+ros2 run openeai_arm OpenEAIArm_node --ros-args \
+  -p ctrl_mode:=2 -p frequency:=50
 ```
 
-### 6.2 Real Hardware Control
+Use simulation to verify the robot model, coordinate frames, joint directions, reachable workspace, and topics. Stop the node before changing between simulation and real-hardware modes.
 
-**SAFETY WARNING:** Ensure E-Stop is ready and workspace is clear.
+### 4. Configure the real arm
 
-1.  **Hardware Config**:
-    *   Edit `configs/default.yml`.
-    *   **Check Motor IDs**: In default file, Motor 1 (Base) is often ID `0x02` instead of `0x01` while Motor 2 is `0x01` instead of `0x02`. **Verify before powering on.**
-    *   Set `urdf.path` if you moved files.
-2.  **Permissions**: `sudo usermod -aG dialout $USER` (Re-login required).
-3.  **Run Node**:
-    ```bash
-    source ros2/install/setup.bash
-    # ctrl_mode:=0 enables Real Control
-    ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0 -p frequency:=50
-    ```
-4.  **Dual Arm**:
-    ```bash
-    ros2 run openeai_arm OpenEAIArm_node --ros-args -p arm_name:=left ...
-    ros2 run openeai_arm OpenEAIArm_node --ros-args -p arm_name:=right -p config:=configs/right.yml ...
-    ```
+Before applying power, inspect [`software/configs/default.yml`](software/configs/default.yml):
 
----
+- Serial device and communication settings
+- CAN master/slave IDs for all six joints and the gripper
+- Joint zero positions and direction signs
+- Position, velocity, acceleration, and torque limits
+- URDF path and end-effector configuration
 
-## 7. Advanced Control & Teleoperation
+The public default configuration uses `/dev/ttyACM0`, but the actual device path may differ. The first two actuator IDs in the public configuration are intentionally ordered differently from a simple `1, 2, ...` sequence; verify every physical joint against the configuration instead of assuming numeric order.
 
-We support three primary modes for data collection.
+Add the user to the serial-device group if required, then log out and back in:
 
-### 7.1 GELLO (Master-Slave)
-Control the arm using a localized "Master" arm (Dynamixel-based).
-1.  **Setup**: Configure master IDs in `configs/gello_config.yml`.
-2.  **Run**:
-    ```bash
-    # 1. Start Arm Node (Real Mode)
-    ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0
+```bash
+sudo usermod -aG dialout $USER
+```
 
-    # 2. Start GELLO Controller
-    cd ros2/src/openeai_arm/examples
-    python gello_controller.py
-    ```
+### 5. Start the real arm
 
-### 7.2 SpaceMouse (Delta Pose)
-Control End-Effector position (XYZ) and orientation (RPY) incrementally.
-1.  **Install**:
-    ```bash
-    pip install git+https://github.com/bglopez/python-easyhid.git
-    pip install pyspacemouse
-    # Add udev rules (see docs/teleop.md if needed)
-    ```
-2.  **Run**:
-    ```bash
-    # 1. Start Arm Node with ee_pose:=1 (Delta Pose Mode)
-    ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0 -p ee_pose:=1
+Rigidly mount the base, clear the workspace, support the arm against an uncontrolled drop, and make the emergency stop immediately reachable.
 
-    # 2. Start Driver
-    cd ros2/src/openeai_arm/examples
-    python spacemouse.py
-    ```
+```bash
+cd OpenEAI-Arm/software
+source ros2/install/setup.bash
+ros2 run openeai_arm OpenEAIArm_node --ros-args \
+  -p ctrl_mode:=0 -p frequency:=50 \
+  -p config:=configs/default.yml
+```
 
-### 7.3 VR Control (Absolute Pose)
-Map absolute VR controller pose to the End-Effector via UDP.
-1.  **Protocol**: Expects UDP packets `[x, y, z, qx, qy, qz, qw, gripper]` at 50Hz.
-2.  **Run**:
-    ```bash
-    # 1. Start Arm Node with ee_pose:=2 (Absolute Pose Mode)
-    ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0 -p ee_pose:=2
+Inspect the current state before sending any target:
 
-    # 2. Start VR Bridge
-    cd ros2/src/openeai_arm/examples
-    python vr.py
-    ```
-    *Controls: Hold **B** to align/prepare; Release **B** to track; Hold **Y** to retract.*
+```bash
+ros2 topic echo /openeai_arm/joint_states --once
+ros2 topic echo /openeai_arm/eef_pose --once
+ros2 topic hz /openeai_arm/joint_states
+```
 
----
+The `position` target contains seven values:
 
-## 8. Data Collection (VLA Pipeline)
+```text
+[J1, J2, J3, J4, J5, J6, gripper]
+```
 
-We provide a unified script to record synchronized data (Images + Joint States + Actions) into HDF5/Pickle.
+Read the current position first. For initial motion, copy the current seven-value target and change only one joint by approximately 0.03-0.05 rad. Do not copy joint values from another arm.
 
-**Example Workflow:**
+## Control Modes
 
-1.  **Launch Cameras**:
-    ```bash
-    # Example for USB Cam
-    ros2 run usb_cam usb_cam_node_exe --ros-args -p video_device:=/dev/video0
-    # Example for Realsense
-    ros2 launch realsense2_camera rs_launch.py camera_name:=agentview ...
-    ```
+| Function | Settings | Purpose |
+| --- | --- | --- |
+| Joint position control | `ctrl_mode:=0`, `ee_pose:=0` | Send six joint targets plus gripper |
+| Drag teaching | `ctrl_mode:=1` | Manually guide the arm while publishing joint state |
+| Simulation | `ctrl_mode:=2` | Validate the model and control interface without motors |
+| End-effector increments | `ctrl_mode:=0`, `ee_pose:=1` | Incremental Cartesian commands, typically SpaceMouse |
+| Absolute end-effector pose | `ctrl_mode:=0`, `ee_pose:=2` | Absolute pose input, typically VR |
 
-2.  **Start Arm Node**:
-    ```bash
-    ros2 run openeai_arm OpenEAIArm_node --ros-args -p ctrl_mode:=0
-    ```
+### GELLO master-slave control
 
-3.  **Start Collection Script**:
-    ```bash
-    cd ros2/src/openeai_arm/examples
-    
-    # This script starts the teleop interface AND recording logic
-    python collect_data.py --task_name pick_apple --teleop_mode gello
-    ```
-    Data saves to: `data/<task_name>/`
+```bash
+ros2 run openeai_arm OpenEAIArm_node --ros-args \
+  -p ctrl_mode:=0 -p frequency:=50 -p arm_name:=left
 
----
+cd ros2/src/openeai_arm/examples
+python gello_controller.py
+```
 
-## 9. Safety & Troubleshooting
+### SpaceMouse control
 
-### Safety Checklist
-*   **Zeroing**: Physically verify joint zero marks match `q=0` in software before powering high-level control.
-*   **Voltage**: Ensure PSU provides stable 24V. Voltage drops cause CAN errors.
-*   **Limits**: Keep `torque_limit` conservative (<1.0 Nm) in `configs/default.yml` for initial tests.
+```bash
+sudo apt install libhidapi-dev
+pip install git+https://github.com/bglopez/python-easyhid.git
+pip install pyspacemouse
 
-### Troubleshooting
-*   **"Pinocchio not found"**: Check `CMAKE_PREFIX_PATH`. Did you source `.bashrc`?
-*   **"Permission denied: /dev/ttyUSB0"**: Add user to `dialout` group.
-*   **Arm moves in reverse**: Invert the motor direction sign in `configs/default.yml`.
-*   **Jittery motion**: Increase the `frequency` or check if `Kd` (Derivative gain) is too high.
+ros2 run openeai_arm OpenEAIArm_node --ros-args \
+  -p ctrl_mode:=0 -p ee_pose:=1 -p frequency:=50
+
+cd ros2/src/openeai_arm/examples
+python spacemouse.py
+```
+
+### VR control
+
+The example expects UDP data in the form `[x, y, z, qx, qy, qz, qw, gripper]` at approximately 50 Hz.
+
+```bash
+ros2 run openeai_arm OpenEAIArm_node --ros-args \
+  -p ctrl_mode:=0 -p ee_pose:=2 -p frequency:=50
+
+cd ros2/src/openeai_arm/examples
+python vr.py
+```
+
+Validate direction, scale, coordinate frames, and initial-pose alignment in simulation before connecting the real arm.
+
+## Dual-Arm Operation
+
+Use independent device paths, node names, configurations, and target topics. Calibrate and test each arm separately before running both together.
+
+```bash
+# Left arm
+ros2 run openeai_arm OpenEAIArm_node --ros-args \
+  -p ctrl_mode:=0 -p frequency:=50 -p arm_name:=left \
+  -r /joint_targets:=/left/joint_targets
+
+# Right arm
+ros2 run openeai_arm OpenEAIArm_node --ros-args \
+  -p config:=configs/default_right.yml \
+  -p ctrl_mode:=0 -p frequency:=50 -p arm_name:=right \
+  -r /joint_targets:=/right/joint_targets
+```
+
+## VLA Data Collection
+
+The examples support synchronized camera images, joint states, and actions. Start the arm, launch the required USB or RealSense camera nodes, and then run:
+
+```bash
+cd ros2/src/openeai_arm/examples
+python collect_data.py --task_name pick_place --config config_left.yml
+```
+
+For dual-arm capture, see `config_multi.yml`. Record a short sample first and verify timestamps, dimensions, camera views, joint order, action units, and gripper values before collecting a full dataset.
+
+## Recommended Test Sequence
+
+1. Inspect the base, fasteners, cable routing, end effector, work area, and emergency stop.
+2. Confirm the device path, CAN IDs, zero positions, direction signs, and limits.
+3. Start RViz or drag mode and verify the pose and coordinate conventions.
+4. Start the real node and confirm that all seven channels report continuous state.
+5. Perform an unloaded, small-angle, single-joint motion test.
+6. Run the target function while monitoring communication, current, temperature, and mechanical behavior.
+7. Stop teleoperation or policy commands, return to a supported safe pose, and stop the arm node.
+8. Confirm that the motors are disabled, support the arm, and disconnect 24 V power before adjustment or disassembly.
+
+Immediately stop and disconnect power after unintended motion, collision, unusual noise, persistent CAN loss, overcurrent, overheating, burning odor, structural looseness, or high-frequency oscillation.
+
+## Frequently Asked Questions
+
+### The serial device cannot be opened
+
+Check the actual `/dev/ttyACM*` or `/dev/ttyUSB*` path, USB cable, group permissions, and `can_config.id`. Reconnect only while power is safely removed, and log in again after changing `dialout` membership.
+
+### A CAN node is missing or repeatedly disconnects
+
+Power down first. Verify the 24 V supply, CAN high/low wiring, termination, bus rate, physical node IDs, and the master/slave IDs in the selected YAML configuration.
+
+### A joint moves in the wrong direction
+
+Use the emergency stop, correct the direction or zero setting in the configuration, and repeat an unloaded low-speed test. Do not compensate for a reversed joint only at the high-level policy layer.
+
+### The arm jitters after startup
+
+Stop motion and check the zero position, direction, encoder installation, structural fasteners, update frequency, and controller gains. Reduce gains and target changes before retesting.
+
+### End-effector control jumps
+
+Check units, reference pose, quaternion convention, coordinate frames, inverse-kinematics result, and initial alignment. Reproduce the command in simulation and reduce the increment or pose change.
+
+### Pinocchio cannot be found
+
+Check the installed Python version and the `PATH`, `PKG_CONFIG_PATH`, `LD_LIBRARY_PATH`, `PYTHONPATH`, and `CMAKE_PREFIX_PATH` entries for `/opt/openrobots`.
+
+### Dual-arm topics interfere with each other
+
+Use separate device paths, configuration files, arm names, node names, namespaces, and remapped target topics. Test each arm independently before enabling simultaneous motion.
 
 ## Citation
 
-If you use this project in your research, please cite our paper:
+If OpenEAI-Arm contributes to your research, please cite the OpenEAI-Platform paper and identify the repository version or commit used:
 
 ```bibtex
 @inproceedings{openeai_platform,
-  title   = {OpenEAI-Platform: Open-source Embodied Artificial Intelligence Hardware-Software Unified Platform},
-  author  = {Jinyuan Zhang, Luoyi Fan, Leiyu Wang, Yeqiang Wang, Yichen Zhu, Cewu Lu, Nanyang Ye},
-  year    = {2026}
+  title  = {OpenEAI-Platform: Open-source Embodied Artificial Intelligence Hardware-Software Unified Platform},
+  author = {Jinyuan Zhang and Luoyi Fan and Leiyu Wang and Yeqiang Wang and Yichen Zhu and Cewu Lu and Nanyang Ye},
+  year   = {2026}
 }
 ```
 
 ## License
 
-Licensed under the BSD-3-Clause License. See [LICENSE](./LICENSE) for details.
+OpenEAI-Arm is licensed under the [BSD 3-Clause License](LICENSE). Third-party components remain subject to their respective licenses; see [`THIRD_PARTY_NOTICES`](THIRD_PARTY_NOTICES).
 
-## Contact / Issues
+## Contributing and Support
 
-If you have questions, suggestions, or would like to contribute:
+Issues and pull requests are welcome. Include the hardware revision, operating system, configuration, supply conditions, command sequence, logs, and reproducible steps. For safety-related reports, describe the physical setup and tested limits.
 
-- Please open an issue or submit a pull request.
-- Send an e-mail to ynylincoln@sjtu.edu.cn
-
-
+- Repository: <https://github.com/eai-yeslab/OpenEAI-Arm>
+- Open an issue for questions, bugs, or proposed changes
+- Contact: ynylincoln@sjtu.edu.cn
