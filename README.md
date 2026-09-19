@@ -16,7 +16,6 @@ The design prioritizes a practical balance among workspace, payload, mass, manuf
 OpenEAI-Arm is the robot-hardware and control foundation of the OpenEAI platform:
 
 - [OpenEAI-VLA](https://github.com/eai-yeslab/OpenEAI-VLA) provides the Vision-Language-Action research and deployment stack.
-- [OpenEAI-FOC](https://github.com/ZJYSII/OpenEAI-FOC) develops open joint hardware, drive electronics, sensing, and field-oriented motor control.
 - OpenEAI-Arm connects policies to a reproducible physical system through kinematics, dynamics-aware control, CAN communication, ROS 2, teleoperation, and safety limits.
 
 ```text
@@ -26,7 +25,7 @@ OpenEAI-VLA policy and data pipeline
 OpenEAI-Arm coordination, kinematics, teleoperation, and safety
                   │ joint targets
                   ▼
-OpenEAI-FOC / compatible joint actuators and end effector
+Compatible joint actuators and end effector
                   │
                   └──────── joint state and sensor feedback ────────┘
 ```
