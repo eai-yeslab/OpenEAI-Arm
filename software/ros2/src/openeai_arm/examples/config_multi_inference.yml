@@ -1,7 +1,7 @@
 frame_rate: 50
 use_depth_image: true
 use_robot_base: false
-arm_steps_length: [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01]
+arm_steps_length: [0.0025, 0.0025, 0.0025, 0.0025, 0.0025, 0.0025, 0.025]
 cameras:
   left:
     rgb_topic: "/camera/leftview/color/image_raw"

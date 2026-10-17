@@ -176,6 +176,39 @@ namespace DM_Motor
                     {12.5,45,10}     // DMG6220
             };
 
+    // daMiao DM motors do not report bus voltage/current over CAN, so the
+    // electrical input power is estimated from the feedback torque using the
+    // rated operating point of each motor type:
+    //   I_est  = |tau_fb| / rated_torque * rated_current
+    //   P_elec = bus_voltage * I_est + overhead_w
+    // rated_torque/rated_current are the datasheet rated output torque and
+    // supply current; overhead_w is a fixed per-motor allowance for driver and
+    // iron losses. Values for non-arm types are placeholders and should be
+    // updated before they are used.
+    struct ElectricalSpec
+    {
+        float bus_voltage;
+        float rated_torque;
+        float rated_current;
+        float overhead_w;
+    };
+
+    static ElectricalSpec electrical_spec[Num_Of_Motor] =
+    {
+        {24.0f, 3.0f, 2.5f, 1.0f},   // DM4310
+        {48.0f, 3.0f, 1.0f, 1.0f},   // DM4310_48V
+        {24.0f, 9.0f, 2.5f, 1.0f},   // DM4340
+        {48.0f, 9.0f, 1.0f, 1.0f},   // DM4340_48V
+        {24.0f, 20.0f, 2.5f, 1.0f},  // DM6006 (placeholder)
+        {24.0f, 40.0f, 2.5f, 1.0f},  // DM8006 (placeholder)
+        {24.0f, 54.0f, 2.5f, 1.0f},  // DM8009 (placeholder)
+        {24.0f, 200.0f, 2.5f, 1.0f}, // DM10010L (placeholder)
+        {24.0f, 200.0f, 2.5f, 1.0f}, // DM10010 (placeholder)
+        {24.0f, 1.0f, 2.5f, 1.0f},   // DMH3510 (placeholder)
+        {24.0f, 10.0f, 2.5f, 1.0f},  // DMH6215 (placeholder)
+        {24.0f, 10.0f, 2.5f, 1.0f}   // DMG6220 (placeholder)
+    };
+
     class Motor
     {
     private:
@@ -255,6 +288,8 @@ namespace DM_Motor
          * @return motor torque 电机实际输出扭矩
          */
         float Get_tau() const { return this->state_tau; }
+        float estimate_mechanical_power() const { return state_tau * state_dq; }
+        float estimate_electrical_power() const;
 
         /*
          * @brief get limit param 获取电机限制参数

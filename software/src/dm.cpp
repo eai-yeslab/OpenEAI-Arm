@@ -49,6 +49,18 @@ bool DM_Motor::Motor::is_have_param(int key) const
     return param_map.find(key) != param_map.end();
 }
 
+float DM_Motor::Motor::estimate_electrical_power() const
+{
+    const ElectricalSpec& spec = electrical_spec[Motor_Type];
+    float abs_tau = std::fabs(state_tau);
+    float est_current = 0.0f;
+    if (spec.rated_torque > 1e-6f)
+    {
+        est_current = (abs_tau / spec.rated_torque) * spec.rated_current;
+    }
+    return spec.bus_voltage * est_current + spec.overhead_w;
+}
+
 
 void DM_Motor::Motor_Control::enable(const Motor& motor)
 {

@@ -28,8 +28,8 @@ controller:
 motors:
 - name: joint_1
   type: DM4340
-  slave_id: 2
-  master_id: 18
+  slave_id: 0x02
+  master_id: 0x12
   min_position: -3.14
   max_position: 3.14
   reset_pose: 0.11
@@ -52,8 +52,8 @@ motors:
       moving_tanh_alpha: 2.0
 - name: joint_2
   type: DM4340
-  slave_id: 1
-  master_id: 17
+  slave_id: 0x01
+  master_id: 0x11
   min_position: -3.14
   max_position: 3.14
   reset_pose: -1.42
@@ -76,8 +76,8 @@ motors:
       moving_tanh_alpha: 2.0
 - name: joint_3
   type: DM4340
-  slave_id: 3
-  master_id: 19
+  slave_id: 0x03
+  master_id: 0x13
   min_position: -3.14
   max_position: 3.14
   reset_pose: -0.18
@@ -100,8 +100,8 @@ motors:
       moving_tanh_alpha: 2.0
 - name: joint_4
   type: DM4310
-  slave_id: 4
-  master_id: 20
+  slave_id: 0x04
+  master_id: 0x14
   min_position: -3.14
   max_position: 3.14
   reset_pose: 0.226
@@ -111,7 +111,7 @@ motors:
   dynamic_coefficients:
     kp: 90.0
     ki: 0.0
-    kd: 1.2
+    kd: 2.0
     friction: 0.5
     friction_alpha: 5.0
     coriolis_scale: 1.0
@@ -124,11 +124,11 @@ motors:
       moving_tanh_alpha: 2.0
 - name: joint_5
   type: DM4310
-  slave_id: 5
-  master_id: 21
+  slave_id: 0x05
+  master_id: 0x15
   min_position: -3.14
   max_position: 3.14
-  reset_pose: -1.46
+  reset_pose: -1.82
   motion_limits:
     vmax: 5.0
     amax: 50.0
@@ -148,11 +148,11 @@ motors:
       moving_tanh_alpha: 2.0
 - name: joint_6
   type: DM4310
-  slave_id: 6
-  master_id: 22
+  slave_id: 0x06
+  master_id: 0x16
   min_position: -3.14
   max_position: 3.14
-  reset_pose: 1.93
+  reset_pose: -2.68
   motion_limits:
     vmax: 5.0
     amax: 50.0
@@ -172,11 +172,11 @@ motors:
       moving_tanh_alpha: 2.0
 - name: joint_7
   type: DM4310
-  slave_id: 7
-  master_id: 23
+  slave_id: 0x07
+  master_id: 0x17
   min_position: 0.0
   max_position: 0.082
-  reset_pose: -2.28
+  reset_pose: 1.97
   motion_limits:
     vmax: 5.0
     amax: 50.0

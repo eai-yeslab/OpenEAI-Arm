@@ -35,6 +35,10 @@ from datetime import datetime
 
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_ROOT = os.path.abspath(os.path.join(_SCRIPT_DIR, '..'))
+# Resolve sibling files relative to this script so the tool works from any checkout.
+_URDF_PATH = os.path.abspath(os.path.join(
+    _SCRIPT_DIR, '..', '..', 'openeai_arm_urdf_ros2', 'urdf', 'STEP.urdf'))
+_OPERATOR_CONFIG = os.path.join(_SCRIPT_DIR, 'config_right_inference.yml')
 
 try:
     import pinocchio as pin
@@ -49,7 +53,7 @@ from OpenEAIArmROS2Operator import OpenEAIArmROS2Operator
 @dataclass
 class CalibrationConfig:
     """Calibration config"""
-    urdf_path: str = "/home/ubuntu/codes/OpenEAI/OpenEAI_Arm/software/ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf"
+    urdf_path: str = _URDF_PATH
     output_path: str = "./calibration"
     
     joint_names: List[str] = field(default_factory=lambda: [
@@ -87,7 +91,7 @@ class InertiaCalibrator():
         self.calibration_data: List[Tuple[np.ndarray, np.ndarray]] = []
         
         # ROS2 interfaces
-        self.arm = OpenEAIArmROS2Operator("/home/ubuntu/codes/OpenEAI/OpenEAI_Arm/software/ros2/src/openeai_arm/examples/config_right_inference.yml")
+        self.arm = OpenEAIArmROS2Operator(_OPERATOR_CONFIG)
         
         # Initialize Pinocchio
         if PINOCCHIO_AVAILABLE:
@@ -851,7 +855,7 @@ def main():
                         default="./calibration/inertia_params.yaml",
                         help='Output config file path')
     parser.add_argument('--urdf', type=str,
-                        default= "/home/ubuntu/codes/OpenEAI/OpenEAI_Arm/software/ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf",
+                        default=_URDF_PATH,
                         help='URDF file path')
     
     args = parser.parse_args()
