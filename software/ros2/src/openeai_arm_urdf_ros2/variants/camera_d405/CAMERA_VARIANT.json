@@ -1,0 +1,190 @@
+{
+  "status": "provisional_camera_payload_urdf",
+  "variant": "camera_d405",
+  "camera": {
+    "model": "Intel RealSense D405",
+    "mass_kg": 0.076,
+    "mass_basis": "User-measured mass supplied to update_payload_masses.py; confirm whether cables, mounting screws, and adapters are included.",
+    "body_dimensions_m": [
+      0.045,
+      0.045,
+      0.025
+    ],
+    "body_center_link6_m": [
+      0.0,
+      -0.087,
+      0.0386500107685
+    ],
+    "body_rpy_link6": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "body_inertia": "Uniform solid-box approximation about the body center, recomputed from measured mass and stored body dimensions.",
+    "camera_link": "camera_link",
+    "optical_frame": "camera_optical_frame",
+    "camera_visual_basis": "D405 visual uses the official mesh anisotropically normalized to the user-measured 45 x 45 x 25 mm envelope."
+  },
+  "bracket": {
+    "mass_kg": 0.05857121772034209,
+    "basis": "Estimated from SolidWorks CAD volume/COM/inertia, density-scaled from CAD default 1000 kg/m^3 to the fitted effective density for two un-nutted printed shells. Not weighed; unmodeled screws, nuts, and fasteners are excluded.",
+    "com_link6_m": [
+      -9.085076353751628e-07,
+      -0.04452222465762021,
+      0.030474379068092975
+    ],
+    "inertia_link6_about_com_kg_m2": [
+      [
+        6.230128227909414e-05,
+        2.432848241462117e-09,
+        3.1808436781601905e-10
+      ],
+      [
+        2.432848241462117e-09,
+        3.7606540189928405e-05,
+        9.50374075810829e-06
+      ],
+      [
+        3.1808436781601905e-10,
+        9.50374075810829e-06,
+        6.513054696679404e-05
+      ]
+    ]
+  },
+  "base_link6_inertials_by_urdf": {
+    "STEP_D405.urdf": {
+      "mass_kg": 0.574543913251,
+      "com_m": [
+        5.02344899285e-07,
+        0.000241055699342,
+        0.059546716944
+      ],
+      "inertia_about_com_kg_m2": [
+        [
+          0.000531149527829,
+          1.94337243069e-06,
+          -3.97967768739e-08
+        ],
+        [
+          1.94337243069e-06,
+          0.00101294819464,
+          -1.14685623291e-05
+        ],
+        [
+          -3.97967768739e-08,
+          -1.14685623291e-05,
+          0.000680644145815
+        ]
+      ]
+    },
+    "STEP_D405_viz.urdf": {
+      "mass_kg": 0.574543913251,
+      "com_m": [
+        5.02344899285e-07,
+        0.000241055699342,
+        0.059546716944
+      ],
+      "inertia_about_com_kg_m2": [
+        [
+          0.000531149527829,
+          1.94337243069e-06,
+          -3.97967768739e-08
+        ],
+        [
+          1.94337243069e-06,
+          0.00101294819464,
+          -1.14685623291e-05
+        ],
+        [
+          -3.97967768739e-08,
+          -1.14685623291e-05,
+          0.000680644145815
+        ]
+      ]
+    },
+    "STEP_D405_full.urdf": {
+      "mass_kg": 0.461984174743,
+      "com_m": [
+        -1.27751554464e-06,
+        -0.000259597309169,
+        0.0509633970279
+      ],
+      "inertia_about_com_kg_m2": [
+        [
+          0.000295908289015,
+          7.48883678998e-08,
+          4.96373779724e-09
+        ],
+        [
+          7.48883678998e-08,
+          0.000777724334084,
+          3.09409730001e-06
+        ],
+        [
+          4.96373779724e-09,
+          3.09409730001e-06,
+          0.000639968839359
+        ]
+      ]
+    },
+    "STEP_D405_drag.urdf": {
+      "mass_kg": 0.745743913251,
+      "com_m": [
+        -1.14028947201e-05,
+        0.0069515230112,
+        0.0570603668056
+      ],
+      "inertia_about_com_kg_m2": [
+        [
+          0.00134573257173,
+          3.00038995319e-06,
+          5.2614852271e-08
+        ],
+        [
+          3.00038995319e-06,
+          0.00113013566709,
+          9.50230489214e-05
+        ],
+        [
+          5.2614852271e-08,
+          9.50230489214e-05,
+          0.00146836009233
+        ]
+      ]
+    },
+    "STEP_D405_drag_full.urdf": {
+      "mass_kg": 0.613584174743,
+      "com_m": [
+        -1.32635476614e-05,
+        0.0065081747738,
+        0.0494168336129
+      ],
+      "inertia_about_com_kg_m2": [
+        [
+          0.00104072960803,
+          1.09592382928e-06,
+          1.26976074923e-07
+        ],
+        [
+          1.09592382928e-06,
+          0.00085520889718,
+          0.000100065440016
+        ],
+        [
+          1.26976074923e-07,
+          0.000100065440016,
+          0.00138342784838
+        ]
+      ]
+    }
+  },
+  "source_zero_and_joint_signs": "Inherited without edits from the verified eyeview45 arm URDF; STEP nonfixed joints remain 1..6 in source order.",
+  "gravity_compensation_note": "Use the selected camera variant only when that camera is physically installed. Update measured camera mass before using this payload model for gravity compensation.",
+  "urdf_files": [
+    "STEP_D405.urdf",
+    "STEP_D405_viz.urdf",
+    "STEP_D405_full.urdf",
+    "STEP_D405_drag.urdf",
+    "STEP_D405_drag_full.urdf"
+  ]
+}

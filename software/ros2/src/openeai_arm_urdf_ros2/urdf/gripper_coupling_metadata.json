@@ -1,0 +1,31 @@
+{
+  "coupling": {
+    "closed_follower_x_m": 0.015299999545141607,
+    "closed_theta_rad": 2.3503608092910273,
+    "crank_radius_m": 0.0279999999999998,
+    "guide_y_m": 0.021000000000001046,
+    "negative_rod_closed_angle_rad": -3.110563483496028,
+    "positive_rod_closed_angle_rad": 0.031029170093764987,
+    "rod_length_m": 0.034999999999999594
+  },
+  "driver_joint": "gripper_crank_joint",
+  "driver_max_rad": 0.0,
+  "driver_min_rad": -1.6509759542512752,
+  "joint_names": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "gripper_crank_joint",
+    "gripper_positive_jaw_joint",
+    "gripper_negative_jaw_joint",
+    "gripper_positive_rod_joint",
+    "gripper_negative_rod_joint"
+  ],
+  "relationship": "The four passive joint coordinates are analytic nonlinear functions of the signed crank coordinate; no linear mimic tags are used.",
+  "schema_version": 1,
+  "sign_policy": "Input is already the signed URDF driver angle: zero is closed and opening is negative. The output crank angle is preserved exactly; no ROS-side sign conversion is applied.",
+  "source_metadata_sha256": "f24f41e89b4563bd2551d9d238ec82ddf41cd75896153eeead58460bd0b3622c"
+}

@@ -7,14 +7,20 @@ This is the open-source control software for the OpenEAI-ARM robot.
 First, make sure you have some basic building tools on your machine. You can install them by:
 
 ```bash
-sudo apt install git build-essential cmake
+sudo apt install git git-lfs build-essential cmake
 ```
 
 Then, clone the repository:
 
 ```bash
+git lfs install
 git clone https://github.com/eai-yeslab/OpenEAI-Arm.git
+cd OpenEAI-Arm
+git lfs pull
+cd software
 ```
+
+Run build and control commands below from `software/`. Existing checkouts need `git lfs pull` after updating; model meshes must contain geometry rather than Git LFS pointer text.
 
 Since some of the third-party dependencies will use python bindings, we also recommend setting up a python virtual environment to avoid conflicts with your system python packages. You can set up a virtual environment with the following commands:
 
@@ -165,6 +171,10 @@ Then, based on your settings, modify the parameters in the config file. The defa
 - For each motor, modify `type`, `reset_pose`, `master_id` and `slave_id` if necessary. The motors are from bottem (base) to top (end effector). **Please note in the default setting, the first motor has slave_id to be 0x02, and the second has 0x01, !!modify this based on your own settings!!** 
 
 ## Data collection
+
+For autonomous policy execution and recording, use [the rollout examples guide](ros2/src/openeai_arm/examples/README.md). `rollout.py` is now the autonomous collector; the former human-in-the-loop program is available as `hil.py`. Manual demonstration collection with `collect_data.py` remains available below.
+
+The default configurations now select reduced `STEP_D435.urdf` and `STEP_D405.urdf` models respectively. `default.yml` also changes the second motor's example `reset_pose` from -1.36 to -1.42 rad. Check this calibration against your assembly. Control URDFs, camera masses, and full-gripper visualization options are documented in [the model package README](ros2/src/openeai_arm_urdf_ros2/README.md).
 
 OpenEAI-arm supports human manipulation for further training. We provide an example data collection code based on ROS2 in [ros2/src/openeai_arm/examples/collect_data.py](ros2/src/openeai_arm/examples/collect_data.py) using , and you can write your own data collection scripts with/without ROS2. 
 

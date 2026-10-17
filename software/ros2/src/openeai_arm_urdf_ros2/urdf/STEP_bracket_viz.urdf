@@ -1,0 +1,2995 @@
+<?xml version='1.0' encoding='utf-8'?>
+<robot name="STEP_bracket_viz">
+  <link name="base_link">
+    <inertial>
+      <origin xyz="4.45154940917e-05 -3.21498676938e-05 0.0226136604038" rpy="0 0 0" />
+      <mass value="0.687729447622" />
+      <inertia ixx="0.00105261734497" ixy="-5.03576862445e-08" ixz="-1.0117986012e-06" iyy="0.000532551892656" iyz="3.91975306866e-07" izz="0.00107942765019" />
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_00.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_02.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_03.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="photo_part_000">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_000.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_motor">
+        <color rgba="0.105 0.115 0.125 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_002">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_002.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_003">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_003.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+  </link>
+  <link name="link1">
+    <inertial>
+      <origin xyz="0.00734538828725 -0.0030344364512 -0.0227159621019" rpy="0 0 0" />
+      <mass value="0.116952147877" />
+      <inertia ixx="0.000128015531252" ixy="1.23391076298e-05" ixz="-1.43948105673e-06" iyy="6.11385092088e-05" iyz="3.02590333635e-05" izz="0.000105208739562" />
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.33801794427687e-73 -5.4762534445178e-59" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_01.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.33801794427687e-73 -5.4762534445178e-59" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_04.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 1.33801794427687e-73 -5.4762534445178e-59" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_17.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="photo_part_001">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_001.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_004">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_004.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_017">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_017.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+  </link>
+  <link name="link2">
+    <inertial>
+      <origin xyz="0.134874366893 -3.87604199602e-05 -3.5715661178e-05" rpy="0 0 0" />
+      <mass value="1.25196567903" />
+      <inertia ixx="0.000617793112793" ixy="-1.49651312851e-07" ixz="-3.96359026757e-05" iyy="0.0175956223184" iyz="-1.42636233907e-06" izz="0.0175404357671" />
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_05.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_08.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_09.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_10.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_11.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_12.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_13.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_14.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_15.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_16.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.25256985966127e-13 4.49401800495242e-16 1.27891280956631e-17" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_27.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="photo_part_005">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_005.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_008">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_008.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.16 0.165 0.17 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_009">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_009.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_010">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_010.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_bare_aluminium">
+        <color rgba="0.48 0.5 0.53 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_011">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_011.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_012">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_012.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_013">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_013.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_014">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_014.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_motor">
+        <color rgba="0.105 0.115 0.125 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_015">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_015.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_016">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_016.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_027">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_027.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_motor">
+        <color rgba="0.105 0.115 0.125 1" />
+      </material>
+    </visual>
+  </link>
+  <link name="link3">
+    <inertial>
+      <origin xyz="0.160187722297 0.0147715611766 -0.000157965104519" rpy="0 0 0" />
+      <mass value="0.799752329983" />
+      <inertia ixx="0.000749332843341" ixy="0.000882846538409" ixz="1.18377486601e-05" iyy="0.00670757180061" iyz="8.0875951454e-06" izz="0.00685193499189" />
+    </inertial>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_20.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_23.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_24.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_25.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_26.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_28.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_29.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_30.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_31.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="8.32667268468867e-17 0 1.20427756308827e-16" rpy="-1.20823435891676e-13 3.30334717912884e-14 -5.29767939511919e-14" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_33.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="photo_part_020">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_020.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_motor">
+        <color rgba="0.105 0.115 0.125 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_023">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_023.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_bare_aluminium">
+        <color rgba="0.48 0.5 0.53 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_024">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_024.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_025">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_025.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_026">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_026.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_028">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_028.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.16 0.165 0.17 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_029">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_029.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_030">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_030.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_031">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_031.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_033">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_033.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+  </link>
+  <link name="link4">
+    <inertial>
+      <origin xyz="0.0663842922325 0.0470829135531 0.00206410135244" rpy="0 0 0" />
+      <mass value="0.420194161869" />
+      <inertia ixx="0.000437777189619" ixy="-0.000239319593965" ixz="3.26434198297e-05" iyy="0.000473440975929" iyz="2.14802886525e-05" izz="0.000634973326358" />
+    </inertial>
+    <collision>
+      <origin xyz="3.33760796777938e-15 -1.20459198171829e-14 -7.8435623610245e-15" rpy="-1.25256930136764e-13 4.46149193977785e-16 7.47679684776002e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_06.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="3.33760796777938e-15 -1.20459198171829e-14 -7.8435623610245e-15" rpy="-1.25256930136764e-13 4.46149193977785e-16 7.47679684776002e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_18.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="3.33760796777938e-15 -1.20459198171829e-14 -7.8435623610245e-15" rpy="-1.25256930136764e-13 4.46149193977785e-16 7.47679684776002e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_19.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="3.33760796777938e-15 -1.20459198171829e-14 -7.8435623610245e-15" rpy="-1.25256930136764e-13 4.46149193977785e-16 7.47679684776002e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_21.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="3.33760796777938e-15 -1.20459198171829e-14 -7.8435623610245e-15" rpy="-1.25256930136764e-13 4.46149193977785e-16 7.47679684776002e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_22.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="photo_part_006">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_006.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_motor">
+        <color rgba="0.105 0.115 0.125 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_018">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_018.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_019">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_019.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_021">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_021.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_022">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_022.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+  </link>
+  <link name="link5">
+    <inertial>
+      <origin xyz="-5.4321175536e-06 -0.00494405694743 -0.00504174031469" rpy="0 0 0" />
+      <mass value="0.358582266675" />
+      <inertia ixx="0.000167063227831" ixy="6.98693414136e-09" ixz="9.30224667431e-08" iyy="0.000189383999884" iyz="2.12649373134e-05" izz="0.000159990252546" />
+    </inertial>
+    <collision>
+      <origin xyz="-7.69086942568886e-15 -4.38538094726937e-15 -4.78783679369599e-14" rpy="1.7395475768203e-12 -2.83624189346291e-13 -3.79115467318003e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_07.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-7.69086942568886e-15 -4.38538094726937e-15 -4.78783679369599e-14" rpy="1.7395475768203e-12 -2.83624189346291e-13 -3.79115467318003e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/arm_proxy_32.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="photo_part_007">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_007.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_032">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_032.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_motor">
+        <color rgba="0.105 0.115 0.125 1" />
+      </material>
+    </visual>
+  </link>
+  <joint name="1" type="revolute">
+    <origin xyz="1.87350135405e-15 0 0.106258950856" rpy="3.8973122934e-30 1.7763568394e-14 3.4331812376e-44" />
+    <parent link="base_link" />
+    <child link="link1" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.57" upper="1.57" effort="27" velocity="5" />
+  </joint>
+  <joint name="2" type="revolute">
+    <origin xyz="0.0190000055239 4.2122208499e-12 1.44874713337e-08" rpy="1.57079632679 -1.38698963426e-09 -3.14083011396" />
+    <parent link="link1" />
+    <child link="link2" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.2" upper="3.662" effort="27" velocity="4" />
+  </joint>
+  <joint name="3" type="revolute">
+    <origin xyz="0.268 -8.40771072208e-09 1.38777878078e-17" rpy="-3.14159265359 -6.66133814775e-16 2.8783" />
+    <parent link="link2" />
+    <child link="link3" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0.1" upper="3.1416" effort="27" velocity="2.5" />
+  </joint>
+  <joint name="4" type="revolute">
+    <origin xyz="0.235624738402 0.00149417600227 2.08166817117e-17" rpy="-6.13398221105e-15 2.88657986403e-15 -0.26332" />
+    <parent link="link3" />
+    <child link="link4" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.5708" upper="1.5708" effort="7" velocity="2" />
+  </joint>
+  <joint name="5" type="revolute">
+    <origin xyz="0.0799984465786 -0.00150530821595 0.00097693310978" rpy="-1.57079633031 -1.57079265359 3.14053068437" />
+    <parent link="link4" />
+    <child link="link5" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.5708" upper="1.5708" effort="7" velocity="5" />
+  </joint>
+  <joint name="6" type="revolute">
+    <origin xyz="-2.78361266753e-05 -0.0359999784764 -0.00142035139892" rpy="1.57079632679 1.4201086973e-09 -0.000773225854259" />
+    <parent link="link5" />
+    <child link="link6" />
+    <axis xyz="0 0 1" />
+    <limit lower="-3.1416" upper="3.1416" effort="7" velocity="5" />
+  </joint>
+  <link name="link6">
+    <inertial>
+      <origin xyz="3.71823060623e-07 -0.00390011817474 0.056857155207" rpy="0 0 0" />
+      <mass value="0.633115130971" />
+      <inertia ixx="0.000744880117335" ixy="1.9424484569e-06" ixz="-4.16588424721e-08" iyy="0.00109547938501" iyz="-7.1136235133e-05" izz="0.000852279350035" />
+    </inertial>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_327_00.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_328_01.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_329_02.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_330_03.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_331_04.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_332_05.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_333_06.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_334_07.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_335_08.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_336_09.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_337_10.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_338_11.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_339_12.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_340_13.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0196831526421376 -0.0199141533104349 0.0783500107684721" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_341_14.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_342_00.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_343_01.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_344_02.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_345_03.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_346_04.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_347_05.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_348_06.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_349_07.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_350_08.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_351_09.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_352_10.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_353_11.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_354_12.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_355_13.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_356_14.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0196831526422555 0.0199141533099149 0.0783500107685316" rpy="-1.7911054041829e-12 6.29520090569825e-13 -3.00097819710993" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_357_15.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_178_00.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_179_01.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_180_02.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_181_03.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_182_04.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_183_05.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_184_06.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_185_07.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_186_08.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_187_09.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_188_10.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_189_11.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_190_12.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_191_13.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_192_14.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_193_15.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_194_16.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_195_17.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_196_18.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_197_19.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_198_20.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.23190821662443e-14 -2.26808460898507e-13 0.0605500107685019" rpy="-2.14529565986666e-13 1.88635408291879e-12 -1.88140634584003" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_199_21.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.00150000056808353 0.00528223067479126 0.152760639707211" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <box size="0.003 0.00534998252988 0.00747874379158" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_200.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_201_00.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_202_01.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_203_02.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_204_03.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_205_04.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_206_05.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_207_06.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_208_07.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_211_10.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_212_11.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_213_12.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_214_13.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_215_14.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_216_15.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_217_16.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_218_17.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_219_18.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_220_19.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_221_20.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_222_21.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_223_22.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_224_23.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_225_24.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_226_25.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_227_26.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_228_27.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_229_28.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_230_29.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_232_31.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_233_32.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_234_33.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_235_34.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_236_35.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_237_36.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_238_37.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_239_38.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_240_39.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_241_40.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_242_41.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_243_42.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_244_43.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_245_44.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_246_45.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_247_46.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_248_47.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_249_48.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_250_49.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_251_50.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_252_51.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_253_52.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_254_53.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_255_54.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_256_55.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_257_56.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_258_57.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_259_58.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_260_59.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_261_60.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_262_61.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_263_62.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_264.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_209_08_outside_pad_0.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_209_08_outside_pad_1.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_209_08_outside_pad_2.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_209_08_outside_pad_3.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_210_09_outside_pad_0.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_210_09_outside_pad_1.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_231_30_outside_pad_0.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_231_30_outside_pad_1.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_231_30_outside_pad_2.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0324353122991534 -2.40335529255741e-13 0.0605000107685142" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_231_30_outside_pad_3.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.00150000056791647 0.00528223067485172 0.152760639707212" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <box size="0.003 0.00534998252988 0.00747874379158" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_265.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_266_00.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_267_01.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_268_02.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_269_03.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_270_04.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_271_05.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_272_06.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_273_07.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_274_08.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_275_09.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_276_10.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_277_11.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_278_12.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_279_13.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_280_14.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_281_15.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_282_16.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_283_17.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_284_18.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_285_19.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_286_20.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_287_21.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_288_22.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_289_23.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_290_24.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_291_25.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_292_26.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_293_27.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_294_28.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_295_29.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_296_30.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_297_31.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_298_32.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_299_33.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_301_35.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_302_36.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_303_37.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_304_38.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_305_39.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_306_40.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_307_41.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_308_42.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_309_43.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_310_44.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_311_45.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_312_46.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_313_47.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_314_48.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_315_49.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_316_50.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_317_51.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_318_52.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_321_55.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_322_56.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_323_57.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_324_58.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_325_59.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_326.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_300_34_outside_pad_0.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_300_34_outside_pad_1.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_300_34_outside_pad_2.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_319_53_outside_pad_0.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_319_53_outside_pad_1.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_319_53_outside_pad_2.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_319_53_outside_pad_3.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_320_54_outside_pad_0.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0324353122992466 -2.13135065152424e-13 0.0605000107684896" rpy="-1.861693408555e-12 3.72269489540283e-13 -3.1415926535893" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_320_54_outside_pad_1.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_00.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_01.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_02_00.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_03_01.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_04_02.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_05_03.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_06_04.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_07_05.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_08_06.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_09_07.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_10_08.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_11_09.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_12_10.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_13_11.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_14_12.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_15_13.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_16_14.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_17_15.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_18_16.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_19_17.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_20_18.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_21_19.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_22_20.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_23_21.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_24_22.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_25_23.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_26_24.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_27_25.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_28_26.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_29_27.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_30_28.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_31_29.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_32_30.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_33_31.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_34_32.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_35_33.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_36_34.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_37_35.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_38_36.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_39_37.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_40_38.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_41_39.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_42_40.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_43_41.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_44_42.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_45_43.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_46_44.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_47_45.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_48_46.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_49_47.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_50_48.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_51_49.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_52_50.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_53_51.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_54_52.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_55_53.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_56_54.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_57_55.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_58_56.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_59_57.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_60_58.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_61_59.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_62_60.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_63_61.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_64_62.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_65_63.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_66_64.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_67_65.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_68_66.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_69_67.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_70_68.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_71_69.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_72_70.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_73_71.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_74_72.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_75_73.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_76_74.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_77_75.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_78_76.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_79_77.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_80_78.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_81_79.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_82_80.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_83_81.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_84_82.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_85_83.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_86_84.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_87_85.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_88_86.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_89_87.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_90_88.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_91_89.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_92_90.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_93_91.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_94_92.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_95_93.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_96_94.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_97_95.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_98_96.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_99_97.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_100_98.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_101_99.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_102_100.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_103_101.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_104_102.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_105_103.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_106_104.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_107_105.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_108_106.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_109_107.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_110_108.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_111_109.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_112_110.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_113_111.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_114_112.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_115_113.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_116_114.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_117_115.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_118_116.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_119_117.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_120_118.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_121_119.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_122_120.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_123_121.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_124_122.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_125_123.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_126_124.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_127_125.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_128_126.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_129_127.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_130_128.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_131_129.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_132_130.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_133_131.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_134_132.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_135_133.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_136_134.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_137_135.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_138_136.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_139_137.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_140_138.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_141_139.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_142_140.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_143_141.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_144_142.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_145_143.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_146_144.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_147_145.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_148_146.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_149_147.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_150_148.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_151_149.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_152_150.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_153_151.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_154_152.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_155_153.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_156_154.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_157_155.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_158_156.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_159_157.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_160_158.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_161_159.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_162_160.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_163_161.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_164_162.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_165_163.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_166_164.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_167_165.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_168_166.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_169_167.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_170_168.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_171_169.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_172_170.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_173_171.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_174_172.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_175_173.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_176.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.09347784333597e-14 -1.10522702101434e-13 -0.0072499999999981" rpy="1.84459575314956e-12 -3.78930827688029e-13 2.83304043397119e-13" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/collision/grip_proxy_177.obj" scale="1 1 1" />
+      </geometry>
+    </collision>
+    <visual name="photo_part_034">
+      <origin xyz="0 0 -0.00725" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_034.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_motor">
+        <color rgba="0.105 0.115 0.125 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_035">
+      <origin xyz="0 0 -0.00725" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_035.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_036">
+      <origin xyz="0 0 -0.00725" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_036.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.16 0.165 0.17 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_037">
+      <origin xyz="0 0 -0.00725" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_037.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.16 0.165 0.17 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_038">
+      <origin xyz="0 0 -0.00725" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_038.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.16 0.165 0.17 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_039">
+      <origin xyz="-5.69010984163842e-15 8.71525074330748e-15 0.0605500107685" rpy="-1.15463194561016e-14 1.4210854715202e-14 -1.88140634584" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_039.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_black_aluminium">
+        <color rgba="0.07 0.08 0.09 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_040">
+      <origin xyz="0.0324353122992 -1.40720768371239e-14 0.0605000107685" rpy="-1.73194791841524e-14 -6.66133814775094e-15 -3.14159265358959" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_040.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_041">
+      <origin xyz="0.0324353122992 -1.40720768371239e-14 0.0605000107685" rpy="-1.73194791841524e-14 -6.66133814775094e-15 -3.14159265358959" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_041.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.16 0.165 0.17 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_042">
+      <origin xyz="0.0324353122992 -1.40720768371239e-14 0.0605000107685" rpy="-1.73194791841524e-14 -6.66133814775094e-15 -3.14159265358959" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_042.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_043">
+      <origin xyz="-0.0324353122992 3.15303338993544e-14 0.0605000107685" rpy="-1.73194791841524e-14 -6.66133814775094e-15 -3.14159265358959" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_043.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_044">
+      <origin xyz="-0.0324353122992 3.15303338993544e-14 0.0605000107685" rpy="-1.73194791841524e-14 -6.66133814775094e-15 -3.14159265358959" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_044.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.16 0.165 0.17 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_045">
+      <origin xyz="-0.0324353122992 3.15303338993544e-14 0.0605000107685" rpy="-1.73194791841524e-14 -6.66133814775094e-15 -3.14159265358959" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_045.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_046">
+      <origin xyz="0.0196831526421916 -0.0199141533101659 0.0783500107684995" rpy="-1.77635683940025e-14 -3.99680288865056e-15 -3.00097819711" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_046.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.16 0.165 0.17 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_047">
+      <origin xyz="0.0196831526421916 -0.0199141533101659 0.0783500107684995" rpy="-1.77635683940025e-14 -3.99680288865056e-15 -3.00097819711" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_047.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_048">
+      <origin xyz="-0.0196831526422027 0.0199141533101827 0.0783500107685005" rpy="-1.77635683940025e-14 -3.99680288865056e-15 -3.00097819711" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_048.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.16 0.165 0.17 1" />
+      </material>
+    </visual>
+    <visual name="photo_part_049">
+      <origin xyz="-0.0196831526422027 0.0199141533101827 0.0783500107685005" rpy="-1.77635683940025e-14 -3.99680288865056e-15 -3.00097819711" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/photo_part_049.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_steel">
+        <color rgba="0.42 0.44 0.47 1" />
+      </material>
+    </visual>
+    <visual name="eyeview_camera_bracket">
+      <origin xyz="0 0 0.0067500107685" rpy="3.14159265359 -0 0" />
+      <geometry>
+        <mesh filename="package://openeai_arm_urdf_ros2/meshes/photo_visual/eyeview_D405_bracket_activeCAD.obj" scale="1 1 1" />
+      </geometry>
+      <material name="photo_resin">
+        <color rgba="0.08 0.085 0.09 1" />
+      </material>
+    </visual>
+  </link>
+</robot>

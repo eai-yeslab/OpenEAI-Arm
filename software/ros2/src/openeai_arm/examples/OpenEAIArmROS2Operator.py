@@ -74,9 +74,14 @@ class OpenEAIArmROS2Operator:
             joint_state_msg.name = [f'joint_{k+1}' for k in range(dof)]
             joint_state_msg.position = list(sub_target)
             self.arm_publishers[sub_arm_name].publish(joint_state_msg)
-            self.node.get_logger().info(
-                f"Publish {sub_arm_name} joint targets: {sub_target}"
-            )
+            # self.node.get_logger().info(
+            #     f"Publish {sub_arm_name} joint targets: {sub_target}"
+            # )
+            # if len(self.arm_deques[sub_arm_name]) > 0:
+            #     print("Current arm pose:", end=' ')
+            #     for pos in self.arm_deques[sub_arm_name][-1].position:
+            #         print(f"{pos:.3f} ", end='')
+            #     print()  # New line after printing all positions
 
     def robot_base_publish(self, vel):
         if not self.base_publisher:
@@ -142,7 +147,7 @@ class OpenEAIArmROS2Operator:
                 if not arm_done:
                     flag = True
             steps += 1
-            print(f"{arm_name} puppet_arm_publish_continuous: {steps}")
+            # print(f"{arm_name} puppet_arm_publish_continuous: {steps}")
             rate.sleep()
 
     def run_executor(self):
@@ -155,24 +160,38 @@ class OpenEAIArmROS2Operator:
         stamp = msg.header.stamp
         return stamp.sec + stamp.nanosec * 1e-9
 
-    def get_frame(self):
+    def get_frame(self, required=None):
+        if required is None:
+            required = {'imgs', 'arms', 'extra'}
+        elif isinstance(required, str):
+            required = {required}
+        else:
+            required = set(required)
+
         frame_time_candidates = []
-        for cam_name, types in self.img_deques.items():
-            for typ, dq in types.items():
+
+        if 'imgs' in required:
+            for cam_name, types in self.img_deques.items():
+                for typ, dq in types.items():
+                    if len(dq) == 0:
+                        self.node.get_logger().info(f"{cam_name} {typ} image info is missing...")
+                        return False
+                    frame_time_candidates.append(self._to_sec(dq[-1]))
+
+        if 'arms' in required:
+            for arm_name, dq in self.arm_deques.items():
                 if len(dq) == 0:
-                    self.node.get_logger().info(f"{cam_name} {typ} image info is missing...")
+                    self.node.get_logger().info(f"{arm_name} arm pose info missing...")
                     return False
                 frame_time_candidates.append(self._to_sec(dq[-1]))
-        for arm_name, dq in self.arm_deques.items():
-            if len(dq) == 0:
-                self.node.get_logger().info(f"{arm_name} arm pose info missing...")
-                return False
-            frame_time_candidates.append(self._to_sec(dq[-1]))
-        for topic_name, topic in self.extra_deques.items():
-            if len(topic) == 0:
-                self.node.get_logger().info(f"{topic_name} extra topic info missing...")
-                return False
-            frame_time_candidates.append(self._to_sec(topic[-1]))
+
+        if 'extra' in required:
+            for topic_name, topic in self.extra_deques.items():
+                if len(topic) == 0:
+                    self.node.get_logger().info(f"{topic_name} extra topic info missing...")
+                    return False
+                frame_time_candidates.append(self._to_sec(topic[-1]))
+
         if frame_time_candidates:
             frame_time = min(frame_time_candidates)
         else:
@@ -184,43 +203,46 @@ class OpenEAIArmROS2Operator:
             return dq.popleft() if len(dq) > 0 else None
 
         imgs = {}
-        for cam_name, types in self.img_deques.items():
-            imgs[cam_name] = {}
-            for typ, dq in types.items():
-                msg = pop_until(dq)
-                if msg is None:
-                    self.node.get_logger().info(f"Waiting for {cam_name} {typ} image...")
-                    return False
-                img = self.bridge.imgmsg_to_cv2(msg, 'passthrough')
-                if img.shape[-1] == 2:
-                    img = cv2.cvtColor(img, cv2.COLOR_YUV2RGB_YUY2)
-                imgs[cam_name][typ] = img
+        if 'imgs' in required:
+            for cam_name, types in self.img_deques.items():
+                imgs[cam_name] = {}
+                for typ, dq in types.items():
+                    msg = pop_until(dq)
+                    if msg is None:
+                        self.node.get_logger().info(f"Waiting for {cam_name} {typ} image...")
+                        return False
+                    img = self.bridge.imgmsg_to_cv2(msg, 'passthrough')
+                    if img.shape[-1] == 2:
+                        img = cv2.cvtColor(img, cv2.COLOR_YUV2RGB_YUY2)
+                    imgs[cam_name][typ] = img
 
         arms = {}
-        for arm_name, dq in self.arm_deques.items():
-            arms[arm_name] = pop_until(dq)
-            if arms[arm_name] is None:
-                self.node.get_logger().info(f"Waiting for {arm_name} arm pose...")
-                return False
+        if 'arms' in required:
+            for arm_name, dq in self.arm_deques.items():
+                arms[arm_name] = pop_until(dq)
+                if arms[arm_name] is None:
+                    self.node.get_logger().info(f"Waiting for {arm_name} arm pose...")
+                    return False
 
         extra = {}
-        for topic_name, dq in self.extra_deques.items():
-            msg = pop_until(dq)
-            if isinstance(msg, dict):
-                msg = msg['data']
-            extra[topic_name] = {
-                'msg': msg,
-                'type': self.config['extra'][topic_name]['type'],
-            }
-            if extra[topic_name]['msg'] is None:
-                self.node.get_logger().info(f"Waiting for {topic_name} extra topic...")
-                return False
+        if 'extra' in required:
+            for topic_name, dq in self.extra_deques.items():
+                msg = pop_until(dq)
+                if isinstance(msg, dict):
+                    msg = msg['data']
+                extra[topic_name] = {
+                    'msg': msg,
+                    'type': self.config['extra'][topic_name]['type'],
+                }
+                if extra[topic_name]['msg'] is None:
+                    self.node.get_logger().info(f"Waiting for {topic_name} extra topic...")
+                    return False
 
         return {
-            'imgs': imgs,         # {'hand': {'rgb':..., 'depth': ...}, ...}
-            'arm_keys': self.arm_keys,  # ['puppet', ...]
-            'arms': arms,         # {'puppet': jointstate_msg, ...}
-            'extra': extra,       # {'extra_topic': float32_msg, ...}
+            'imgs': imgs,
+            'arm_keys': self.arm_keys,
+            'arms': arms,
+            'extra': extra,
             'timestamp': frame_time,
         }
 
@@ -240,7 +262,7 @@ class OpenEAIArmROS2Operator:
                 dq.popleft()
             dq.append(msg)
         return cb
-    
+
     def _make_extra_callback(self, topic_name):
         def cb(msg):
             dq = self.extra_deques[topic_name]
@@ -321,7 +343,7 @@ class OpenEAIArmROS2Operator:
                 msg_type, topic['topic'],
                 self._make_extra_callback(topic_name), 10
             )
-        
+
         self.prepare_publisher = self.node.create_publisher(
             Int32, self.config.get('prepare_topic', '/robot_prepare'), 10
         )

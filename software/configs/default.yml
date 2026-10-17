@@ -5,7 +5,7 @@ can_config:
   baud_rate: 921600
 
 urdf:
-  path: ros2/src/openeai_arm_urdf_ros2/urdf/STEP.urdf
+  path: ros2/src/openeai_arm_urdf_ros2/urdf/STEP_D435.urdf
   base_link: base_link
   ee_link: link6
 
@@ -41,7 +41,7 @@ motors:
     master_id: 0x11
     min_position: -3.14
     max_position: 3.14
-    reset_pose: -1.36
+    reset_pose: -1.42
     dynamic_coefficients:
       kp: 300.0
       ki: 0.0

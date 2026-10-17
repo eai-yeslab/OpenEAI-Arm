@@ -1,0 +1,9 @@
+# Keep model metadata portable between Windows and Linux.
+software/ros2/src/openeai_arm_urdf_ros2/** text=auto eol=lf
+# Software model meshes are stored in Git LFS. Hardware has its own rules.
+software/ros2/src/openeai_arm_urdf_ros2/meshes/**/*.obj filter=lfs diff=lfs merge=lfs -text
+software/ros2/src/openeai_arm_urdf_ros2/meshes/**/*.stl filter=lfs diff=lfs merge=lfs -text
+software/ros2/src/openeai_arm_urdf_ros2/meshes/**/*.STL filter=lfs diff=lfs merge=lfs -text
+software/ros2/src/openeai_arm_urdf_ros2/meshes/**/*.dae filter=lfs diff=lfs merge=lfs -text
+software/ros2/src/openeai_arm_urdf_ros2/meshes/**/*.glb filter=lfs diff=lfs merge=lfs -text
+software/ros2/src/openeai_arm_urdf_ros2/meshes/**/*.gltf filter=lfs diff=lfs merge=lfs -text

@@ -17,6 +17,8 @@
 
 !src/openeai_arm/examples/*.py
 !src/openeai_arm/examples/*.yml
+!src/openeai_arm/examples/*.sh
+!src/openeai_arm/examples/README.md
 
 !src/openeai_arm_urdf_ros2/
 !src/openeai_arm_urdf_ros2/**/*
@@ -57,3 +59,8 @@ __pycache__/
 # Ignore .DS_Store and Thumbs.db everywhere
 **/.DS_Store
 **/Thumbs.db
+
+# Meshes are required runtime resources and use Git LFS.
+!src/openeai_arm_urdf_ros2/meshes/**/*.obj
+!src/openeai_arm_urdf_ros2/meshes/**/*.stl
+!src/openeai_arm_urdf_ros2/meshes/**/*.STL

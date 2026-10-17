@@ -87,3 +87,9 @@ __pycache__/
 # Ignore .DS_Store and Thumbs.db everywhere
 **/.DS_Store
 **/Thumbs.db
+
+# URDF meshes are resources, including OBJ/STL files otherwise ignored above.
+!/ros2/src/openeai_arm_urdf_ros2/meshes/**/*.obj
+!/ros2/src/openeai_arm_urdf_ros2/meshes/**/*.stl
+!/ros2/src/openeai_arm_urdf_ros2/meshes/**/*.STL
+/analysis/
