@@ -480,7 +480,7 @@ namespace DM_Motor
     class SimMotorControl : public Motor_Control
     {
     public:
-        SimMotorControl();
+        explicit SimMotorControl(SerialPort::SharedPtr serial = nullptr);
         ~SimMotorControl() override = default;
 
         void enable(const Motor& motor) override;
@@ -522,6 +522,7 @@ namespace DM_Motor
             float amax = 20.0f;
             float pos_epsilon = 1e-4f;
             float vel_epsilon = 1e-3f;
+            float tracking_tau = 0.02f;
             float max_dt = 0.1f;
         };
 

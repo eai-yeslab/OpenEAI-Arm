@@ -172,6 +172,44 @@ Then, based on your settings, modify the parameters in the config file. The defa
 
 ## Data collection
 
+### Migrated controller and diagnostics
+
+`controller.interpolation` accepts `{method: linear}`, `{method: cubics}`, or
+`{method: minjerk}`. The legacy scalar form is also accepted. Sigmoid is not
+included. The motor loop frequency is configured separately through
+`controller.frequency`; per-joint `motion_limits.vmax/amax` are used by the
+post-interpolation motion filter and feedforward acceleration limit, not to
+stretch basic interpolation segments.
+
+`controller.motion_filter` configures velocity output, position/velocity snap
+tolerances, Hann smoothing through `delay_frames`, and optional `input_shaper`
+types `zv`, `zvd`, and `iir_notch`. Gripper commands bypass arm-joint smoothing
+and retain the configured delay synchronization. `gripper_version` selects
+`raw`, `v1`, or `v2`; check the physical gripper and closed-position calibration
+before enabling motors. The supplied configuration values follow the private
+driver defaults, while existing public `reset_pose` values and URDF paths are
+preserved. Hardware IDs, gains, and limits are examples, not universal defaults.
+
+Rigid-body feedforward uses KDL gravity, Coriolis, and inertia terms. Per-motor
+`dynamic_coefficients.coriolis_scale/inertia_scale` configure the latter two.
+Public configurable drag-mode gains and runtime mode switching remain available.
+The ROS node includes stateful seeded IK and continuous manual return commands.
+
+`read_motors [config_path]` is a passive status reader: it does not enable,
+disable, change modes, or command positions. It warns when a measured motor
+position differs from `reset_pose` by more than 0.28 rad. Parameter inspection
+is documented in [read_motor_params](tests/read_motor_params.md).
+
+ROS logs use `motor_state_log_<arm_name>.csv`; unnamed C++ instances keep
+`motor_state_log.csv`. Logged electrical power is only a model-based estimate,
+not measured bus power. Power, damping, trajectory comparison, and batch replay
+tools are available under `scripts/` and the ROS examples directory.
+
+`inference.py --save <path>` saves the actually published action sequence for
+replay, including transitions but excluding preparation and idle waiting.
+Build and hardware validation of the migrated controller must be performed in
+the target ROS2/Linux environment before production use.
+
 For autonomous policy execution and recording, use [the rollout examples guide](ros2/src/openeai_arm/examples/README.md). `rollout.py` is now the autonomous collector; the former human-in-the-loop program is available as `hil.py`. Manual demonstration collection with `collect_data.py` remains available below.
 
 The default configurations now select reduced `STEP_D435.urdf` and `STEP_D405.urdf` models respectively. `default.yml` also changes the second motor's example `reset_pose` from -1.36 to -1.42 rad. Check this calibration against your assembly. Control URDFs, camera masses, and full-gripper visualization options are documented in [the model package README](ros2/src/openeai_arm_urdf_ros2/README.md).

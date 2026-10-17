@@ -5,6 +5,7 @@
 #include <memory>
 #include <array>
 #include <algorithm>
+#include "joint_array.hpp"
 
 template<typename T, size_t N>
 class HistoryQueue {
@@ -31,9 +32,13 @@ public:
 
     const std::array<T, N>& array() const { return data_; }
 
-    T getVel() const {
-        if (head_ < 1) return T{};
-        return data_[0] - data_[1];
+    T getVel(float dt) const {
+        if (head_ < 1 || dt <= 0.0f) return T{};
+        auto data_diff = data_[0] - data_[1];
+        for (size_t i = 0; i < data_diff.size(); ++i) {
+            data_diff[i] /= dt;
+        }
+        return data_diff;
     }
     size_t size() const { return filled_ ? N : head_+1; }
 };
@@ -55,7 +60,7 @@ public:
     void fill(const T& cmd) { history_.fill(cmd); }
     const HistoryQueue<T, N>& getHistory() const { return history_; }
     HistoryQueue<T, N>& getHistory() { return history_; }
-    T getVel() const { return history_.getVel(); }
+    T getVel(float dt) const { return history_.getVel(dt); }
     T& operator[](size_t idx) { return history_[idx]; }
     const T& operator[](size_t idx) const { return history_[idx]; }
     virtual std::vector<T> interpolate(size_t n_steps) {
@@ -65,6 +70,13 @@ public:
             traj[step-1] = interpolate_impl(s);
         }
         return traj;
+    }
+
+    virtual std::vector<T> interpolate(size_t n_steps, T q, T dq, float dt) {
+        (void)q;
+        (void)dq;
+        (void)dt;
+        return interpolate(n_steps);
     }
 
     virtual float compute_s(size_t step, size_t total_step) const { return float(step)/total_step; }

@@ -1,3 +1,4 @@
+#pragma once
 #include <array>
 #include <cmath>
 #include <iostream>
@@ -11,7 +12,7 @@ public:
     JointArray uniform(float value);
     void setResetPose(JointArray reset_pose) { reset_pose_ = reset_pose; }
 
-    JointArray computeControlTorque(const JointArray& current_q, const JointArray& target_q, const JointArray& current_vel, const bool output = false) {return JointArray{};};
+    JointArray computeControlTorque(const JointArray& current_q, const JointArray& target_q, bool output = false) {return JointArray{};};
 
 
 protected:
@@ -28,6 +29,13 @@ public:
     void setKpKiParams(JointArray Kp, JointArray Ki) {Kp_ = Kp; Ki_ = Ki;}
     void setNonlinearParams(JointArray alpha, float deadzone) { alpha_ = alpha; error_deadzone_ = deadzone; }
     void setOutputLimits(float min, float max) { output_min_ = min; output_max_ = max; }
+    void setDynamicsParams(const JointArray& coriolis_scale,
+                           const JointArray& inertia_scale,
+                           const JointArray& acceleration_limit) {
+        coriolis_scale_ = coriolis_scale;
+        inertia_scale_ = inertia_scale;
+        acceleration_limit_ = acceleration_limit;
+    }
 
     void reset() {
         integral_.fill(0.0f);
@@ -37,8 +45,16 @@ public:
     }
 
 
-    // Gravity compensation torque calculation
-    JointArray computeGravityTorque(JointArray q, JointArray dq);
+    // Full rigid-body feedforward torque calculation.
+    JointArray computeFeedforwardTorque(const JointArray& current_q,
+                                        const JointArray& target_dq,
+                                        const JointArray& target_ddq);
+
+    // Compatibility entry point without requested acceleration feedforward.
+    JointArray computeControlTorque(const JointArray& q, const JointArray& target,
+                                    const JointArray& dq, bool output = false) {
+        return computeControlTorque(q, target, dq, JointArray{}, output);
+    }
 
     // Nonlinear proportional term with deadzone
     float nonlinearProportional(float Kp, float alpha, float error) const;
@@ -47,7 +63,20 @@ public:
     void updateIntegralWithAntiWindup(float Ki, float error, float& integral, float p_term, float g_term, int joint_idx);
 
     // Main control function
-    JointArray computeControlTorque(const JointArray& current_q, const JointArray& target_q, const JointArray& target_vel, const bool output = false) ;
+    JointArray computeControlTorque(
+        const JointArray& current_q,
+        const JointArray& target_q,
+        bool output = false) {
+        return computeControlTorque(
+            current_q, target_q, JointArray{}, JointArray{}, output);
+    }
+
+    JointArray computeControlTorque(
+        const JointArray& current_q,
+        const JointArray& target_q,
+        const JointArray& target_dq,
+        const JointArray& target_ddq,
+        bool output = false);
 
 private:
 
@@ -57,6 +86,9 @@ private:
 
     // Nonlinear parameters
     JointArray alpha_; // tanh nonlinearity coefficient
+    JointArray coriolis_scale_{};
+    JointArray inertia_scale_{};
+    JointArray acceleration_limit_{};
     float error_deadzone_; // error deadzone
 
     // Anti-windup parameters

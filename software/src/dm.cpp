@@ -197,6 +197,7 @@ void DM_Motor::Motor_Control::receive()
         };
 
         auto & data = receive_data.canData;
+        const uint8_t error_code = (data[0] >> 4) & 0x0f;
 
         uint16_t q_uint = (uint16_t(data[1]) << 8) | data[2];
         uint16_t dq_uint = (uint16_t(data[3]) << 4) | (data[4] >> 4);
@@ -228,6 +229,11 @@ void DM_Motor::Motor_Control::receive()
             float receive_dq = uint_to_float(dq_uint, -limit_param_receive.DQ_MAX, limit_param_receive.DQ_MAX, 12);
             float receive_tau = uint_to_float(tau_uint, -limit_param_receive.TAU_MAX, limit_param_receive.TAU_MAX, 12);
             m->receive_data(receive_q, receive_dq, receive_tau);
+        }
+        if (error_code != 0x00 && error_code != 0x01) {
+            std::cerr << "[" << std::hex << receive_data.canId << std::dec
+                      << "] Error code: " << static_cast<int>(error_code)
+                      << std::endl;
         }
         return;
     }
@@ -413,8 +419,8 @@ void DM_Motor::Motor_Control::write_motor_param(Motor &DM_Motor,uint8_t RID,cons
     serial_->send((uint8_t*)&send_data, sizeof(can_send_frame));
 }
 
-DM_Motor::SimMotorControl::SimMotorControl()
-    : Motor_Control(nullptr, false)
+DM_Motor::SimMotorControl::SimMotorControl(SerialPort::SharedPtr serial)
+    : Motor_Control(std::move(serial), false)
 {
 }
 
@@ -444,39 +450,14 @@ void DM_Motor::SimMotorControl::step_tracker(
         return;
     }
 
-    float direction = signf(error);
-    float acceleration = 0.0f;
-    if (direction == 0.0f) {
-        acceleration = state.vel > 0.0f ? -params.amax
-                     : state.vel < 0.0f ? params.amax : 0.0f;
-    } else {
-        float velocity_toward_target = direction * state.vel;
-        float braking_distance = velocity_toward_target > 0.0f
-            ? velocity_toward_target * velocity_toward_target / (2.0f * params.amax)
-            : 0.0f;
-        float margin = std::max(
-            params.pos_epsilon, 0.5f * params.amax * dt * dt);
-
-        if (velocity_toward_target < 0.0f ||
-            std::abs(error) > braking_distance + margin) {
-            acceleration = direction * params.amax;
-        } else {
-            acceleration = -direction * params.amax;
-        }
-    }
-
-    float new_velocity = clampf(
-        state.vel + acceleration * dt, -params.vmax, params.vmax);
-    float new_position = state.pos + 0.5f * (state.vel + new_velocity) * dt;
-
-    if ((state.target_pos - state.pos) *
-        (state.target_pos - new_position) <= 0.0f) {
-        new_position = state.target_pos;
-        new_velocity = 0.0f;
-    }
-
-    state.pos = new_position;
-    state.vel = new_velocity;
+    // This host-side first-order tracker exercises the control pipeline; it is
+    // intentionally not a physical motor model.
+    const float alpha = 1.0f - std::exp(-dt / params.tracking_tau);
+    const float desired_position = state.pos + error * alpha;
+    const float velocity = clampf(
+        (desired_position - state.pos) / dt, -params.vmax, params.vmax);
+    state.pos += velocity * dt;
+    state.vel = velocity;
 }
 
 void DM_Motor::SimMotorControl::update_feedback(
@@ -492,6 +473,7 @@ void DM_Motor::SimMotorControl::update_feedback(
         value.amax = 20.0f;
         value.pos_epsilon = 1e-4f;
         value.vel_epsilon = 1e-3f;
+        value.tracking_tau = 0.02f;
         value.max_dt = 0.02f;
         return value;
     }();

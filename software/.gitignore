@@ -39,6 +39,8 @@
 !/tests/**/*.cpp
 !/tests/**/*.h
 !/tests/**/*.hpp
+!/tests/**/*.py
+!/tests/**/*.md
 
 /python/*
 !/python/**

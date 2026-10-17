@@ -3,6 +3,9 @@
 #ifndef SERIAL_PORT_H
 #define SERIAL_PORT_H
 
+#include <array>
+#include <cstdint>
+
 #include <termios.h>
 #include <sys/select.h>
 #include <string>

@@ -1,54 +1,102 @@
-import pandas as pd
+import argparse
+
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
-df = pd.read_csv('motor_state_log.csv')
-time = df['timestamp_ms'] / 1000.0
 
-num_joints = 7
+def main():
+    parser = argparse.ArgumentParser(description="Plot motor state log data.")
+    parser.add_argument("filename", nargs="?", default="motor_state_log.csv")
+    parser.add_argument("--legend", action="store_true")
+    args = parser.parse_args()
 
-fig, axs = plt.subplots(num_joints, 3, figsize=(14, 2.8*num_joints), sharex=True)
+    data = pd.read_csv(args.filename)
+    time = data["timestamp_ms"] / 1000.0
+    keyframe_mask = (
+        data["keyframe"] == 1
+        if "keyframe" in data.columns
+        else np.zeros(len(data), dtype=bool)
+    )
+    num_joints = 7
+    figure, axes = plt.subplots(
+        num_joints, 3, figsize=(14, 2.8 * num_joints), sharex=True
+    )
 
-for j in range(num_joints):
-    # axs[j, 0].plot(time, df[f'q_cmd_{j}'], 'b', label=f'Joint {j} Command Pos')
-    # axs[j, 0].plot(time, df[f'q_{j}'], 'r', label=f'Joint {j} Feedback Pos')
-    # axs[j, 0].set_ylabel('Pos(rad)')
-    # axs[j, 0].legend()
-    # axs[j, 0].grid()
-    # 左y轴：位置
-    ax = axs[j, 0]
-    ax.plot(time, df[f'q_cmd_{j}'], 'b', label=f'Joint {j} Command Pos')
-    ax.plot(time, df[f'q_{j}'], 'r', label=f'Joint {j} Feedback Pos')
-    ax.set_ylabel('Pos(rad)')
-    ax.legend(loc='upper left')
-    ax.grid()
+    for joint in range(num_joints):
+        position_axis = axes[joint, 0]
+        command_column = f"q_cmd_{joint}"
+        if command_column in data.columns:
+            position_axis.plot(time, data[command_column], "b", label="Planned position")
+            if keyframe_mask.any():
+                position_axis.scatter(
+                    time[keyframe_mask],
+                    data[command_column][keyframe_mask],
+                    color="b",
+                    marker="o",
+                    s=20,
+                    label="Keyframe",
+                )
+        external_column = f"q_ext_{joint}"
+        if external_column in data.columns:
+            position_axis.plot(
+                time, data[external_column], "c", label="External target"
+            )
+        sent_column = f"q_snd_{joint}"
+        if sent_column in data.columns:
+            position_axis.plot(time, data[sent_column], "y", label="Sent position")
+        feedback_column = f"q_{joint}"
+        if feedback_column in data.columns:
+            position_axis.plot(time, data[feedback_column], "r", label="Feedback position")
+        position_axis.set_ylabel("Position (rad)")
+        position_axis.grid()
 
-    # 右y轴：绝对值误差
-    ax2 = ax.twinx()
-    with np.errstate(divide='ignore', invalid='ignore'):
-        percent_err = np.where(df[f'q_cmd_{j}'] != 0,
-                               (df[f'q_{j}'] - df[f'q_cmd_{j}']), #/ df[f'q_cmd_{j}'] * 100,
-                               0)
-    ax2.plot(time, percent_err, 'g', label=f'Joint {j} %Error')
-    ax2.set_ylabel('Position Error')
-    ax2.legend(loc='upper right')
-    q01 = np.percentile(percent_err, 1)
-    q99 = np.percentile(percent_err, 99)
+        if command_column in data.columns and feedback_column in data.columns:
+            error = data[feedback_column] - data[command_column]
+            error_axis = position_axis.twinx()
+            error_axis.plot(time, error, "g", label="Position error")
+            error_axis.set_ylabel("Error (rad)")
+            if args.legend:
+                error_axis.legend(loc="upper right")
+            p01, p99 = np.nanpercentile(error, [1, 99])
+            print(
+                f"Joint {joint}: feedback min={data[feedback_column].min():.4f}, "
+                f"max={data[feedback_column].max():.4f}, "
+                f"error p01={p01:.4f}, p99={p99:.4f} rad"
+            )
 
-    axs[j, 1].plot(time, df[f'dq_cmd_{j}'], 'b', label=f'Joint {j} Command Vel')
-    axs[j, 1].plot(time, df[f'dq_{j}'], 'r', label=f'Joint {j} Feedback Vel')
-    axs[j, 1].set_ylabel('Vel(rad/s)')
-    axs[j, 1].legend()
-    axs[j, 1].grid()
+        velocity_axis = axes[joint, 1]
+        for column, label, color in (
+            (f"dq_cmd_{joint}", "Planned velocity", "b"),
+            (f"dq_snd_{joint}", "Sent velocity", "y"),
+            (f"dq_{joint}", "Feedback velocity", "r"),
+        ):
+            if column in data.columns:
+                velocity_axis.plot(time, data[column], color, label=label)
+        velocity_axis.set_ylabel("Velocity (rad/s)")
+        velocity_axis.grid()
 
-    axs[j, 2].plot(time, df[f'tau_cmd_{j}'], 'b', label=f'Joint {j} Command Tau')
-    axs[j, 2].plot(time, df[f'tau_{j}'], 'r', label=f'Joint {j} Feedback Tau')
-    axs[j, 2].set_ylabel('Tau')
-    axs[j, 2].legend()
-    axs[j, 2].grid()
-    
-    print(f"Joint {j} max: {max(df[f'q_{j}'])}, min: {min(df[f'q_{j}'])}, q01={q01:.3f}%  q99={q99:.3f}%")
+        torque_axis = axes[joint, 2]
+        for column, label, color in (
+            (f"tau_cmd_{joint}", "Command torque", "b"),
+            (f"tau_{joint}", "Feedback torque", "r"),
+        ):
+            if column in data.columns:
+                torque_axis.plot(time, data[column], color, label=label)
+        torque_axis.set_ylabel("Torque (Nm)")
+        torque_axis.grid()
 
-plt.xlabel('Time(s)')
-plt.tight_layout()
-plt.show()
+        if args.legend:
+            position_axis.legend(loc="upper left")
+            velocity_axis.legend(loc="upper left")
+            torque_axis.legend(loc="upper left")
+
+    axes[-1, 0].set_xlabel("Time (s)")
+    axes[-1, 1].set_xlabel("Time (s)")
+    axes[-1, 2].set_xlabel("Time (s)")
+    figure.tight_layout()
+    plt.show()
+
+
+if __name__ == "__main__":
+    main()

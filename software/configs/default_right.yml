@@ -1,153 +1,197 @@
-
-
-can_config: 
+can_config:
   id: /dev/ttyACM1
   baud_rate: 921600
-
 urdf:
   path: ros2/src/openeai_arm_urdf_ros2/urdf/STEP_D405.urdf
   base_link: base_link
   ee_link: link6
-
+gripper_version: v2
 controller:
-  interpolation: minjerk
+  interpolation:
+    method: linear
+  motion_filter:
+    enabled: true
+    position_tolerance: 0.001
+    velocity_tolerance: 0.01
+    send_velocity: true
+    delay_frames: 16
+    input_shaper:
+      enabled: true
+      type: zv
+      frequency_hz: 2.6
+      damping_ratio: 0.0
+      bandwidth_hz: 1.4
   filter_alpha: 0.9
   enable_safety_check: false
+  frequency: 200
   drag_stationary_vel_threshold: 0.25
-
 motors:
-  - name: joint_1
-    type: DM4340
-    slave_id: 0x01
-    master_id: 0x11
-    min_position: -3.14
-    max_position: 3.14
-    reset_pose: -0.17
-    dynamic_coefficients:
-      kp: 300.0
-      ki: 0.0
-      kd: 2.0
-      friction: 1.0
-      friction_alpha: 50.0
-      drag:
-        stationary_kp: 20.0
-        stationary_kd: 1.0
-        moving_kd: 0.0
-        moving_tanh: 0.0
-        moving_tanh_alpha: 2.0
-  - name: joint_2
-    type: DM4340
-    slave_id: 0x02
-    master_id: 0x12
-    min_position: -3.14
-    max_position: 3.14
-    reset_pose: -0.31
-    dynamic_coefficients:
-      kp: 400.0
-      ki: 0.0
-      kd: 5.0
-      friction: 1.0
-      friction_alpha: 50.0
-      drag:
-        stationary_kp: 15.0
-        stationary_kd: 1.0
-        moving_kd: -0.25
-        moving_tanh: 0.25
-        moving_tanh_alpha: 2.0
-  - name: joint_3
-    type: DM4340
-    slave_id: 0x03
-    master_id: 0x13
-    min_position: -3.14
-    max_position: 3.14
-    reset_pose: -1.058
-    dynamic_coefficients:
-      kp: 400.0
-      ki: 0.0
-      kd: 5.0
-      friction: 1.0
-      friction_alpha: 50.0
-      drag:
-        stationary_kp: 12.5
-        stationary_kd: 0.5
-        moving_kd: -0.35
-        moving_tanh: 0.35
-        moving_tanh_alpha: 2.0
-  - name: joint_4
-    type: DM4310
-    slave_id: 0x04
-    master_id: 0x14
-    min_position: -3.14
-    max_position: 3.14
-    reset_pose: -0.825
-    dynamic_coefficients:
-      kp: 100.0
-      ki: 0.0
-      kd: 2.0
-      friction: 0.5
-      friction_alpha: 5.0
-      drag:
-        stationary_kp: 5.0
-        stationary_kd: 0.5
-        moving_kd: -0.03
-        moving_tanh: 0.03
-        moving_tanh_alpha: 2.0
-  - name: joint_5
-    type: DM4310
-    slave_id: 0x05
-    master_id: 0x15
-    min_position: -3.14
-    max_position: 3.14
-    reset_pose: -1.804
-    dynamic_coefficients:
-      kp: 20.0
-      ki: 0.0
-      kd: 0.5
-      friction: 0.5
-      friction_alpha: 5.0
-      drag:
-        stationary_kp: 5.0
-        stationary_kd: 0.5
-        moving_kd: 0.0
-        moving_tanh: 0.0
-        moving_tanh_alpha: 2.0
-  - name: joint_6
-    type: DM4310
-    slave_id: 0x06
-    master_id: 0x16
-    min_position: -3.14
-    max_position: 3.14
-    reset_pose: 2.54
-    dynamic_coefficients:
-      kp: 20.0
-      ki: 0.0
-      kd: 0.5
-      friction: 0.5
-      friction_alpha: 5.0
-      drag:
-        stationary_kp: 5.0
-        stationary_kd: 0.5
-        moving_kd: 0.0
-        moving_tanh: 0.0
-        moving_tanh_alpha: 2.0
-  - name: joint_7
-    type: DM4310
-    slave_id: 0x07
-    master_id: 0x17
-    min_position: 0.0
-    max_position: 1.35
-    reset_pose: -0.632
-    dynamic_coefficients:
-      kp: 0.0
-      ki: 0.0
-      kd: 0.1
-      friction: 1.5
-      friction_alpha: 5.0
-      drag:
-        stationary_kp: 0.0
-        stationary_kd: 0.0
-        moving_kd: -0.01
-        moving_tanh: 0.01
-        moving_tanh_alpha: 2.0
-      
-      
+- name: joint_1
+  type: DM4340
+  slave_id: 1
+  master_id: 17
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: -0.17
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 120.0
+    ki: 0.0
+    kd: 2.5
+    friction: 0.5
+    friction_alpha: 50.0
+    coriolis_scale: 1.0
+    inertia_scale: 0.0
+    drag:
+      stationary_kp: 20.0
+      stationary_kd: 1.0
+      moving_kd: 0.0
+      moving_tanh: 0.0
+      moving_tanh_alpha: 2.0
+- name: joint_2
+  type: DM4340
+  slave_id: 2
+  master_id: 18
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: -0.31
+  motion_limits:
+    vmax: 4.0
+    amax: 30.0
+  dynamic_coefficients:
+    kp: 200.0
+    ki: 0.0
+    kd: 5.0
+    friction: 0.0
+    friction_alpha: 50.0
+    coriolis_scale: 1.0
+    inertia_scale: 0.0
+    drag:
+      stationary_kp: 15.0
+      stationary_kd: 1.0
+      moving_kd: -0.25
+      moving_tanh: 0.25
+      moving_tanh_alpha: 2.0
+- name: joint_3
+  type: DM4340
+  slave_id: 3
+  master_id: 19
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: -1.058
+  motion_limits:
+    vmax: 2.5
+    amax: 25.0
+  dynamic_coefficients:
+    kp: 160.0
+    ki: 0.0
+    kd: 4.0
+    friction: 0.5
+    friction_alpha: 50.0
+    coriolis_scale: 1.0
+    inertia_scale: 0.0
+    drag:
+      stationary_kp: 12.5
+      stationary_kd: 0.5
+      moving_kd: -0.35
+      moving_tanh: 0.35
+      moving_tanh_alpha: 2.0
+- name: joint_4
+  type: DM4310
+  slave_id: 4
+  master_id: 20
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: -0.825
+  motion_limits:
+    vmax: 2.0
+    amax: 12.0
+  dynamic_coefficients:
+    kp: 90.0
+    ki: 0.0
+    kd: 2.0
+    friction: 0.5
+    friction_alpha: 5.0
+    coriolis_scale: 1.0
+    inertia_scale: 0.0
+    drag:
+      stationary_kp: 5.0
+      stationary_kd: 0.5
+      moving_kd: -0.03
+      moving_tanh: 0.03
+      moving_tanh_alpha: 2.0
+- name: joint_5
+  type: DM4310
+  slave_id: 5
+  master_id: 21
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: -1.804
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 20.0
+    ki: 0.0
+    kd: 0.5
+    friction: 0.5
+    friction_alpha: 5.0
+    coriolis_scale: 1.0
+    inertia_scale: 0.0
+    drag:
+      stationary_kp: 5.0
+      stationary_kd: 0.5
+      moving_kd: 0.0
+      moving_tanh: 0.0
+      moving_tanh_alpha: 2.0
+- name: joint_6
+  type: DM4310
+  slave_id: 6
+  master_id: 22
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: 2.54
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 20.0
+    ki: 0.0
+    kd: 0.5
+    friction: 0.5
+    friction_alpha: 5.0
+    coriolis_scale: 1.0
+    inertia_scale: 0.0
+    drag:
+      stationary_kp: 5.0
+      stationary_kd: 0.5
+      moving_kd: 0.0
+      moving_tanh: 0.0
+      moving_tanh_alpha: 2.0
+- name: joint_7
+  type: DM4310
+  slave_id: 7
+  master_id: 23
+  min_position: 0.0
+  max_position: 0.082
+  reset_pose: -0.632
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 0.0
+    ki: 0.0
+    kd: 0.25
+    friction: 1.5
+    friction_alpha: 5.0
+    coriolis_scale: 0.0
+    inertia_scale: 0.0
+    drag:
+      stationary_kp: 0.0
+      stationary_kd: 0.0
+      moving_kd: -0.01
+      moving_tanh: 0.01
+      moving_tanh_alpha: 2.0
+

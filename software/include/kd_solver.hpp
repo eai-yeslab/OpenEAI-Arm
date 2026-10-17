@@ -27,7 +27,26 @@ public:
     bool inverseKinematics(const KDL::Frame& desired_pose, std::vector<double>& out_joint_positions, std::vector<double>& init_joint_positions);
 
     // Gravity Compensation
-    bool gravityCompensation(const std::vector<double>& joint_positions, const std::vector<double>& joint_velocities, std::vector<double>& out_torques);
+    bool gravityCompensation(const std::vector<double>& joint_positions, std::vector<double>& out_torques);
+
+    // Legacy public API: gravity plus Coriolis, without inertia feedforward.
+    bool gravityCompensation(const std::vector<double>& positions,
+                             const std::vector<double>& velocities,
+                             std::vector<double>& torques) {
+        return dynamicsFeedforward(positions, velocities,
+            std::vector<double>(positions.size(), 0.0),
+            std::vector<double>(positions.size(), 1.0),
+            std::vector<double>(positions.size(), 0.0), torques);
+    }
+
+    // Full rigid-body dynamics feedforward:
+    // tau = M(q) * qdd + C(q, qd) + G(q).
+    bool dynamicsFeedforward(const std::vector<double>& joint_positions,
+                             const std::vector<double>& joint_velocities,
+                             const std::vector<double>& joint_accelerations,
+                             const std::vector<double>& coriolis_scales,
+                             const std::vector<double>& inertia_scales,
+                             std::vector<double>& out_torques);
 
 private:
     KDL::Tree tree_;

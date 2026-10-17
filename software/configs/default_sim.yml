@@ -1,0 +1,139 @@
+can_config:
+  id: /dev/ttyACM99
+  baud_rate: 921600
+urdf:
+  path: ros2/src/openeai_arm_urdf_ros2/urdf/STEP_D435.urdf
+  base_link: base_link
+  ee_link: link6
+gripper_version: v1
+controller:
+  interpolation:
+    method: minjerk
+  motion_filter:
+    enabled: true
+    position_tolerance: 0.001
+    velocity_tolerance: 0.01
+    send_velocity: false
+    delay_frames: 0
+    input_shaper:
+      enabled: false
+      type: zv
+      frequency_hz: 2.6
+      damping_ratio: 0.0
+      bandwidth_hz: 1.0
+  filter_alpha: 0.0
+  enable_safety_check: false
+  frequency: 200
+motors:
+- name: joint_1
+  type: DM4340
+  slave_id: 1
+  master_id: 17
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: 0.0
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 300.0
+    ki: 0.0
+    kd: 5.0
+    friction: 1.0
+    friction_alpha: 50.0
+- name: joint_2
+  type: DM4340
+  slave_id: 2
+  master_id: 18
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: 0.0
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 300.0
+    ki: 0.0
+    kd: 5.0
+    friction: 1.0
+    friction_alpha: 50.0
+- name: joint_3
+  type: DM4340
+  slave_id: 3
+  master_id: 19
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: 0.0
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 300.0
+    ki: 0.0
+    kd: 5.0
+    friction: 1.0
+    friction_alpha: 50.0
+- name: joint_4
+  type: DM4310
+  slave_id: 4
+  master_id: 20
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: 0.0
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 50.0
+    ki: 0.0
+    kd: 1.0
+    friction: 0.5
+    friction_alpha: 5.0
+- name: joint_5
+  type: DM4310
+  slave_id: 5
+  master_id: 21
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: 0.0
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 20.0
+    ki: 0.0
+    kd: 0.5
+    friction: 0.5
+    friction_alpha: 5.0
+- name: joint_6
+  type: DM4310
+  slave_id: 6
+  master_id: 22
+  min_position: -3.14
+  max_position: 3.14
+  reset_pose: 0.0
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 20.0
+    ki: 0.0
+    kd: 0.5
+    friction: 0.5
+    friction_alpha: 5.0
+- name: joint_7
+  type: DM4310
+  slave_id: 7
+  master_id: 23
+  min_position: 0.0
+  max_position: 1.35
+  reset_pose: 0.0
+  motion_limits:
+    vmax: 5.0
+    amax: 50.0
+  dynamic_coefficients:
+    kp: 0.0
+    ki: 0.0
+    kd: 0.1
+    friction: 2.0
+    friction_alpha: 5.0

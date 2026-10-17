@@ -20,31 +20,24 @@
 
 class OpenEAIArm {
 public:
-    /*
-    * @brief Control mode enumeration class of the Arm.
-    */
     enum class ControlMode {
-        MIT_MIX,
-        MIT_DRAG,
-        SIM
+        MIT_MIX = 0,
+        MIT_DRAG = 1,
+        SIM = 2,
+        MIT_POS = 3
     };
 
-    /*
-    * @brief Policy Enumeration Class for inverse kinetic computation when there is a jump between current joint positions and target joint positions
-    */
     enum class IKJumpPolicy {
         REJECT,      // Fail on jump over threshold
         CLIP,        // Move with fixed_step when jump over threshold
         ACCEPT       // Always accept (equivalent to original logic)
     };
 
-    /*
-    * @brief Option Class for inverse kinetic computation to set jump threshold, jump policy and clipping step length
-    */
     struct IKOptions {
         float angle_jump_threshold = 0.2f; // rad/s
         float fixed_step = 0.2f;           // rad/s, only valid if policy==CLIP
         IKJumpPolicy policy = IKJumpPolicy::REJECT;
+        bool report_failure = true;
         IKOptions() {}
     };
 
@@ -52,30 +45,20 @@ public:
     using JointArray = std::array<float, NUM_JOINTS>;
     using MotorPtrArray = std::array<DM_Motor::Motor*, NUM_JOINTS>;
 
-    OpenEAIArm(const std::string& config_path, ControlMode control_mode = ControlMode::MIT_MIX);
+    OpenEAIArm(const std::string& config_path,
+               ControlMode control_mode = ControlMode::MIT_MIX,
+               const std::string& arm_name = "");
     ~OpenEAIArm();
 
-    /*
-    * @brief Step the arm to the next joint angles. Equivalent to set_joint_targets(joint_angles, 0.0f, joint_velocities, joint_torques, false)
-    * @param joint_angles Target joint positions
-    * @param joint_velocities Target joint velocities (optional)
-    * @param joint_torques Target joint torques (optional)
-    */
-    void joint_step(const JointArray& joint_angles, 
-                    const JointArray& joint_velocities = JointArray{}, 
+    // Joint step control (MIT mode), optional velocity and torque
+    void joint_step(const JointArray& joint_angles,
+                    const JointArray& joint_velocities = JointArray{},
                     const JointArray& joint_torques = JointArray{});
 
-    /*
-    * @brief Return to preset zero position
-    * @param move_time time to move to the zero position
-    */
+    // Return to preset zero position (interpolation mode), parameters are interpolation steps and time
     void go_home(float move_time = 2);
 
-    /*
-    * @brief Reset the robot arm. If there is a large angle jump, the user will be prompted to decide if to continue the operation
-    * @param move_time time to move to the zero position
-    * @param angle_jump_threshold threshold for rejecting large angle jumps
-    */
+    // Reset the robot arm. If there is a large angle jump, it will be rejected.
     void reset(float move_time = 2, float angle_jump_threshold = 0.28f);
 
     JointArray get_joint_positions()   const;
@@ -84,38 +67,28 @@ public:
     JointArray get_ee_pose()           const;
     std::array<std::string, NUM_JOINTS> get_joint_names() const;
 
-    /*
-    * @brief forward kinetics function for the arm
-    * @param joint Joint angles of the arm
-    * @return JointArray representing the end-effector pose in {x, y, z, rx, ry, rz, gripper_width} which rx, ry, rz is the euler angle in ZYX rotation. The gripper width will not be changed.
-    */
+    // FK, the output is {x, y, z, rx, ry, rz, gripper_width} which rx, ry, rz is the euler angle in ZYX rotation
     JointArray forward_kinetics(JointArray joint) const;
     // IK, the input should be {x, y, z, rx, ry, rz, gripper_width} which rx, ry, rz is the euler angle in ZYX rotation
-    /*
-    * @brief inverse kinetics function for the arm
-    * @param ee_pose EE Pose of the arm in {x, y, z, rx, ry, rz, gripper_width} which rx, ry, rz is the euler angle in ZYX rotation
-    * @param success reference value to record if the computation is successful
-    * @param options IK Options to set specific behaviors (mainly when the result differs too large from current joint positions)
-    * @return JointArray representing the joint angles of the arm. The gripper width will not be changed.
-    */
     JointArray inverse_kinetics(JointArray ee_pose, bool& success, IKOptions options = IKOptions()) const;
+    // Stateful IK entry point. The caller supplies the previous planned joint
+    // state so IK branch selection does not depend on delayed motor feedback.
+    JointArray inverse_kinetics(JointArray ee_pose, const JointArray& seed_joints,
+                                bool& success, IKOptions options = IKOptions()) const;
 
-    /*
-    * @brief Set joint targets with various control modes
-    * @param target: Target joint positions
-    * @param move_time: Time to move to the target, default is 0.0s (will be aligned to minimal control cycle time)
-    * @param vel: Target joint velocities (optional)
-    * @param tau: Target joint torques (optional)
-    * @param interpolate: Whether to interpolate the movement, default is false
-    */
+
+    // Directly set joint targets (interpolatable), internally calls MotorManager
     void set_joint_targets(const JointArray& target, float move_time = 0.0,
                            const JointArray& vel = JointArray{},
                            const JointArray& tau = JointArray{},
                            bool interpolate = false);
 
+    void set_joint_targets(const JointArray& target, float move_time, bool interpolate,
+                           const JointArray& vel = JointArray{}, const JointArray& tau = JointArray{});
 
     /*
-    * @brief Switch control mode at runtime. Currently, switching to/from SIM mode is not fully tested and may cause unexpected behavior, so it is disabled.
+    * @brief Switch between program control and drag teaching at runtime.
+    * Switching to/from SIM mode is not supported and is rejected.
     */
     void set_control_mode(ControlMode mode);
 
@@ -130,6 +103,7 @@ public:
     // Joint limits
     JointArray lower_limits() const { return joint_limits_low_; }
     JointArray upper_limits() const { return joint_limits_high_; }
+    JointArray velocity_limits() const { return joint_vmax_; }
 
     // Motor object array and manager interface
     const MotorPtrArray& motors() const { return motors_; }
@@ -153,21 +127,18 @@ private:
     JointArray drag_stationary_kp_, drag_stationary_kd_, drag_moving_kd_, drag_moving_tanh_, drag_moving_tanh_alpha_;
     JointArray joint_limits_low_;
     JointArray joint_limits_high_;
+    JointArray joint_vmax_;
     JointArray reset_pose_;
     std::array<std::string, NUM_JOINTS> joint_names;
-    
+    std::string gripper_version_ = "v1";
+
     ControlMode mode_ = ControlMode::MIT_MIX;
-    ArmConfig config;
     std::shared_ptr<KDSolver> kd_solver;
     std::unique_ptr<AdvancedPIDController> pid_controller;
     std::array<float, NUM_JOINTS> motor_mass={0.362, 0.362, 0.362, 0.3, 0.3, 0.3, 0.3};
     std::array<float, NUM_JOINTS> link_mass={0.089464, 0.8789, 0.71598, 0.23515, 0.16797, 0.02, 0.3 };
     std::array<float, NUM_JOINTS+1> motor_cg_z={-0.0267-0.046, 0, 0, 0, -0.023-0.048, 0, 0, -0.055};
 
-    void initialize_arm(bool reinitialize_manager = true);
-
 };
-
-std::ostream& operator<<(std::ostream& os, const OpenEAIArm::JointArray& arr);
 
 #endif // OPENEAIARM_HPP

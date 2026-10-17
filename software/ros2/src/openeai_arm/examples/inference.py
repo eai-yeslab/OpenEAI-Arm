@@ -9,6 +9,7 @@ import threading
 import math
 import cv2
 import sys
+import tempfile
 import rclpy
 import h5py
 import matplotlib.pyplot as plt
@@ -107,18 +108,32 @@ class MsgPackHttpClientPolicy:
             print(f"❌ Inference request failed: {e}")
             return {"error": str(e)}
 
-def load_replay_actions(h5_path: str, field: str) -> np.ndarray:
-    """Load one or more complete 7-DoF arm actions from an HDF5 dataset."""
+def load_replay_actions(
+    h5_path: str,
+    field: str,
+) -> tuple[np.ndarray, float | None]:
+    """Load complete 7-DoF actions and an optional recorded frame rate."""
     with h5py.File(h5_path, "r") as f:
         if field not in f:
             raise KeyError(f"Replay field '{field}' not found in hdf5. Available keys: {list(f.keys())}")
-        actions = np.asarray(f[field])
+        dataset = f[field]
+        actions = np.asarray(dataset)
+        recorded_frame_rate = dataset.attrs.get(
+            "frame_rate",
+            f.attrs.get("frame_rate", None),
+        )
     if actions.ndim != 2 or actions.shape[1] < 7 or actions.shape[1] % 7 != 0:
         raise ValueError(
             "Replay actions must contain one or more complete 7-DoF arms, "
             f"got shape {actions.shape}"
         )
-    return actions.astype(np.float64)
+    if recorded_frame_rate is not None:
+        recorded_frame_rate = float(recorded_frame_rate)
+        if not math.isfinite(recorded_frame_rate) or recorded_frame_rate <= 0.0:
+            raise ValueError(
+                f"Invalid recorded replay frame rate: {recorded_frame_rate}"
+            )
+    return actions.astype(np.float64), recorded_frame_rate
 
 
 def smooth_replay_actions(
@@ -403,6 +418,77 @@ def _warn_model_wait(node, start_time: float, frame_rate: float, context: str):
         #     f"(~{wait_frames:.1f} frames at {frame_rate:g} Hz)"
         # )
     return wait_seconds
+
+
+def save_actual_model_actions(
+    actions: list[np.ndarray],
+    output_path: str | os.PathLike,
+    args,
+    includes_bridge: bool,
+) -> None:
+    """Save the actions that were actually published by model inference.
+
+    The reset/prepare commands, discarded RTC prefixes, synchronization-only
+    frames, and repeated wait/hold frames are intentionally not passed here.
+    The temporary-file replacement keeps the requested output from being left
+    half-written if HDF5 creation fails.
+    """
+    if output_path is None:
+        return
+
+    if not actions:
+        print(
+            "No model-output action was published; the requested trajectory "
+            "file was not created."
+        )
+        return
+
+    output = Path(output_path).expanduser()
+    output.parent.mkdir(parents=True, exist_ok=True)
+
+    action_array = np.asarray(actions, dtype=np.float64)
+    if action_array.ndim != 2:
+        raise ValueError(
+            "Actual model actions must form a 2D array, "
+            f"got shape {action_array.shape}"
+        )
+
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            prefix=f".{output.name}.",
+            suffix=".tmp",
+            dir=str(output.parent),
+            delete=False,
+        ) as temporary_file:
+            temporary_path = Path(temporary_file.name)
+
+        with h5py.File(temporary_path, "w") as h5_file:
+            dataset = h5_file.create_dataset(
+                "action",
+                data=action_array,
+                dtype=np.float64,
+            )
+            dataset.attrs["source"] = "model_inference_actual_published_actions"
+            dataset.attrs["frame_rate"] = float(getattr(args, "frame_rate", 0.0))
+            dataset.attrs["frame_count"] = int(action_array.shape[0])
+            dataset.attrs["action_dimension"] = int(action_array.shape[1])
+            dataset.attrs["includes_bridge"] = bool(includes_bridge)
+            dataset.attrs["includes_wait_frames"] = False
+            dataset.attrs["includes_reset_prepare"] = False
+            dataset.attrs["smooth"] = bool(getattr(args, "smooth", False))
+            dataset.attrs["merge"] = bool(getattr(args, "merge", False))
+            dataset.attrs["config_path"] = str(getattr(args, "config_path", ""))
+
+        os.replace(temporary_path, output)
+        print(
+            f"Saved {action_array.shape[0]} actually published model frames "
+            f"to {output}"
+        )
+    finally:
+        if temporary_path is not None and temporary_path.exists():
+            temporary_path.unlink()
 
 def inference_process(
     args,
@@ -723,6 +809,12 @@ def model_inference(args, ros_operator, recorder=None):
 
     set_seed(1000)
 
+    # Only actions successfully passed to the publisher are recorded here.
+    # Reset/prepare commands happen before this list is used, while wait/hold
+    # repetitions and non-published RTC bookkeeping are deliberately omitted.
+    actual_model_actions = []
+    includes_bridge = False
+
     max_publish_step = args.max_publish_step
     chunk_size = args.chunk_size
     trigger_step = max(0, args.pos_lookahead_step)
@@ -845,6 +937,8 @@ def model_inference(args, ros_operator, recorder=None):
 
                     ros_operator.puppet_arm_publish('puppet', action)
                     execute_history.append((t, "bridge", action.tolist()))
+                    actual_model_actions.append(np.asarray(action, dtype=np.float64).copy())
+                    includes_bridge = True
 
                     t += 1
                     rate.sleep()
@@ -998,6 +1092,7 @@ def model_inference(args, ros_operator, recorder=None):
 
             ros_operator.puppet_arm_publish('puppet', action)
             execute_history.append((t, "action", action.tolist()))
+            actual_model_actions.append(np.asarray(action, dtype=np.float64).copy())
 
             t += 1
             rate.sleep()
@@ -1126,13 +1221,27 @@ def model_inference(args, ros_operator, recorder=None):
     finally:
         end_time = time.time()
         ros_operator.node.get_logger().info(f"Total execution time: \033[1;32m{end_time - start_time:.2f}s\033[0m")
+        save_path = getattr(args, "save", None)
+        if save_path is not None:
+            save_actual_model_actions(
+                actual_model_actions,
+                save_path,
+                args,
+                includes_bridge,
+            )
 
 # --- add new replay loop (place near model_inference) ---
 def model_replay(args, ros_operator):
     global execute_history
     set_seed(1000)
 
-    replay_actions = load_replay_actions(args.replay, args.replay_field)
+    replay_actions, recorded_frame_rate = load_replay_actions(
+        args.replay,
+        args.replay_field,
+    )
+    if recorded_frame_rate is not None:
+        args.frame_rate = recorded_frame_rate
+        print(f"Using recorded replay frame rate: {args.frame_rate:g} Hz")
     puppet_keys = [key for key in ros_operator.arm_keys if 'puppet' in key]
     if not puppet_keys:
         raise RuntimeError("Replay latency measurement requires at least one puppet arm")
@@ -1250,7 +1359,11 @@ def model_replay(args, ros_operator):
 
     try:
         # publish sequentially, one frame per tick
-        max_steps = min(args.max_publish_step, traj_len)
+        max_steps = traj_len
+        if args.replay_max_publish_step is not None:
+            if args.replay_max_publish_step <= 0:
+                raise ValueError("--replay_max_publish_step must be positive")
+            max_steps = min(args.replay_max_publish_step, traj_len)
         for t in range(max_steps):
             if not rclpy.ok():
                 break
@@ -1351,8 +1464,24 @@ def get_arguments():
     parser.add_argument('--use_tactile', default=False, required=False, action='store_true')
     parser.add_argument('--plot', default=False, required=False, action='store_true')
 
+    parser.add_argument(
+        '--save',
+        type=str,
+        default=None,
+        help=(
+            'Save actually published model-inference actions to an HDF5 file '
+            'with dataset action.'
+        ),
+    )
+
     parser.add_argument('--replay', type=str, default=None,
                         help='Replay from hdf5 file. If set, bypass model inference and publish actions sequentially.')
+    parser.add_argument(
+        '--replay_max_publish_step',
+        type=int,
+        default=None,
+        help='Optional replay-only frame limit. By default the complete trajectory is replayed.',
+    )
     parser.add_argument('--replay_field', type=str, default='action',
                         help='Dataset field containing one or more complete 7-DoF arm actions.')
     parser.add_argument('--replay_settle_seconds', type=float, default=2.0,

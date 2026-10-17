@@ -56,7 +56,23 @@ add_executable(demo tests/demo.cpp)
 target_link_libraries(demo PRIVATE OpenEAIArm_core)
 
 add_executable(read_motors tests/read_motors.cpp)
-target_link_libraries(read_motors PRIVATE dm_core)
+target_sources(read_motors PRIVATE src/config_loader.cpp)
+target_link_libraries(read_motors PRIVATE dm_core yaml-cpp)
+
+# Passive diagnostics and actuator tests
+find_package(Threads REQUIRED)
+add_executable(read_motor_params tests/read_motor_params.cpp src/config_loader.cpp
+    src/dm.cpp src/serial_port.cpp)
+target_link_libraries(read_motor_params PRIVATE yaml-cpp Threads::Threads)
+
+add_executable(test_OpenEAIArm_accuracy tests/test_openeai_arm_accuracy.cpp)
+target_link_libraries(test_OpenEAIArm_accuracy PRIVATE OpenEAIArm_core)
+
+add_executable(test_gravity_compensation tests/test_gravity_compensation.cpp)
+target_link_libraries(test_gravity_compensation PRIVATE OpenEAIArm_core)
+
+add_executable(test_damping tests/test_damping.cpp)
+target_link_libraries(test_damping PRIVATE OpenEAIArm_core)
 
 # Add debug options
 set(CMAKE_CXX_FLAGS -g)
